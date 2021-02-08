@@ -1,0 +1,107 @@
+.nav-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 352px;
+    position: fixed;
+}
+
+
+.nav-container > .nav-body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 0px;
+    background: #24344b;
+    height: 100vh;
+    transition: 300ms;
+}
+
+
+.nav-container > .nav-body > h1 {
+    text-align: center;
+    margin: 30px auto;
+    color: var(--green);
+    font-weight: 400;
+    user-select: none;
+}
+
+.nav-container > .nav-body > div.nav-item {
+    display: block;
+    padding: 20px;
+    box-sizing: border-box;
+    color: var(--light);
+    max-height: 22px;
+    overflow: hidden;
+}
+
+.nav-container > .nav-body > div.nav-item.showing {
+    max-height: unset;
+    overflow: unset;
+    padding-bottom: 0px;
+}
+
+.nav-container > .nav-body > div.nav-item > span {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.nav-container > .nav-body > div.nav-item > span > svg {
+    transform: rotate(-90deg);
+    font-size: 1.2em;
+}
+
+.nav-container > .nav-body > div.nav-item.showing > span > svg {
+    transform: rotate(0deg);
+}
+
+.nav-container > .nav-body > div.nav-item > span > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-container > .nav-body > div.nav-item > span > span > h3 {
+    margin-left: 10px;
+}
+
+.nav-container > .nav-body > div.nav-item  > ul {
+    padding: 0px 20px;
+    box-sizing: border-box;
+}
+
+.nav-container > .nav-body > div.nav-item  > ul > li {
+    padding: 0px 0px 7px 0px;
+
+}
+
+.nav-container > .nav-body > div.nav-item  > ul > li > a {
+    color: var(--light);
+}
+
+.nav-container > .toggler {
+    margin: 20px;
+    font-size: 2em;
+    cursor: pointer;
+    transition: 300ms;
+}
+
+.nav-container.showing > .toggler {
+    margin-left: 20px;
+}
+
+.nav-container {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.nav-container.showing > .nav-body {
+    overflow: unset;
+    overflow-y: unset;
+    width: 100%;
+}
