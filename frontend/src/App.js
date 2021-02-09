@@ -11,6 +11,7 @@ import {
     Redirect,
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
+import EnrolledCourses from './Components/Courses/EnrolledCourses'
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
                                 </Fragment>
                             )}
                         />
+                    </Route>
+
+                    <Route path="/courses/enrolled">
+                        <EnrolledCourses />
                     </Route>
                     
                     <Route path="/logout">

@@ -62,7 +62,10 @@ def login():
 
     userJ = users.find_one({"username": auth["username"]})
 
-    user = User(userJ["username"], userJ["email"], userJ["password"], userJ["types"], userJ["dateJoined"], str(userJ["_id"]))
+    if not userJ:
+        userJ = users.find_one({"email": auth["username"]})
+
+    user = User(userJ["username"], userJ["email"], userJ["password"], userJ["types"], userJ["dateJoined"], str(userJ["_id"]), enrolledCourses=userJ["enrolledCourses"])
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     if check_password_hash(user.password, auth["password"]):
@@ -78,16 +81,16 @@ def login():
 def user():
     print(request)
 
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
 
-    isAdmin = False
+    # isAdmin = False
 
-    for admin in current_user["types"]:
-        if admin == "SuperAdmin":
-            isAdmin = True
+    # for admin in current_user["types"]:
+    #     if admin == "SuperAdmin":
+    #         isAdmin = True
 
-    if isAdmin == False:
-        return jsonify({"message": "Cannot perform that function!"})
+    # if isAdmin == False:
+    #     return jsonify({"message": "Cannot perform that function!"})
 
     return methodExec(request, User)
 
@@ -95,6 +98,7 @@ def user():
 @jwt_required
 def course():
     print(request)
+    print("courses")
     return methodExec(request, Course)
 
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])

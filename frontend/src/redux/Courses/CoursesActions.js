@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { API_URL } from "../constants"
 
 export const getAllCourses = createAsyncThunk(
     'courses/fetchAll',
@@ -13,7 +14,7 @@ export const getAllCourses = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            const response = await fetch("http://127.0.0.1:5000/api/course", requestOptions)
+            const response = await fetch(API_URL + "api/course", requestOptions)
             const data = await response.json()
             return data
         }
@@ -42,7 +43,7 @@ export const createCourse = createAsyncThunk(
 
             console.log("fetch")
 
-            const response = await fetch(("http://127.0.0.1:5000/api/course?username=" + data.username), requestOptions)
+            const response = await fetch((API_URL + "api/course?username=" + data.username), requestOptions)
             console.log("fetch2")
             const data2 = await response.json()
             return data2

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { API_URL } from "../constants"
 
 export const getAllComments = createAsyncThunk(
     'comments/getAllComments',
@@ -13,7 +14,7 @@ export const getAllComments = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            const response = await fetch("http://127.0.0.1:5000/api/comment", requestOptions)
+            const response = await fetch(API_URL + "api/comment", requestOptions)
             const data = await response.json()
             return data
         }
@@ -40,7 +41,7 @@ export const createComment = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            const response = await fetch("http://127.0.0.1:5000/api/comment", requestOptions)
+            const response = await fetch(API_URL + "api/comment", requestOptions)
             const data2 = await response.json()
             return data2
         }

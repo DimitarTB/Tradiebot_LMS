@@ -1,0 +1,10 @@
+#enrolled {
+    max-width: 1200px;
+    box-sizing: border-box;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}

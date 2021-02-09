@@ -6,13 +6,13 @@ import uuid
 from flask_mail import Message
 
 class User:
-    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None):
+    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None, enrolledCourses = []):
         self.username = username
         self.email = email
         self.password = password
         self.types = types
         self.createdCourses = []
-        self.enrolledCourses = []
+        self.enrolledCourses = enrolledCourses
         self.dateJoined = dateJoined
         self.activated = False
         self.rnd = rnd
@@ -50,13 +50,14 @@ class User:
         users = db.users
         if usern is not None:
             data = users.find_one({"username": usern})
-            ret_user = User(data["username"], data["email"], data["password"], data["types"], data["dateJoined"])
+            ret_user = User(data["username"], data["email"], data["password"], data["types"], data["dateJoined"], enrolledCourses=data["enrolledCourses"])
             return jsonify(ret_user.__dict__)
         else:
             users = users.find({})
             ret_users = []
             for user in users:
-                ret_users.append((User(user["username"], user["email"], user["password"], user["types"], user["dateJoined"])).__dict__)
+                user["_id"] = str(user["_id"])
+                ret_users.append(user)
             return jsonify(ret_users)
 
     

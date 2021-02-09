@@ -4,39 +4,27 @@ import CoursesReducer from "../redux/Courses/CoursesSlice"
 import LecturesReducer from "../redux/Lectures/LecturesSlice"
 import CommentsReducer from "../redux/Comments/CommentsSlice"
 import FilesReducer from "../redux/Files/FilesSlice"
-import {pendingReducer} from "redux-pending"
+// import {pendingReducer} from "redux-pending"
+import { combineReducers } from 'redux'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
+const persistConfig = {
+  key: 'root',
+  storage,
+}
 
-export default configureStore({
-  reducer: {
+const rootReducer = combineReducers({
     user: UserReducer,
     courses: CoursesReducer,
     lectures: LecturesReducer,
     comments: CommentsReducer,
     files: FilesReducer
-  },
-});
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({reducer: persistedReducer})
+export const persistor = persistStore(store)
 
 
-
-const Reducer = {
-  pending: pendingReducer,
-  user: {
-    allUsers : [],
-    currentUser : "token",
-    currentUserData : {},
-  },
-  courses: {
-    allCourses: [],
-  },
-  lectures: {
-    allLectures: []
-
-  },
-  comments: {
-    allComments: []
-  },
-  files: {
-    allfiles: []
-  },
-}

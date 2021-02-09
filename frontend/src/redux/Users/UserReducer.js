@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { getAllUsers as fetchAll, loginUser } from "./UserActions"
+import { fetchAll, loginUser } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from '../../serviceWorker'
 
@@ -48,7 +48,7 @@ export const UserSlice = createSlice({
             state.loginStatus = statuses.fulfilled
             console.log(state.currentUser)
             const decoded = jwt_decode(state.currentUser).identity
-            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)

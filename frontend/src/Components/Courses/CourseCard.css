@@ -1,0 +1,19 @@
+.course-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    padding: 12px;
+    min-width: 210px;
+    max-width: 210px;
+    margin: 20px;
+    box-shadow: 0 0.15rem 0.75rem 0 rgba(40, 60, 80, 0.15);
+    color: var(--gray);
+    min-height: 280px;
+}
+
+.course-card > img {
+    display: block;
+    margin-bottom: 20px;
+    object-fit: cover;
+    height: 120px;
+}

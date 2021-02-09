@@ -21,7 +21,7 @@ export default props => {
 
     const toggleNav = e => {
         document.getElementsByClassName("nav-container")[0].classList.toggle("showing")
-        if(document.getElementsByClassName("nav-container")[0].classList.contains("showing"))
+        if (document.getElementsByClassName("nav-container")[0].classList.contains("showing"))
             document.getElementsByClassName("App")[0].classList.add("showing")
         else
             document.getElementsByClassName("App")[0].classList.remove("showing")
@@ -42,7 +42,7 @@ export default props => {
                     </span>
                     <ul>
                         <li><NavLink to={"/profile/" + user?._id}> Profile</NavLink></li>
-                        <li><NavLink to="/"> Logout</NavLink></li>
+                        <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>
 
@@ -55,6 +55,7 @@ export default props => {
                         <MdKeyboardArrowDown />
                     </span>
                     <ul>
+                        <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
                         <li><NavLink to={"/profile/" + user?._id}> Browse Courses</NavLink></li>
                         <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>

@@ -1,13 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { API_URL } from "../constants"
 import Axios from "axios"
-export const getAllUsers = createAsyncThunk(
+export const fetchAll = createAsyncThunk(
     'user/fetchAll',
-    async (user, ext) => {
+    async (token, ext) => {
         try {
-            const response = await Axios.get("http://127.0.0.1:5000/api/user")
-            const data = await response.data
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + token);
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/user", requestOptions)
+            const data = await response.json()
             return data
-        } catch (error) {
+        }
+        catch (error) {
             return ext.rejectWithValue(error.message)
         }
     }
@@ -27,10 +38,10 @@ export const loginUser = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            return await fetch("http://127.0.0.1:5000/api/login", requestOptions)
+            return await fetch(API_URL + "api/login", requestOptions)
                 .then(response => response.json())
                 .then(response => response.token)
-                .catch(error => {return ext.rejectWithValue(error.message)});
+                .catch(error => { return ext.rejectWithValue(error.message) });
         } catch (error) {
             return ext.rejectWithValue(error.message)
         }
@@ -53,7 +64,7 @@ export const register = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            const response = await fetch("http://127.0.0.1:5000/api/register", requestOptions)
+            const response = await fetch(API_URL + "api/register", requestOptions)
             const data2 = await response.json()
             return data2
         } catch (error) {

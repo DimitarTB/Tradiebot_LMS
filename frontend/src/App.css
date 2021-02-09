@@ -43,3 +43,7 @@
     margin-left: 280px;
     transition: 300ms;
 }
+
+body{
+    background: var(--light);
+}

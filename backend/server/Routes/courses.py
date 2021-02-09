@@ -3,12 +3,14 @@ from config import db
 from bson.objectid import ObjectId
 import datetime
 import numpy
+import json
 class Course:
-    def __init__(self, name, description, teachers, dateCreated):
+    def __init__(self, name, description, teachers, dateCreated, manualEnroll=True):
         self.name = name
         self.description = description
         self.teachers = teachers
         self.dateCreated = dateCreated
+        self.manualEnroll = manualEnroll
 
     def create(request):
         userCourse = request.args.get("username")
@@ -40,7 +42,7 @@ class Course:
         if course_id is not None:
             data = courses.find_one({"_id": ObjectId(course_id)})
             print(data)
-            ret_course = Course(data["name"], data["description"], data["teachers"], data["dateCreated"])
+            ret_course = Course(data["name"], data["description"], data["teachers"], data["dateCreated"], data["manualEnroll"])
             return jsonify({"courses": ret_course.__dict__})
         else:
             userCourse = request.args.get("username")
@@ -52,8 +54,10 @@ class Course:
                     ret_course = courses.find_one({"_id": ObjectId(course)})
                     ret_courses.append(ret_course.__dict__)
                 return jsonify(ret_courses)
+
             data = courses.find({})
             ret_courses = []
             for course in data:
-                ret_courses.append((Course(course["name"], course["description"], course["teachers"], course["dateCreated"])).__dict__)
+                course["_id"] = str(course["_id"])
+                ret_courses.append(course)
             return jsonify(ret_courses)
