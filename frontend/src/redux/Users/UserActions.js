@@ -4,7 +4,7 @@ export const getAllUsers = createAsyncThunk(
     'user/fetchAll',
     async (user, ext) => {
         try {
-            const response = await Axios.get("http://127.0.0.1:4000/api/user")
+            const response = await Axios.get("http://127.0.0.1:5000/api/user")
             const data = await response.data
             return data
         } catch (error) {
@@ -17,6 +17,7 @@ export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userData, ext) => {
         try {
+            console.log(userData)
             var myHeaders = new Headers();
             myHeaders.append("Authorization", JSON.stringify(userData));
 
@@ -29,7 +30,7 @@ export const loginUser = createAsyncThunk(
             return await fetch("http://127.0.0.1:5000/api/login", requestOptions)
                 .then(response => response.json())
                 .then(response => response.token)
-                .catch(error => console.log('error', error));
+                .catch(error => {return ext.rejectWithValue(error.message)});
         } catch (error) {
             return ext.rejectWithValue(error.message)
         }

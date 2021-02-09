@@ -10,13 +10,13 @@ import {
     Route,
     Redirect,
 } from "react-router-dom"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 function App() {
 
     const user = useSelector(state => state.user)
 
-
+    const dispatch = useDispatch()
 
     return (
         <div className="App">
@@ -37,10 +37,16 @@ function App() {
                             )}
                         />
                     </Route>
+                    
+                    <Route path="/logout">
+                        {() => {dispatch({ type: 'user/logout' })}}
+                    </Route>
 
                     <Route path="/">
                         <Landing />
                     </Route>
+
+
                 </Switch>
             </Router>
         </div>

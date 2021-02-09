@@ -15,6 +15,13 @@ export const UserSlice = createSlice({
         currentUserData: null
     },
     reducers: {
+        logout: (state) => {
+            state.currentUser = null
+            state.currentUserData = null
+            state.loadingStatus = statuses.idle
+            state.loginStatus = statuses.idle
+            state.registerStatus = statuses.idle
+        }
     },
     extraReducers: {
         [fetchAll.pending]: (state, action) => {
@@ -40,19 +47,16 @@ export const UserSlice = createSlice({
             state.currentUser = action.payload
             state.loginStatus = statuses.fulfilled
             console.log(state.currentUser)
-
-
             const decoded = jwt_decode(state.currentUser).identity
-            const new_user = { "_id": decoded._id , "username": decoded.username, "email": decoded.email, "roles": decoded.types }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)
-
-
         },
         [loginUser.rejected]: (state, action) => {
             state.loginError = action.payload
             state.loginStatus = statuses.rejected
+            alert("Invalid combination of username/e-mail and password!!!")
         },
 
 

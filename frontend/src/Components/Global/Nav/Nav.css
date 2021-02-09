@@ -89,6 +89,7 @@
     font-size: 2em;
     cursor: pointer;
     transition: 300ms;
+    color: #24344b;
 }
 
 .nav-container.showing > .toggler {

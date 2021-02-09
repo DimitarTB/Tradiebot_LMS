@@ -56,7 +56,7 @@ export default props => {
                     </span>
                     <ul>
                         <li><NavLink to={"/profile/" + user?._id}> Browse Courses</NavLink></li>
-                        <li><NavLink to="/"> Logout</NavLink></li>
+                        <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>
             </div>
