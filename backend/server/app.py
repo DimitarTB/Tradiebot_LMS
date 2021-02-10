@@ -102,7 +102,7 @@ def course():
     return methodExec(request, Course)
 
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])
-@jwt_required
+# @jwt_required
 def lecture():
     print(request)
     return methodExec(request, Lecture)

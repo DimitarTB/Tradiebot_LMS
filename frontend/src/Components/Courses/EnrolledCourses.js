@@ -26,14 +26,6 @@ const EnrolledCourses = props => {
 
     console.log(enrolledCourses)
 
-    function getTeachers(course) {
-        console.log(currentUser.allUsers)
-        console.log(course.teachers)
-        let teachers = currentUser.allUsers.filter(teacher => course.teachers.includes(teacher._id))
-        console.log("Teachers:", teachers)
-        return teachers
-    }
-
     return (
         <Container
             details="Enrolled Courses"

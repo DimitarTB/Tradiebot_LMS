@@ -1,0 +1,73 @@
+.course-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    max-height: 100vh;
+}
+
+.course-container > .video-browser {
+    overflow-y: scroll;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0.15rem 0.75rem 0 rgba(40, 60, 80, 0.15);
+}
+
+.course-container > .video-browser > button {
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 300ms;
+}
+
+.course-container > .video-browser > button:hover {
+    background: var(--white);
+}
+
+.course-container > .left {
+    width: calc(100% - 280px);
+    display: flex;
+    flex-direction: column;
+}
+
+.course-container > .left > .video-player {
+    display: block;
+    background: black;
+    width: 100%;
+    height: 70%;
+}
+
+.course-container > .left > .course-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 30%;
+}
+
+.course-container > .left > .course-info > .info-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    height: 10%;
+}
+
+.course-container > .left > .course-info > .info-nav > h3 {
+    cursor: pointer;
+}
+
+.course-container > .left > .course-info > .tab {
+    height: 90%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+}
+
+.course-container > .left > .course-info > .tab > div {
+    width: 100%;
+}

@@ -3,7 +3,6 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    width: 352px;
     position: fixed;
 }
 
@@ -99,6 +98,11 @@
 .nav-container {
     justify-content: flex-start;
     align-items: flex-start;
+    width: 0px;
+}
+
+.nav-container.showing {
+    width: 352px;
 }
 
 .nav-container.showing > .nav-body {

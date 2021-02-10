@@ -3,6 +3,8 @@ import './App.css'
 import Container from "./Components/Global/Container"
 import Nav from "./Components/Global/Nav/Nav"
 import Landing from "./Components/Landing/Landing.js"
+import Profile from "./Components/User/Profile"
+import BrowseCourses from "./Components/Courses/BrowseCourses"
 
 import {
     BrowserRouter as Router,
@@ -12,6 +14,8 @@ import {
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
+import CourseComponent from "./Components/Courses/CourseComponent"
+import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
 
 function App() {
 
@@ -38,9 +42,17 @@ function App() {
                             )}
                         />
                     </Route>
-
+                    <Route path="/course/:course_id">
+                        <CourseContainer />
+                    </Route>
+                    <Route path="/user/:username">
+                        <Profile></Profile>
+                    </Route>
                     <Route path="/courses/enrolled">
                         <EnrolledCourses />
+                    </Route>
+                    <Route path="/courses/browse">
+                        <BrowseCourses />
                     </Route>
                     
                     <Route path="/logout">

@@ -16,6 +16,7 @@ export const LecturesSlice = createSlice({
         [getAllLectures.pending]: (state, action) => {
             state.allLectures = []
             state.loadingStatus = statuses.pending
+            state.allFiles = []
         },
         [getAllLectures.fulfilled]: (state, action) => {
             console.log(action)
