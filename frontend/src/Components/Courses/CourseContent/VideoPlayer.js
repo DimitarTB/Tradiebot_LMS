@@ -1,6 +1,6 @@
 import React from 'react'
 
-const VideoBrowser = props =>{
+const VideoPlayer = props =>{
 
     // tracking functions //
 
@@ -12,4 +12,4 @@ const VideoBrowser = props =>{
 }
 
 
-export default VideoBrowser
+export default VideoPlayer

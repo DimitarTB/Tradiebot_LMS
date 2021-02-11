@@ -37,7 +37,7 @@ const CourseContainer = props => {
                 <VideoPlayer lecture={selectedLecture} />
                 <CourseInfoSection lecture={selectedLecture} course={currentCourse} />
             </div>
-            <VideoBrowser lectures={currentLectures} setSelectedLecture={setSelectedLecture} />
+            <VideoBrowser lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} />
         </div>
     )
     

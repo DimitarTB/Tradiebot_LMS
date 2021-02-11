@@ -32,7 +32,7 @@ export const createLecture = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + data.token));
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id });
+            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id, "video_file": "" });
 
             var requestOptions = {
                 method: 'POST',

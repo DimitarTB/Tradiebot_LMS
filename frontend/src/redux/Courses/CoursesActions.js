@@ -8,6 +8,8 @@ export const getAllCourses = createAsyncThunk(
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + token);
 
+            console.log("All Courses:", token)
+
             var requestOptions = {
                 method: 'GET',
                 headers: myHeaders,

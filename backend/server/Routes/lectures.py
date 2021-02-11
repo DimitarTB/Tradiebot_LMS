@@ -18,7 +18,9 @@ class Lecture:
         new_lecture = Lecture(data["name"], data["course_id"], tNow, video_file = data["video_file"]).__dict__
 
         inserted_ids = lectures.insert(new_lecture)
-        return {"id": str(inserted_ids)}
+
+        new_lecture = { "name": data["name"], "course_id": data["course_id"], "dateCreated": tNow, "video_file": data["video_file"] }
+        return jsonify({"lecture": new_lecture})
 
     def read(request):
         lecture_id = request.args.get("id")

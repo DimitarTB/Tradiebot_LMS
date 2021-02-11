@@ -36,6 +36,7 @@ export const CommentsSlice = createSlice({
             console.log(action)
             state.createStatus = statuses.fulfilled
             console.log("Comment created!")
+            state.allComments.push(action.payload.comment)
         },
         [createComment.rejected]: (state, action) => {
             state.loadingError = action.payload

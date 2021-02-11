@@ -8,7 +8,7 @@ export default props => {
 
     const users = useSelector(state => state.user.allUsers)
 
-    const _users = users.filter(user =>  props.course.teachers.includes(user._id))
+    const _users = users.length > 3 ? users.filter(user =>  props.course.teachers.includes(user._id)) : []
     let teachers = ""
 
     for (const _user of _users){
