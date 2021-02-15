@@ -15,11 +15,15 @@ class Course:
     def create(request):
         userCourse = request.args.get("username")
         cID = request.args.get("course_id")
+        remove = request.args.get("remove")
         if cID is not None and userCourse is not None:
             users = db.users
 
-            users.update({"username": userCourse}, { "$push": {"enrolledCourses": cID}})
-            return "updated"
+            if remove is not None:
+                users.update({"username": userCourse}, { "$pull": {"enrolledCourses": cID}})
+            else:
+                users.update({"username": userCourse}, { "$push": {"enrolledCourses": cID}})
+            return jsonify({"_id": cID})
 
         data = request.get_json()
         courses = db.courses
@@ -33,7 +37,8 @@ class Course:
 
         return jsonify({
             "code" : "success",
-            "new_course" : str(new_course.__dict__)
+            "new_course" : str(new_course.__dict__),
+            "inserted_id": str(_id)
         }), 200
 
     def read(request):
@@ -61,3 +66,20 @@ class Course:
                 course["_id"] = str(course["_id"])
                 ret_courses.append(course)
             return jsonify(ret_courses)
+
+    def update(request):
+        teacher_id = request.args.get("teacher")
+        course_id = request.args.get("course")
+
+        course_id = ObjectId(course_id)
+        courses = db.courses
+
+        if teacher_id is not None:
+            courses.update({"_id": course_id}, { "$push": {"teachers": teacher_id}})
+
+        else:
+            new_name = request.args.get("name")
+            courses.update({"_id": course_id}, {"$set": {"name": new_name}})
+        return jsonify({"message": "Updated!"})
+
+

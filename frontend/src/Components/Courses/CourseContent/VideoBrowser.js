@@ -33,20 +33,20 @@ const VideoBrowser = props => {
 
     console.log(props.lectures)
     const lectures = props.lectures.map((lecture, index, arr) => {
-        console.log(lecture.name, index, arr.length)
         return (
             <Fragment>
                 <button onClick={e => {
-                    console.log(e)
+                    console.log(e, lecture)
                     props.setSelectedLecture(lecture)
                 }}>{lecture.name} <AiFillPlayCircle /></button>
-                {index === arr.length - 1 ? (props.currentCourse?.teachers.includes(currentUser.currentUserData._id) ? <div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div> : "") : ""}
+                {/* {index === arr.length - 1 ? (props.currentCourse?.teachers.includes(currentUser.currentUserData._id) ? <div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div> : "") : ""} */}
             </Fragment>
         )
     })
     return (
         <div className="video-browser">
             {(props.currentCourse?.teachers.includes(currentUser.currentUserData._id) ? <div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div> : "")}
+            {lectures}
         </div>
     )
 }

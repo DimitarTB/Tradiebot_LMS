@@ -5,6 +5,9 @@ import Nav from "./Components/Global/Nav/Nav"
 import Landing from "./Components/Landing/Landing.js"
 import Profile from "./Components/User/Profile"
 import BrowseCourses from "./Components/Courses/BrowseCourses"
+import CreateCourse from "./Components/Courses/CreateCourse"
+import CreatedCourses from "./Components/Courses/CreatedCourses"
+import TeachingCourses from "./Components/Courses/TeachingCourses"
 
 import {
     BrowserRouter as Router,
@@ -48,11 +51,20 @@ function App() {
                     <Route path="/user/:username">
                         <Profile></Profile>
                     </Route>
+                    <Route path="/courses/created">
+                        <CreatedCourses />
+                    </Route>
+                    <Route path="/courses/teaching">
+                        <TeachingCourses />
+                    </Route>
                     <Route path="/courses/enrolled">
                         <EnrolledCourses />
                     </Route>
                     <Route path="/courses/browse">
                         <BrowseCourses />
+                    </Route>
+                    <Route path="/courses/create">
+                        <CreateCourse />
                     </Route>
                     
                     <Route path="/logout">

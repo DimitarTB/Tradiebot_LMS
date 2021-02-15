@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { getAllCourses, createCourse } from "./CoursesActions"
+import { getAllCourses, createCourse, enrollCourse } from "./CoursesActions"
 
 export const CoursesSlice = createSlice({
     name: 'courses',

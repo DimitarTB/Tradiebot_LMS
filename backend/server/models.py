@@ -3,3 +3,5 @@ def methodExec(request, className):
         return className.create(request)
     elif request.method == "GET":
         return className.read(request)
+    elif request.method == "PUT":
+        return className.update(request)

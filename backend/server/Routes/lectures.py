@@ -19,7 +19,7 @@ class Lecture:
 
         inserted_ids = lectures.insert(new_lecture)
 
-        new_lecture = { "name": data["name"], "course_id": data["course_id"], "dateCreated": tNow, "video_file": data["video_file"] }
+        new_lecture = {"_id": str(inserted_ids), "name": data["name"], "course_id": data["course_id"], "dateCreated": tNow, "video_file": data["video_file"] }
         return jsonify({"lecture": new_lecture})
 
     def read(request):

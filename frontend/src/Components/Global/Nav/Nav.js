@@ -10,7 +10,7 @@ import "./Nav.css"
 
 export default props => {
 
-    const user = useSelector(state => state.user.userData)
+    const user = useSelector(state => state.user.currentUserData)
 
     const toggleNavItem = e => {
         let element = e.target
@@ -41,7 +41,7 @@ export default props => {
                         <MdKeyboardArrowDown />
                     </span>
                     <ul>
-                        <li><NavLink to={"/profile/" + user?._id}> Profile</NavLink></li>
+                        <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
                         <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>
@@ -56,7 +56,9 @@ export default props => {
                     </span>
                     <ul>
                         <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
-                        <li><NavLink to={"/profile/" + user?._id}> Browse Courses</NavLink></li>
+                        <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
+                        {user?.roles?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
+                        {user?.roles?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
                         <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>

@@ -8,7 +8,7 @@ function Profile() {
     const currentUser = useSelector(state => state.user)
 
     return (
-        <Container details="Profile" description="" component={currentUser.currentUserData?.username === propUser ? <h1>Private info</h1> : <h1>Public info</h1>}>
+        <Container details="Profile" description="" component={currentUser.currentUserData?._id === propUser ? <h1>Private info</h1> : <h1>Public info</h1>}>
 
         </Container>
     )

@@ -2,7 +2,7 @@ from flask import Flask
 import pymongo
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-import os
+import os, time
 from flask_mail import Mail
 
 config = {
@@ -39,3 +39,15 @@ mail = Mail(app)
 app.config["SECRET_KEY"] = "asd"
 client = pymongo.MongoClient(host="localhost", port=27017)
 db = client['test-database']
+
+
+
+STATIC_PATH = "./static/lms/public"
+
+def get_random():
+    _t = time.time()
+    return str(_t).replace(".", "")
+
+def get_extension(_f):
+    ext = str(_f.filename.split(".")[len(_f.filename.split(".")) - 1])
+    return ext

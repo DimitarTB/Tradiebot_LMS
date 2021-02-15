@@ -32,6 +32,7 @@ export const createComment = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + data.token));
             myHeaders.append("Content-Type", "application/json");
 
+            console.log(data.lecture_id)
             var raw = JSON.stringify({ "creator_id": data.creator_id, "lecture_id": data.lecture_id, "comment": data.comment, "replyTo": data.replyTo });
 
             var requestOptions = {

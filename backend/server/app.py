@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, abort, jsonify
+from flask import Flask, request, make_response, abort, jsonify, send_file
 from config import app, db, mail
 from Routes.users import User
 from Routes.courses import Course
@@ -36,6 +36,20 @@ def register():
     print(request)
     return methodExec(request, User)
 
+@app.route('/api/upload_image', methods=["POST"])
+def upl_img():
+    print(request)
+    c_id = request.args.get('course_id')
+    files = request.files
+    image = files["image"]
+    image.save(("./static/lms/public/thumbnails/" + c_id + ".jpg"))
+    return "success"
+
+@app.route('/api/get_image', methods=["GET"])
+def get_img():
+    print(request)
+    filename = "./static/lms/public/lp.jpg"
+    return send_file(filename, mimetype='image/gif')
 @app.route('/api/resend', methods=["GET"])
 def resend():
     print(request)
@@ -65,11 +79,11 @@ def login():
     if not userJ:
         userJ = users.find_one({"email": auth["username"]})
 
-    user = User(userJ["username"], userJ["email"], userJ["password"], userJ["types"], userJ["dateJoined"], str(userJ["_id"]), enrolledCourses=userJ["enrolledCourses"])
+    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"]})
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
-    if check_password_hash(user.password, auth["password"]):
-        user = user.__dict__
+    if check_password_hash(user["password"], auth["password"]):
+        user = user
         print("User : ", user)
         token = create_access_token(identity=user)
         return jsonify({'token': token})
@@ -95,11 +109,12 @@ def user():
     return methodExec(request, User)
 
 @app.route("/api/course", methods=["GET", "POST", "PUT", "DELETE"])
-@jwt_required
 def course():
     print(request)
     print("courses")
     return methodExec(request, Course)
+
+
 
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])
 # @jwt_required

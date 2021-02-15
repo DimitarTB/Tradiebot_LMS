@@ -34,7 +34,7 @@ export const createCourse = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + data.token));
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "name": data.name, "description": data.description, "teachers": data.teachers });
+            var raw = JSON.stringify({ "name": data.name, "description": data.description, "teachers": data.teachers, "manualEnroll": data.manualEnroll });
 
             var requestOptions = {
                 method: 'POST',
@@ -56,3 +56,4 @@ export const createCourse = createAsyncThunk(
         }
     }
 )
+

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { fetchAll, loginUser } from "./UserActions"
+import { enrollCourse, fetchAll, loginUser, unEnrollCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from '../../serviceWorker'
 
@@ -48,7 +48,7 @@ export const UserSlice = createSlice({
             state.loginStatus = statuses.fulfilled
             console.log(state.currentUser)
             const decoded = jwt_decode(state.currentUser).identity
-            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)
@@ -71,6 +71,16 @@ export const UserSlice = createSlice({
             state.loadingError = action.payload
             state.registerStatus = statuses.rejected
         },
+
+        [enrollCourse.fulfilled]: (state,action) => {
+            console.log("PL", action.payload)
+            state.currentUserData.enrolledCourses = [...state.currentUserData.enrolledCourses, action.payload._id]
+        },
+
+        [unEnrollCourse.fulfilled]: (state,action) => {
+            console.log(action.payload._id)
+            state.currentUserData.enrolledCourses = state.currentUserData.enrolledCourses.filter(course => course !== action.payload._id)
+        }
     },
 })
 

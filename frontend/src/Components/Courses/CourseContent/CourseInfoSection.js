@@ -4,6 +4,8 @@ import { createComment, getAllComments } from '../../../redux/Comments/CommentsA
 import { fetchAll } from "../../../redux/Users/UserActions"
 import { useParams } from "react-router-dom"
 import "./comments.css"
+import { API_URL } from "../../../redux/constants"
+import axios from 'axios'
 
 const CourseInfoSection = props => {
 
@@ -15,11 +17,21 @@ const CourseInfoSection = props => {
     const [comment, setComment] = useState({
         comment: ""
     })
-
     const handleChange = e => {
         setComment({
             ...comment,
             [e.target.name]: e.target.value
+        })
+    }
+    const sendFile = e => {
+
+        console.log(API_URL + "api/upload_image")
+        var formData = new FormData();
+        formData.append("image", e[0]);
+        axios.post((API_URL + ("api/upload_image?course_id=" + props.course?._id)), formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         })
     }
 
@@ -35,6 +47,7 @@ const CourseInfoSection = props => {
             "replyTo": ""
         }
 
+        console.log(props.lecture._id)
         dispatch(createComment(data))
 
     }
@@ -72,6 +85,11 @@ const CourseInfoSection = props => {
         (
             <div className="course-files">
                 Lecture Files
+                <form>
+                    <input type="file" onChange={(e) => sendFile(e.target.files)} />
+                    <button>Submit</button>
+                </form>
+
                 {props.lecture?.files?.map(file => <a href={file.file_path} download>{file.name}</a>)}
             </div>
         )

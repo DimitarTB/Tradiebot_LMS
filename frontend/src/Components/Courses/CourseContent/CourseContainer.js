@@ -18,7 +18,6 @@ const CourseContainer = props => {
     const currentUser = useSelector((state) => state.user)
     const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === params.course_id))
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
-
     const [selectedLecture, setSelectedLecture] = useState(currentLectures[0])
 
     useEffect(() => {

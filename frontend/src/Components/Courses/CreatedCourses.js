@@ -13,9 +13,8 @@ const EnrolledCourses = props => {
 
     const dispatch = useDispatch()
     const currentUser = useSelector(state => state.user)
-    // const enrolledCourses = useSelector(state => state?.courses?.allCourses?.filter(course => state.user.currentUserData?.enrolledCourses?.includes(course._id)))
-    const allCourses = useSelector(state => state.courses.allCourses?.filter(course => currentUser.currentUserData.enrolledCourses.includes(course?._id)))
-    
+    const allCourses = useSelector(state => state.courses.allCourses?.filter(course => (currentUser.currentUserData.createdCourses.includes(course?._id))))
+
     useEffect(() => {
         console.log(currentUser.currentUser)
         if (currentUser.currentUser !== null) {
@@ -24,15 +23,14 @@ const EnrolledCourses = props => {
         }
     }, [])
 
-    // let enrolledCourses = allCourses.allCourses.filter(course => currentUser.currentUserData.enrolledCourses.includes(course._id))
 
     return (
         <Container
-            details="Enrolled Courses"
-            description="View your enrolled courses."
+            details="Created Courses"
+            description="View your created courses."
             component={(
                 <div id="enrolled">
-                    {allCourses.map(course => <CourseCard course={course} unenroll={true} />)}
+                    {allCourses.map(course => <CourseCard course={course} />)}
                 </div>
             )}
         />

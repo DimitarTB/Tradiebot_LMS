@@ -15,6 +15,7 @@ class Comment:
             comments = db.comments
 
             tNow = datetime.datetime.utcnow()
+            print(data)
             new_comment = Comment(data["creator_id"], data["lecture_id"], data["comment"]["comment"], tNow, replyTo=data["replyTo"])
             
             ret_id = comments.insert(new_comment.__dict__)

@@ -11,9 +11,18 @@
     min-height: 280px;
 }
 
-.course-card > img {
+.course-card > a > img {
     display: block;
     margin-bottom: 20px;
     object-fit: cover;
     height: 120px;
+}
+
+.course-card > a > h3 {
+    color: var(--gray);
+}
+
+#enroll {
+    margin: 20px;
+
 }
