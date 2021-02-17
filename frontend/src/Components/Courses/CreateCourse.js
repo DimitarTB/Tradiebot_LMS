@@ -39,19 +39,6 @@ function CreateCourse() {
         }
 
         dispatch(createCourse(data))
-
-        const all_length = courses.allCourses.length
-
-
-        console.log(API_URL + "api/upload_image")
-        var formData = new FormData();
-        formData.append("image", courseInfo.file);
-        axios.post((API_URL + ("api/upload_image?course_id=" + courses.allCourses[all_length - 1]._id)), formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-
     }
     return (
         <Container
@@ -62,7 +49,6 @@ function CreateCourse() {
                         <input name="name" placeholder="Course Name"></input><br></br>
                         <input name="description" placeholder="Description"></input><br></br>
                         <input name="teachers" placeholder="Teacher"></input><br></br>
-                        <input type="file" onChange={(e) => setFile(e.target.files)} /><br></br>
                         <button>Submit</button>
                     </form>
                 </Fragment>

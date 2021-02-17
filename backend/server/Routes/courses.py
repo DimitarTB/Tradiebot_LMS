@@ -29,7 +29,7 @@ class Course:
         courses = db.courses
 
         tNow = datetime.datetime.utcnow()
-        new_course = Course(data["name"], data["description"], data["teachers"], tNow)
+        new_course = Course(data["name"], data["description"], data["teachers"], tNow, manualEnroll=data["manualEnroll"])
         _id = courses.insert(new_course.__dict__)
 
         users = db.users

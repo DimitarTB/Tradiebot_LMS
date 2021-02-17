@@ -19,7 +19,8 @@ export const CommentsSlice = createSlice({
         },
         [getAllComments.fulfilled]: (state, action) => {
             console.log(action)
-            state.allComments = action.payload
+            if ( typeof action.payload !== typeof []) state.allComments = []
+            else state.allComments = action.payload
             state.loadingStatus = statuses.fulfilled
             console.log("Comments: ", state.allComments)
         },

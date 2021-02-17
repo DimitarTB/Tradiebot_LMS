@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { createComment, getAllComments } from '../../../redux/Comments/CommentsActions'
 import { fetchAll } from "../../../redux/Users/UserActions"
-import { useParams } from "react-router-dom"
+import { useParams, NavLink, BrowserRouter } from "react-router-dom"
 import "./comments.css"
 import { API_URL } from "../../../redux/constants"
 import axios from 'axios'
+import DownloadLink from "react-download-link"
+import FileSaver from 'file-saver';
+import { MdInsertDriveFile } from 'react-icons/md'
 
 const CourseInfoSection = props => {
 
@@ -53,10 +56,10 @@ const CourseInfoSection = props => {
     }
 
     useEffect(() => {
+        console.log("fetch all")
         dispatch(getAllComments(allUsers.currentUser))
         dispatch(fetchAll(allUsers.currentUser))
     }, [])
-
     function filterComments(comment) {
         return (comment.lecture_id === props.lecture?._id)
     }
@@ -91,7 +94,9 @@ const CourseInfoSection = props => {
                 </form>
 
                 {props.lecture?.files?.map(file => <a href={file.file_path} download>{file.name}</a>)}
-            </div>
+                <button>Download</button>
+                {/* "http://localhost:88/lms/public/HelloWOrld.txt" */}
+            </div >
         )
     ]
 

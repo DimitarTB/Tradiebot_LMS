@@ -5,7 +5,7 @@ import Nav from "./Components/Global/Nav/Nav"
 import Landing from "./Components/Landing/Landing.js"
 import Profile from "./Components/User/Profile"
 import BrowseCourses from "./Components/Courses/BrowseCourses"
-import CreateCourse from "./Components/Courses/CreateCourse"
+import CreateCourse from "./Components/Courses/Forms/CreateCourse"
 import CreatedCourses from "./Components/Courses/CreatedCourses"
 import TeachingCourses from "./Components/Courses/TeachingCourses"
 
