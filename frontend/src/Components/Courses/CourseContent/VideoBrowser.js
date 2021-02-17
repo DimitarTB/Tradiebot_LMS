@@ -12,24 +12,6 @@ const VideoBrowser = props => {
     const [lectureName, setLectureName] = useState({
         "name": ""
     })
-    const handleChange = e => {
-        setLectureName({
-            ...lectureName,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        const data = {
-            "token": currentUser.currentUser,
-            "name": lectureName.name,
-            "course_id": props.currentCourse._id
-        }
-        dispatch(createLecture(data))
-
-    }
 
     console.log(props.lectures)
     const lectures = props.lectures.map((lecture, index, arr) => {
@@ -45,7 +27,6 @@ const VideoBrowser = props => {
     })
     return (
         <div className="video-browser">
-            {(props.currentCourse?.teachers.includes(currentUser.currentUserData._id) ? <div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div> : "")}
             {lectures}
         </div>
     )

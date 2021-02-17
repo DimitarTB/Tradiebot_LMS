@@ -109,15 +109,24 @@ def user():
     return methodExec(request, User)
 
 @app.route("/api/course", methods=["GET", "POST", "PUT", "DELETE"])
+@jwt_required
 def course():
-    print(request)
+    current_user = get_jwt_identity()
+
+    isAdmin = False
+
+    for admin in current_user["types"]:
+        if admin == "SuperAdmin":
+            isAdmin = True
+
+    if request.method is "POST" or request.method is "PUT" or request.method is "DELETE":
+        if isAdmin is not True:
+            return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     print("courses")
     return methodExec(request, Course)
 
-
-
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])
-# @jwt_required
+@jwt_required
 def lecture():
     print(request)
     return methodExec(request, Lecture)

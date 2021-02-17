@@ -57,3 +57,55 @@ export const createCourse = createAsyncThunk(
     }
 )
 
+export const addTeacher = createAsyncThunk(
+    'courses/addTeacher',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + data.token);
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/course?course=" + data.course_id + "&teacher=" + data.teacher_id), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log(error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const editCourse = createAsyncThunk(
+    'courses/editCourse',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + data.token);
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "name": data.course.name, "description": data.course.description, "teachers": data.course.teachers, "manualEnroll": data.course.manualEnroll, "dateCreated": data.course.dateCreated });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+
+            const response = await fetch((API_URL + "api/course?course=" + data.course._id), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log(error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react"
+import { current } from "@reduxjs/toolkit"
+import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { useParams, NavLink } from "react-router-dom"
+import {createLecture} from "../../../redux/Lectures/LecturesActions"
 
 import Form, {
     datePicker,
@@ -8,7 +11,7 @@ import Form, {
     multipleSelect,
     select
 } from '../../../react-former/Form'
-import { createCourse } from "../../../redux/Courses/CoursesActions"
+import { editCourse } from "../../../redux/Courses/CoursesActions"
 
 
 
@@ -16,14 +19,18 @@ export default props => {
 
     const dispatch = useDispatch()
 
+    const course_id = useParams().id
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
+    const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === course_id))
     const currentUser = useSelector(state => state.user)
+    const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
+
     const [info, setInfo] = useState({ type: null, message: null })
     const [course, setCourse] = useState({
-        name: null,
-        description: null,
-        teachers: [],
-        manualEnroll: null
+        name: currentCourse?.name,
+        description: currentCourse?.description,
+        teachers: currentCourse?.teachers,
+        manualEnroll: currentCourse?.manualEnroll === true ? "Manual Enroll" : "Self Enroll",
     })
 
     const courseValidator = {
@@ -45,10 +52,33 @@ export default props => {
             minLength: 0,
             maxLength: 4
         },
-        courseType: {
+        manualEnroll: {
             type: "string",
             isNullable: false
         }
+    }
+
+
+    const [lectureName, setLectureName] = useState({
+        name: ""
+    })
+    const handleChange = e => {
+        setLectureName({
+            ...lectureName,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        const data = {
+            "token": currentUser.currentUser,
+            "name": lectureName.name,
+            "course_id": course_id
+        }
+        dispatch(createLecture(data))
+
     }
 
     const validator = (data, tester) => {
@@ -64,29 +94,29 @@ export default props => {
 
     useEffect(() => {
         if (info.type === "loading") {
+            course.dateCreated = currentCourse.dateCreated
+            course._id = course_id
+            course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
             const data = {
-                name: course.name,
-                description: course.description,
-                teachers: course.teachers,
-                manualEnroll: (course.courseType === "Manual Enroll" ? true : false),
-                username: currentUser.currentUserData.username
+                course: course,
+                token: currentUser.currentUser
             }
-            dispatch(createCourse(data))
+            dispatch(editCourse(data))
         }
-        // if (info.type === "error") {
-
-        // }
     }, [info.type])
 
     return (
-        <Form
-            name="Create Course"
+        <Fragment><Form
+            name="Edit Course"
             info={info}
             buttonText="Proceed"
             data={course}
             handleChange={e => {
                 setInfo({ type: null, message: null })
-                setCourse({ ...course, [e.target.name]: e.target.value })
+                setCourse({
+                    ...course,
+                    [e.target.name]: e.target.value
+                })
             }}
             handleSubmit={e => {
                 e.preventDefault()
@@ -118,15 +148,18 @@ export default props => {
                     valueField: "_id"
                 },
                 {
-                    name: "courseType",
+                    name: "manualEnroll",
                     label: "Select Course Type",
                     placeholder: "Please Select Teachers for this course",
                     fieldType: select,
                     options: [{ name: "Manual Enroll" }, { name: "Self Enroll" }],
                     displayField: "name",
                     valueField: "name"
-                }
+                },
             ]}
         />
+            {courseLectures.map(lecture => <NavLink to={"/lecture/" + lecture._id}><h2>{lecture.name}</h2></NavLink>)}
+            {<div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}
+        </Fragment>
     )
 }

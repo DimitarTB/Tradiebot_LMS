@@ -8,6 +8,8 @@ import BrowseCourses from "./Components/Courses/BrowseCourses"
 import CreateCourse from "./Components/Courses/Forms/CreateCourse"
 import CreatedCourses from "./Components/Courses/CreatedCourses"
 import TeachingCourses from "./Components/Courses/TeachingCourses"
+import EditCourse from "./Components/Courses/Forms/EditCourse"
+import EditLecture from "./Components/Courses/Forms/EditLecture"
 
 import {
     BrowserRouter as Router,
@@ -51,6 +53,9 @@ function App() {
                     <Route path="/user/:username">
                         <Profile></Profile>
                     </Route>
+                    <Route path="/courses/edit/:id">
+                        <EditCourse></EditCourse>
+                    </Route>
                     <Route path="/courses/created">
                         <CreatedCourses />
                     </Route>
@@ -65,6 +70,10 @@ function App() {
                     </Route>
                     <Route path="/courses/create">
                         <CreateCourse />
+                    </Route>
+
+                    <Route path="/lectures/edit/:id">
+                        <EditLecture></EditLecture>
                     </Route>
                     
                     <Route path="/logout">

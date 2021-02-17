@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { createComment, getAllComments } from '../../../redux/Comments/CommentsActions'
 import { fetchAll } from "../../../redux/Users/UserActions"
-import { useParams, NavLink, BrowserRouter } from "react-router-dom"
+import { useParams, NavLink, BrowserRouter, Link } from "react-router-dom"
 import "./comments.css"
 import { API_URL } from "../../../redux/constants"
 import axios from 'axios'
@@ -94,7 +94,9 @@ const CourseInfoSection = props => {
                 </form>
 
                 {props.lecture?.files?.map(file => <a href={file.file_path} download>{file.name}</a>)}
-                <button>Download</button>
+                <a href="http://localhost:88/lms/public/HelloWOrld.cpp" target="_blank" download>
+                    <img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142" />
+                </a>
                 {/* "http://localhost:88/lms/public/HelloWOrld.txt" */}
             </div >
         )

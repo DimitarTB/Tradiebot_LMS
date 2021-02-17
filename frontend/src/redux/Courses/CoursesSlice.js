@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { getAllCourses, createCourse, enrollCourse } from "./CoursesActions"
+import { getAllCourses, createCourse, enrollCourse, editCourse } from "./CoursesActions"
 
 export const CoursesSlice = createSlice({
     name: 'courses',
@@ -37,6 +37,11 @@ export const CoursesSlice = createSlice({
         [createCourse.rejected]: (state, action) => {
             state.loadingError = action.payload
             state.loadingStatus = statuses.rejected
+        },
+
+        [editCourse.fulfilled]: (state, action) => {
+            let course = state.allCourses.findIndex(course => course._id === action.payload.course_id)
+            state.allCourses[course] = action.payload.course
         },
     }
 })

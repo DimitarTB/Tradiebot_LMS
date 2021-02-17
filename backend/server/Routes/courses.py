@@ -68,18 +68,26 @@ class Course:
             return jsonify(ret_courses)
 
     def update(request):
-        teacher_id = request.args.get("teacher")
-        course_id = request.args.get("course")
+        # teacher_id = request.args.get("teacher")
+        # course_id = request.args.get("course")
 
-        course_id = ObjectId(course_id)
+        # course_id = ObjectId(course_id)
+        # courses = db.courses
+
+        # if teacher_id is not None:
+        #     courses.update({"_id": course_id}, { "$push": {"teachers": teacher_id}})
+        #     return jsonify({"message": "Updated!", "course": course_id, "teacher": teacher_id})
+
+        # else:
+        #     new_name = request.args.get("name")
+        #     courses.update({"_id": course_id}, {"$set": {"name": new_name}})
+        #     return jsonify({"message": "Updated!", "course": course_id, "name": new_name})
+        course_id = request.args.get("course")
+        data = request.get_json()
+        update_course = Course(data["name"], data["description"], data["teachers"], data["dateCreated"], data["manualEnroll"])
         courses = db.courses
 
-        if teacher_id is not None:
-            courses.update({"_id": course_id}, { "$push": {"teachers": teacher_id}})
-
-        else:
-            new_name = request.args.get("name")
-            courses.update({"_id": course_id}, {"$set": {"name": new_name}})
-        return jsonify({"message": "Updated!"})
+        courses.update({"_id": ObjectId(course_id)}, (update_course.__dict__))
+        return jsonify({"message": "Updated!","course": update_course.__dict__, "course_id": course_id})
 
 
