@@ -2,6 +2,8 @@ import { current } from "@reduxjs/toolkit"
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, NavLink } from "react-router-dom"
+import axios from 'axios'
+import { API_URL } from "../../../redux/constants"
 
 import Form, {
     datePicker,
@@ -11,6 +13,7 @@ import Form, {
     select
 } from '../../../react-former/Form'
 import { editCourse } from "../../../redux/Courses/CoursesActions"
+import { updateLecture } from "../../../redux/Lectures/LecturesActions"
 
 
 export default props => {
@@ -27,11 +30,10 @@ export default props => {
     const [info, setInfo] = useState({ type: null, message: null })
     const [lecture, setLecture] = useState({
         name: currentLecture.name,
-        description: currentLecture.description,
-        files: currentLecture.files,
+        files: [],
         video_file: currentLecture.video_file
     })
-    
+
     const lectureValidator = {
         name: {
             type: "string",
@@ -64,22 +66,13 @@ export default props => {
 
     useEffect(() => {
         if (info.type === "loading") {
-            // course.dateCreated = currentCourse.dateCreated
-            // course._id = course_id
-            // course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
-            // const data = {
-            //     course: course,
-            //     token: currentUser.currentUser
-            // }
-            // dispatch(editCourse(data))
-
             // dispatch
         }
     }, [info.type])
 
     return (
         <Fragment><Form
-            name="Edit Course"
+            name="Edit Lecture"
             info={info}
             buttonText="Proceed"
             data={lecture}
@@ -92,8 +85,30 @@ export default props => {
             }}
             handleSubmit={e => {
                 e.preventDefault()
-                if (validator(lecture, lectureValidator) !== true) return
-                else setInfo({ type: "loading", message: "Request is being processed. PLease wait." })
+                // if (validator(lecture, lectureValidator) !== true) return
+                setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+
+                console.log(lecture.name)
+                const data = {
+                    name: lecture.name,
+                    files: [...currentLecture.files, lecture.files],
+                    video_file: lecture.video_file,
+                    dateCreated: currentLecture.dateCreated,
+                    course_id: currentLecture.course_id,
+                    id: lecture_id
+                }
+                dispatch(updateLecture(data))
+
+
+                var formData = new FormData();
+                for (let i = 0; i < lecture.files.length; i++) {
+                    formData.append("file", lecture.files[i]);
+                }
+                axios.post((API_URL + ("api/upload_file?lecture_id=" + lecture_id)), formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
             }}
             fields={[
                 {
@@ -106,15 +121,13 @@ export default props => {
                 {
                     name: "files",
                     label: "Select Files",
-                    placeholder: "Please Select Files for this lecture",
-                    type: "file",
-                    fieldType: input,
+                    fieldType: file,
+                    multiple: true
                 },
                 {
-                    video_file: "video_file",
+                    name: "video_file",
                     label: "Video for the lecture",
-                    type: "file",
-                    fieldType: input
+                    fieldType: file,
                 }
             ]}
         />

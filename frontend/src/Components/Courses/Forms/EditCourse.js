@@ -2,7 +2,7 @@ import { current } from "@reduxjs/toolkit"
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, NavLink } from "react-router-dom"
-import {createLecture} from "../../../redux/Lectures/LecturesActions"
+import { createLecture, deleteLecture } from "../../../redux/Lectures/LecturesActions"
 
 import Form, {
     datePicker,
@@ -12,8 +12,10 @@ import Form, {
     select
 } from '../../../react-former/Form'
 import { editCourse } from "../../../redux/Courses/CoursesActions"
+import VideoBrowser from "../CourseContent/VideoBrowser"
+import "./Edit.css"
 
-
+import { FcCancel } from "react-icons/fc";
 
 export default props => {
 
@@ -158,8 +160,8 @@ export default props => {
                 },
             ]}
         />
-            {courseLectures.map(lecture => <NavLink to={"/lecture/" + lecture._id}><h2>{lecture.name}</h2></NavLink>)}
-            {<div><h1>Teacher si</h1><form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}
+            <div class="lectures">{courseLectures.map(lecture => <Fragment><NavLink class="item" to={"/lectures/edit/" + lecture._id}><h2>{lecture.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({token: currentUser.currentUser, id: lecture._id}))} /></div></Fragment>)}
+                {<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div>
         </Fragment>
     )
 }

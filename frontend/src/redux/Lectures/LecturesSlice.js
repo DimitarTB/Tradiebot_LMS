@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { getAllLectures, createLecture } from './LecturesActions'
+import { getAllLectures, createLecture, deleteLecture, updateLecture } from './LecturesActions'
 
 export const LecturesSlice = createSlice({
     name: 'lectures',
@@ -47,6 +47,16 @@ export const LecturesSlice = createSlice({
         [createLecture.rejected]: (state, action) => {
             state.loadingError = action.payload
             state.createStatus = statuses.rejected
+        },
+        
+        [deleteLecture.fulfilled]: (state, action) => {
+            state.allLectures = state.allLectures.filter(lect => lect._id !== action.payload.id)
+        },
+
+        [updateLecture.fulfilled]: (state, action) => {
+            const upd_lect = state.allLectures.findIndex(lect => lect._id === action.payload.lecture_id)
+            const new_lect = action.payload.lecture
+            state.allLectures[upd_lect] = new_lect
         }
     }
 })

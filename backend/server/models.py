@@ -5,3 +5,5 @@ def methodExec(request, className):
         return className.read(request)
     elif request.method == "PUT":
         return className.update(request)
+    elif request.method == "DELETE":
+        return className.delete(request)

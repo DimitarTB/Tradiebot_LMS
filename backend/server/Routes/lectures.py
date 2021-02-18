@@ -44,3 +44,25 @@ class Lecture:
             for lecture in data:
                 ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"]})
             return jsonify(ret_lectures)
+
+    def update(request):
+        lectures = db.lectures
+        lecture_id = request.args["id"]
+        if "file" in request.args:
+            data = request.get_json()
+
+            for file in data["files"]:
+                lectures.update({"_id": ObjectId(lecture_id)}, { "$push": {"files": file}})
+            return jsonify({"Message": "Inserted files!", "files": data["files"]})
+        else:
+            data = request.get_json()
+            new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], data["files"], data["video_file"])
+            lectures.update({"_id": ObjectId(lecture_id)}, (new_lecture.__dict__))
+            return jsonify({"message": "Updated!","lecture": new_lecture.__dict__, "lecture_id": lecture_id})
+        
+    def delete(request):
+        lecture_id = request.args["id"]
+        print(lecture_id)
+        lectures = db.lectures
+        print(lectures.find_one_and_delete({"_id": ObjectId(lecture_id)}))
+        return jsonify({"message": "Deleted!", "id": lecture_id})

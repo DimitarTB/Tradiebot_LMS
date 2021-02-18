@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, abort, jsonify, send_file
-from config import app, db, mail
+from config import app, db, mail, get_random
 from Routes.users import User
 from Routes.courses import Course
 from Routes.lectures import Lecture
@@ -14,6 +14,7 @@ from flask_jwt_extended import (
 )
 from werkzeug.security import check_password_hash
 import json
+from bson.objectid import ObjectId
 
 @app.route('/activate')
 def sendMail():
@@ -44,6 +45,20 @@ def upl_img():
     image = files["image"]
     image.save(("./static/lms/public/thumbnails/" + c_id + ".jpg"))
     return "success"
+
+@app.route('/api/upload_file', methods=["POST"])
+def upl_file():
+    print(request)
+    l_id = request.args.get('lecture_id')
+    files = []
+    for file in request.files.getlist('file'):
+        filename = "./static/lms/public/files/" + get_random() + "_" + file.filename
+        file.save(filename)
+        files.append(filename)    
+    lectures = db.lectures
+    for file in files:
+        lectures.update({"_id": ObjectId(l_id)}, { "$push": {"files": file}})
+    return jsonify({"Message": "Inserted files!", "files": files})
 
 @app.route('/api/get_image', methods=["GET"])
 def get_img():
@@ -126,7 +141,6 @@ def course():
     return methodExec(request, Course)
 
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])
-@jwt_required
 def lecture():
     print(request)
     return methodExec(request, Lecture)
