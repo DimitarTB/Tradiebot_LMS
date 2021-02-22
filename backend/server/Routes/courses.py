@@ -47,8 +47,8 @@ class Course:
         if course_id is not None:
             data = courses.find_one({"_id": ObjectId(course_id)})
             print(data)
-            ret_course = Course(data["name"], data["description"], data["teachers"], data["dateCreated"], data["manualEnroll"])
-            return jsonify({"courses": ret_course.__dict__})
+            ret_course = {"_id": course_id, "dateCreated": data["dateCreated"], "description": data["description"], "manualEnroll": data["manualEnroll"], "name": data["name"], "teachers": data["teachers"]}
+            return jsonify({"courses": ret_course})
         else:
             userCourse = request.args.get("username")
             if userCourse is not None:

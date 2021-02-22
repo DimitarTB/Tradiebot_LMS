@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
 import { enrollCourse, fetchAll, loginUser, unEnrollCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
-import { register } from '../../serviceWorker'
+import { register } from './UserActions'
 
 export const UserSlice = createSlice({
     name: 'user',
@@ -48,7 +48,7 @@ export const UserSlice = createSlice({
             state.loginStatus = statuses.fulfilled
             console.log(state.currentUser)
             const decoded = jwt_decode(state.currentUser).identity
-            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)
@@ -66,6 +66,7 @@ export const UserSlice = createSlice({
         [register.fulfilled]: (state, action) => {
             state.allUsers.push(action.payload)
             state.registerStatus = statuses.fulfilled
+            console.log(state.registerStatus)
         },
         [register.rejected]: (state, action) => {
             state.loadingError = action.payload

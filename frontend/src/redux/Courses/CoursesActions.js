@@ -26,6 +26,27 @@ export const getAllCourses = createAsyncThunk(
     }
 )
 
+export const getOneCourse = createAsyncThunk(
+    'courses/getOneCourse',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            const response = await fetch(API_URL + "api/course?id=" + data.id, requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
 export const createCourse = createAsyncThunk(
     'courses/createCourse',
     async (data, ext) => {

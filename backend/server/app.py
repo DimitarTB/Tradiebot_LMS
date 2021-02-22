@@ -47,18 +47,20 @@ def upl_img():
     return "success"
 
 @app.route('/api/upload_file', methods=["POST"])
+@jwt_required
 def upl_file():
     print(request)
     l_id = request.args.get('lecture_id')
     files = []
     for file in request.files.getlist('file'):
-        filename = "./static/lms/public/files/" + get_random() + "_" + file.filename
-        file.save(filename)
+        filename = "lms/public/files/" + get_random() + "_" + file.filename
+        file.save(("./static/" + filename))
         files.append(filename)    
     lectures = db.lectures
+    print(files)
     for file in files:
         lectures.update({"_id": ObjectId(l_id)}, { "$push": {"files": file}})
-    return jsonify({"Message": "Inserted files!", "files": files})
+    return jsonify({"Message": "Inserted files!", "files": files, "id": l_id})
 
 @app.route('/api/get_image', methods=["GET"])
 def get_img():
@@ -94,7 +96,7 @@ def login():
     if not userJ:
         userJ = users.find_one({"email": auth["username"]})
 
-    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"]})
+    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "rnd": userJ["rnd"]})
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     if check_password_hash(user["password"], auth["password"]):

@@ -24,6 +24,28 @@ export const getAllComments = createAsyncThunk(
     }
 )
 
+export const getLectureComments = createAsyncThunk(
+    'comments/getLectureComments',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/comment?lecture_id=" + data.lecture_id, requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
 export const createComment = createAsyncThunk(
     'comments/createComment',
     async (data, ext) => {

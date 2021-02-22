@@ -27,8 +27,8 @@ class Lecture:
         lectures = db.lectures
         if lecture_id is not None:
             data = lectures.find_one({"_id": ObjectId(lecture_id)})
-            ret_lecture = {"name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"]}
-            return jsonify((ret_lecture.__dict__))
+            ret_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"]}
+            return jsonify({"lecture": ret_lecture})
         else:
             course_id = request.args.get("course_id")
 
@@ -36,8 +36,8 @@ class Lecture:
                 data = lectures.find({"course_id": course_id})
                 ret_lectures = []
                 for lecture in data:
-                    ret_lectures.append((Lecture(lecture["name"], lecture["course_id"], lecture["dateCreated"], lecture["files"])).__dict__)
-                return jsonify(ret_lectures)
+                    ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"]})
+                return jsonify({"lectures": ret_lectures, "course_id": course_id})
 
             data = lectures.find({})
             ret_lectures = []
@@ -50,10 +50,15 @@ class Lecture:
         lecture_id = request.args["id"]
         if "file" in request.args:
             data = request.get_json()
-
+            new_files = data["files"]
+            print("new_files1", data["files"])
             for file in data["files"]:
+                print("ciklus", file)
                 lectures.update({"_id": ObjectId(lecture_id)}, { "$push": {"files": file}})
-            return jsonify({"Message": "Inserted files!", "files": data["files"]})
+                new_files.append(file)
+            print("new_files2", new_files)
+            new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], new_files, data["video_file"])
+            return jsonify({"message": "Updated f!","lecture": new_lecture.__dict__, "lecture_id": lecture_id})
         else:
             data = request.get_json()
             new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], data["files"], data["video_file"])

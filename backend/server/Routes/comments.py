@@ -34,8 +34,8 @@ class Comment:
 
             ret_comments = []
             for comment in data:
-                ret_comments.append((Comment(comment["creator_id"], comment["lecture_id"], comment["comment"], comment["dateCreated"], replyTo=comment["replyTo"])).__dict__)
-            return jsonify(ret_comments)
+                ret_comments.append({"_id": str(comment["_id"]), "comment": comment["comment"], "creator_id": comment["creator_id"], "dateCreated": comment["dateCreated"], "lecture_id": comment["lecture_id"], "replyTo": comment["replyTo"]})
+            return jsonify({"comments": ret_comments, "lecture_id": lecture_id})
         else:
             data = comments.find({})
             ret_comments = []

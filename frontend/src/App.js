@@ -10,6 +10,7 @@ import CreatedCourses from "./Components/Courses/CreatedCourses"
 import TeachingCourses from "./Components/Courses/TeachingCourses"
 import EditCourse from "./Components/Courses/Forms/EditCourse"
 import EditLecture from "./Components/Courses/Forms/EditLecture"
+import Register from "./Components/Landing/Register"
 
 import {
     BrowserRouter as Router,
@@ -21,6 +22,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
 import CourseComponent from "./Components/Courses/CourseComponent"
 import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
+import { getAllCourses } from './redux/Courses/CoursesActions'
+import NotActivated from './Components/Landing/NotActivated'
 
 function App() {
 
@@ -31,11 +34,15 @@ function App() {
     return (
         <div className="App">
             <Router>
+                <Route path="/register">
+                    <Register />
+                </Route>
                 {user.currentUser === null ? <Redirect to="/" /> : <Nav />}
+                {user.currentUserData.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
                 <Switch>
                     <Route path="/home">
                         <Container
-                            details="Default Container Details"
+                            details={"Default Container Details"}
                             description="Description about default container details"
 
                             component={(
@@ -49,6 +56,9 @@ function App() {
                     </Route>
                     <Route path="/course/:course_id">
                         <CourseContainer />
+                    </Route>
+                    <Route path="/not_activated">
+                        <NotActivated user={user.currentUserData?.username}/>
                     </Route>
                     <Route path="/user/:username">
                         <Profile></Profile>
@@ -75,14 +85,15 @@ function App() {
                     <Route path="/lectures/edit/:id">
                         <EditLecture></EditLecture>
                     </Route>
-                    
+
                     <Route path="/logout">
-                        {() => {dispatch({ type: 'user/logout' })}}
+                        {() => { dispatch({ type: 'user/logout' }) }}
                     </Route>
 
                     <Route path="/">
                         <Landing />
                     </Route>
+                    
 
 
                 </Switch>

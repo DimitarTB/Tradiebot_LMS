@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import Login from "./Login"
 
 import "./Container.css"
+import Register from "./Register"
 
 
 export default props => {
@@ -16,7 +17,7 @@ export default props => {
                 <div className="image">
 
                 </div>
-                {loginShowing === true ? <Login /> : "Reigster new user"}
+                {loginShowing === true ? <Login setLoginShowing={setLoginShowing} /> : <Register setLoginShowing={setLoginShowing} />}
             </div>
         </div>
     )

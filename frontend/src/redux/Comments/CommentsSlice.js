@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { createComment, getAllComments } from "./CommentsActions"
+import { createComment, getAllComments, getLectureComments } from "./CommentsActions"
 
 export const CommentsSlice = createSlice({
     name: 'comments',
@@ -27,6 +27,11 @@ export const CommentsSlice = createSlice({
         [getAllComments.rejected]: (state, action) => {
             state.loadingError = action.payload
             state.loadingStatus = statuses.rejected
+        },
+
+        [getLectureComments.fulfilled]: (state, action) => {
+            state.allComments = state.allComments.filter(comm => comm.lecture_id !== action.payload.lecture_id)
+            state.allComments.push(...action.payload.comments)
         },
 
 

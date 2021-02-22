@@ -30,6 +30,11 @@
     padding: 40px;
     box-sizing: border-box;
     width: 50%;
+    overflow-y: scroll;
+}
+
+.landing > .landing-container > .form::-webkit-scrollbar {
+    width: 0px;
 }
 
 .landing > .landing-container > .form > h3 {

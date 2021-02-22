@@ -55,7 +55,7 @@ export const register = createAsyncThunk(
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "email": data.email, "username": data.username, "password": data.password, "types": data.types });
+            var raw = JSON.stringify({ "username": data.username, "email": data.email, "password": data.password });
 
             var requestOptions = {
                 method: 'POST',

@@ -31,7 +31,7 @@ class User:
         hashed_password = generate_password_hash(data['password'], method='sha256')
         tNow = datetime.datetime.utcnow()
         rnd = str(uuid.uuid4())
-        new_user = User(data["username"], data["email"], hashed_password, data["types"], tNow, rnd=rnd)
+        new_user = User(data["username"], data["email"], hashed_password, "Student", tNow, rnd=rnd)
         users.insert(new_user.__dict__)
 
         msg = Message( 

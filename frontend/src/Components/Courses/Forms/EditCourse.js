@@ -2,7 +2,7 @@ import { current } from "@reduxjs/toolkit"
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, NavLink } from "react-router-dom"
-import { createLecture, deleteLecture } from "../../../redux/Lectures/LecturesActions"
+import { createLecture, deleteLecture, getAllLectures } from "../../../redux/Lectures/LecturesActions"
 
 import Form, {
     datePicker,
@@ -20,7 +20,6 @@ import { FcCancel } from "react-icons/fc";
 export default props => {
 
     const dispatch = useDispatch()
-
     const course_id = useParams().id
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
     const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === course_id))
@@ -95,6 +94,7 @@ export default props => {
     }
 
     useEffect(() => {
+        dispatch(getAllLectures(currentUser.currentUser))
         if (info.type === "loading") {
             course.dateCreated = currentCourse.dateCreated
             course._id = course_id

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { createComment, getAllComments } from '../../../redux/Comments/CommentsActions'
 import { fetchAll } from "../../../redux/Users/UserActions"
 import { useParams, NavLink, BrowserRouter, Link } from "react-router-dom"
 import "./comments.css"
-import { API_URL } from "../../../redux/constants"
+import { API_URL, getFileName, FILES_URL } from "../../../redux/constants"
 import axios from 'axios'
 import DownloadLink from "react-download-link"
 import FileSaver from 'file-saver';
@@ -58,12 +58,11 @@ const CourseInfoSection = props => {
     useEffect(() => {
         console.log("fetch all")
         dispatch(getAllComments(allUsers.currentUser))
-        dispatch(fetchAll(allUsers.currentUser))
     }, [])
     function filterComments(comment) {
         return (comment.lecture_id === props.lecture?._id)
     }
-    const displayComments = selectComments.filter(filterComments)
+    const displayComments = selectComments?.filter(filterComments)
     const tabs = [
         (
             <div className="course-details">
@@ -87,17 +86,7 @@ const CourseInfoSection = props => {
         ),
         (
             <div className="course-files">
-                Lecture Files
-                <form>
-                    <input type="file" onChange={(e) => sendFile(e.target.files)} />
-                    <button>Submit</button>
-                </form>
-
-                {props.lecture?.files?.map(file => <a href={file.file_path} download>{file.name}</a>)}
-                <a href="http://localhost:88/lms/public/HelloWOrld.cpp" target="_blank" download>
-                    <img src="/images/myw3schoolsimage.jpg" alt="W3Schools" width="104" height="142" />
-                </a>
-                {/* "http://localhost:88/lms/public/HelloWOrld.txt" */}
+                {props.lecture?.files.map(file => <Fragment><h2><a href={FILES_URL + file} target="_blank" download>{getFileName(file)}</a></h2></Fragment>)}
             </div >
         )
     ]

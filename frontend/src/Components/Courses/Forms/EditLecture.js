@@ -3,7 +3,7 @@ import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, NavLink } from "react-router-dom"
 import axios from 'axios'
-import { API_URL } from "../../../redux/constants"
+import { API_URL, getFileName } from "../../../redux/constants"
 
 import Form, {
     datePicker,
@@ -13,14 +13,12 @@ import Form, {
     select
 } from '../../../react-former/Form'
 import { editCourse } from "../../../redux/Courses/CoursesActions"
-import { updateLecture } from "../../../redux/Lectures/LecturesActions"
+import { getOneLecture, updateLecture, uploadFile } from "../../../redux/Lectures/LecturesActions"
+import "./Edit.css"
+import { FcCancel } from "react-icons/fc";
 
 
 export default props => {
-
-    var getFileName = function (url) {
-        return url.split('\\').pop().split('/').pop();
-    }
     const dispatch = useDispatch()
 
     const lecture_id = useParams().id
@@ -29,9 +27,9 @@ export default props => {
 
     const [info, setInfo] = useState({ type: null, message: null })
     const [lecture, setLecture] = useState({
-        name: currentLecture.name,
+        name: currentLecture?.name,
         files: [],
-        video_file: currentLecture.video_file
+        video_file: currentLecture?.video_file
     })
 
     const lectureValidator = {
@@ -65,72 +63,71 @@ export default props => {
     }
 
     useEffect(() => {
-        if (info.type === "loading") {
-            // dispatch
-        }
-    }, [info.type])
+        const data = { "id": lecture_id }
+        dispatch(getOneLecture(data))
+    }, [])
 
     return (
-        <Fragment><Form
-            name="Edit Lecture"
-            info={info}
-            buttonText="Proceed"
-            data={lecture}
-            handleChange={e => {
-                setInfo({ type: null, message: null })
-                setLecture({
-                    ...lecture,
-                    [e.target.name]: e.target.value
-                })
-            }}
-            handleSubmit={e => {
-                e.preventDefault()
-                // if (validator(lecture, lectureValidator) !== true) return
-                setInfo({ type: "loading", message: "Request is being processed. Please wait." })
-
-                console.log(lecture.name)
-                const data = {
-                    name: lecture.name,
-                    files: [...currentLecture.files, lecture.files],
-                    video_file: lecture.video_file,
-                    dateCreated: currentLecture.dateCreated,
-                    course_id: currentLecture.course_id,
-                    id: lecture_id
-                }
-                dispatch(updateLecture(data))
-
-
-                var formData = new FormData();
-                for (let i = 0; i < lecture.files.length; i++) {
-                    formData.append("file", lecture.files[i]);
-                }
-                axios.post((API_URL + ("api/upload_file?lecture_id=" + lecture_id)), formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+        <div style={{ "width": "100%" }}>
+            <Form
+                name="Edit Lecture"
+                info={info}
+                buttonText="Proceed"
+                data={lecture}
+                handleChange={e => {
+                    setInfo({ type: null, message: null })
+                    setLecture({
+                        ...lecture,
+                        [e.target.name]: e.target.value
+                    })
+                }}
+                handleSubmit={e => {
+                    e.preventDefault()
+                    // if (validator(lecture, lectureValidator) !== true) return
+                    setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+                    const data = {
+                        name: lecture.name,
+                        files: currentLecture.files ? currentLecture.files : [],
+                        video_file: lecture.video_file,
+                        dateCreated: currentLecture.dateCreated,
+                        course_id: currentLecture.course_id,
+                        id: lecture_id,
                     }
-                })
-            }}
-            fields={[
-                {
-                    name: "name",
-                    label: "Lecture Name",
-                    placeholder: "Please Enter Lecture Name",
-                    type: "text",
-                    fieldType: input
-                },
-                {
-                    name: "files",
-                    label: "Select Files",
-                    fieldType: file,
-                    multiple: true
-                },
-                {
-                    name: "video_file",
-                    label: "Video for the lecture",
-                    fieldType: file,
-                }
-            ]}
-        />
-        </Fragment>
+                    if (lecture.files.length > 0) data.file = true
+                    console.log("dispatch")
+                    dispatch(updateLecture(data))
+
+                    if (lecture.files.length > 0) {
+                        const data = {
+                            lecture: lecture,
+                            lecture_id: lecture_id
+                        }
+                        dispatch(uploadFile(data))
+                    }
+                }}
+                fields={[
+                    {
+                        name: "name",
+                        label: "Lecture Name",
+                        placeholder: "Please Enter Lecture Name",
+                        type: "text",
+                        fieldType: input
+                    },
+                    {
+                        name: "files",
+                        label: "Select Files",
+                        fieldType: file,
+                        multiple: true
+                    },
+                    {
+                        name: "video_file",
+                        label: "Video for the lecture",
+                        type: "text",
+                        fieldType: input,
+                    }
+                ]}
+            />
+            <div class="lectures">{currentLecture?.files?.map(fl => <Fragment><h2>{getFileName(fl)}</h2><div class="icon"><FcCancel /></div></Fragment>)}</div>
+        </div>
     )
 }
