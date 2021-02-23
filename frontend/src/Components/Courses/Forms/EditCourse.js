@@ -1,7 +1,7 @@
 import { current } from "@reduxjs/toolkit"
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams, NavLink } from "react-router-dom"
+import { useParams, NavLink, Redirect } from "react-router-dom"
 import { createLecture, deleteLecture, getAllLectures } from "../../../redux/Lectures/LecturesActions"
 
 import Form, {
@@ -21,8 +21,11 @@ export default props => {
 
     const dispatch = useDispatch()
     const course_id = useParams().id
+    console.log("CID", course_id)
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
-    const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === course_id))
+    const courses = useSelector(state => state.courses)
+    const currentCourse = courses.allCourses.find(course => course._id === course_id)
+    console.log("CC", currentCourse)
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
 
@@ -107,7 +110,7 @@ export default props => {
         }
     }, [info.type])
 
-    return (
+    return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.roles.includes("SuperAdmin")) ? (
         <Fragment><Form
             name="Edit Course"
             info={info}
@@ -123,7 +126,9 @@ export default props => {
             handleSubmit={e => {
                 e.preventDefault()
                 if (validator(course, courseValidator) !== true) return
-                else setInfo({ type: "loading", message: "Request is being processed. PLease wait." })
+                if (courses.updateStatus === "fulfilled") setInfo({ type: "success", message: "Course updated successfully!" })
+                else if (courses.updateStatus === "rejected") setInfo({ type: "error", message: courses.updateError })
+                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
             }}
             fields={[
                 {
@@ -160,8 +165,8 @@ export default props => {
                 },
             ]}
         />
-            <div class="lectures">{courseLectures.map(lecture => <Fragment><NavLink class="item" to={"/lectures/edit/" + lecture._id}><h2>{lecture.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({token: currentUser.currentUser, id: lecture._id}))} /></div></Fragment>)}
+            <div class="lectures">{courseLectures.map(lecture => <Fragment><NavLink class="item" to={"/lectures/edit/" + lecture._id}><h2>{lecture.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser.currentUser, id: lecture._id }))} /></div></Fragment>)}
                 {<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div>
         </Fragment>
-    )
+    ) : <Redirect to="/" />
 }

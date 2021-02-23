@@ -8,7 +8,9 @@ export const LecturesSlice = createSlice({
         allLectures: [],
         allFiles: [],
         loadingStatus: statuses.idle,
-        createStatus: statuses.idle
+        createStatus: statuses.idle,
+        updateStatus: statuses.idle,
+        updateError: null
     },
     reducers: {
     },
@@ -69,7 +71,17 @@ export const LecturesSlice = createSlice({
             const upd_lect = state.allLectures.findIndex(lect => lect._id === action.payload.lecture_id)
             const new_lect = action.payload.lecture
             state.allLectures[upd_lect] = new_lect
+            state.updateStatus = statuses.fulfilled
         },
+        [updateLecture.pending]: (state, action) => {
+            state.updateStatus = statuses.pending
+        },
+        [updateLecture.rejected]: (state, action) => {
+            state.updateStatus = statuses.rejected
+            state.updateError = action.payload.message
+        },
+
+
         [uploadFile.fulfilled]: (state, action) => {
             const idx = state.allLectures.findIndex(lecture => lecture._id = action.payload.id)
             if (idx === -1) return

@@ -34,7 +34,7 @@ const CourseContainer = props => {
         dispatch(getLectureComments({ "lecture_id": selectedLecture?._id }))
     }, [])
 
-    return (
+    return currentLectures.length > 0 ? (
         <div className="course-container">
             <div className="left">
                 <VideoPlayer url={selectedLecture?.video_file} />
@@ -42,7 +42,7 @@ const CourseContainer = props => {
             </div>
             <VideoBrowser lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} />
         </div>
-    )
+    ) : <div><center><h3>This course has no lectures in it !</h3></center></div>
 
 }
 

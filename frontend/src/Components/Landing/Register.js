@@ -24,12 +24,15 @@ export default props => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        dispatch(register(user)) 
+        console.log(user)
+        dispatch(register(user))
+
+        if (currentUser.registerStatus === "fulfilled") alert("A message with an activation link has been sent to your e-mail address!")
+        else if (currentUser.registerStatus === "rejected") alert(currentUser.registerError)
     }
     return currentUser.currentUser === null ? (
         <div className="login form">
             <h3> REGISTER </h3>
-            <h4>{currentUser.registerStatus === "fulfilled" ? <div>An email has been sent with activation link!</div> : ""}</h4>
             <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
                 <label htmlFor="">Username</label>
                 <input type="text" name="username" />

@@ -45,12 +45,11 @@ const CourseInfoSection = props => {
         const data = {
             "token": allUsers.currentUser,
             "creator_id": allUsers.currentUserData._id,
-            "lecture_id": props.lecture._id,
+            "lecture_id": props.lecture?._id,
             "comment": comment,
             "replyTo": ""
         }
 
-        console.log(props.lecture._id)
         dispatch(createComment(data))
 
     }
@@ -86,7 +85,7 @@ const CourseInfoSection = props => {
         ),
         (
             <div className="course-files">
-                {props.lecture?.files.map(file => <Fragment><h2><a href={FILES_URL + file} target="_blank" download>{getFileName(file)}</a></h2></Fragment>)}
+                {props.lecture?.files?.map(file => <Fragment><h2><a href={FILES_URL + file} target="_blank" download>{getFileName(file)}</a></h2></Fragment>)}
             </div >
         )
     ]

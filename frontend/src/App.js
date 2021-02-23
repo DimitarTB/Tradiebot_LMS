@@ -17,6 +17,7 @@ import {
     Switch,
     Route,
     Redirect,
+    DefaultRoute
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
@@ -24,6 +25,7 @@ import CourseComponent from "./Components/Courses/CourseComponent"
 import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
 import { getAllCourses } from './redux/Courses/CoursesActions'
 import NotActivated from './Components/Landing/NotActivated'
+import ChangePassword from './Components/Landing/ChangePassword'
 
 function App() {
 
@@ -37,64 +39,66 @@ function App() {
                 <Route path="/register">
                     <Register />
                 </Route>
-                {user.currentUser === null ? <Redirect to="/" /> : <Nav />}
-                {user.currentUserData.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
+                <Route path="/change_password">
+                    <ChangePassword />
+                </Route>
+                {user?.currentUser === null ? <Redirect to="/" /> : <Nav />}
+                {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
                 <Switch>
-                    <Route path="/home">
-                        <Container
-                            details={"Default Container Details"}
-                            description="Description about default container details"
-
-                            component={(
-                                <Fragment>
-                                    <h1>Hello World</h1>
-                                    <h2>H2 tag</h2>
-                                    <h3>Hello again</h3>
-                                </Fragment>
-                            )}
-                        />
-                    </Route>
-                    <Route path="/course/:course_id">
-                        <CourseContainer />
-                    </Route>
                     <Route path="/not_activated">
-                        <NotActivated user={user.currentUserData?.username}/>
+                        <NotActivated user={user.currentUserData?.username} />
                     </Route>
-                    <Route path="/user/:username">
-                        <Profile></Profile>
-                    </Route>
-                    <Route path="/courses/edit/:id">
-                        <EditCourse></EditCourse>
-                    </Route>
-                    <Route path="/courses/created">
-                        <CreatedCourses />
-                    </Route>
-                    <Route path="/courses/teaching">
-                        <TeachingCourses />
-                    </Route>
-                    <Route path="/courses/enrolled">
-                        <EnrolledCourses />
-                    </Route>
-                    <Route path="/courses/browse">
-                        <BrowseCourses />
-                    </Route>
-                    <Route path="/courses/create">
-                        <CreateCourse />
-                    </Route>
-
-                    <Route path="/lectures/edit/:id">
-                        <EditLecture></EditLecture>
-                    </Route>
-
                     <Route path="/logout">
                         {() => { dispatch({ type: 'user/logout' }) }}
                     </Route>
+                    {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : (<>
+                        <Route path="/home">
+                            <Container
+                                details={"Default Container Details"}
+                                description="Description about default container details"
 
-                    <Route path="/">
-                        <Landing />
-                    </Route>
-                    
+                                component={(
+                                    <Fragment>
+                                        <h1>Hello World</h1>
+                                        <h2>H2 tag</h2>
+                                        <h3>Hello again</h3>
+                                    </Fragment>
+                                )}
+                            />
+                        </Route>
+                        <Route path="/course/:course_id">
+                            <CourseContainer />
+                        </Route>
+                        <Route path="/user/:username">
+                            <Profile></Profile>
+                        </Route>
+                        <Route path="/courses/edit/:id">
+                            <EditCourse></EditCourse>
+                        </Route>
+                        <Route path="/courses/created">
+                            <CreatedCourses />
+                        </Route>
+                        <Route path="/courses/teaching">
+                            <TeachingCourses />
+                        </Route>
+                        <Route path="/courses/enrolled">
+                            <EnrolledCourses />
+                        </Route>
+                        <Route path="/courses/browse">
+                            <BrowseCourses />
+                        </Route>
+                        <Route path="/courses/create">
+                            <CreateCourse />
+                        </Route>
 
+                        <Route path="/lectures/edit/:id">
+                            <EditLecture></EditLecture>
+                        </Route>
+
+                        <Route exact path="/">
+                            <Landing />
+                        </Route>
+                    </>)}
 
                 </Switch>
             </Router>

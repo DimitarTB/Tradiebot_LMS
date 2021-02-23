@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 import { enrollCourse } from '../../redux/Users/UserActions'
 import { unEnrollCourse } from '../../redux/Users/UserActions'
 
@@ -55,6 +55,7 @@ export default props => {
             }
             }>Unenroll</button> : ""
             }
+            {props.edit === true ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
         </div>
     )
 }

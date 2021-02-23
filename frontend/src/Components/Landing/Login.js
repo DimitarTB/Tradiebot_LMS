@@ -3,7 +3,7 @@ import React from "react"
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { loginUser } from "../../redux/Users/UserActions"
-import { Redirect } from "react-router-dom"
+import { NavLink, Redirect } from "react-router-dom"
 
 export default props => {
 
@@ -25,7 +25,7 @@ export default props => {
     const handleSubmit = e => {
         e.preventDefault();
         dispatch(loginUser(user))
-        
+
     }
     return currentUser.currentUser === null ? (
         <div className="login form">
@@ -36,10 +36,10 @@ export default props => {
 
                 <label htmlFor="password">Password</label>
                 <input type="password" name="password" />
-
+                <NavLink to="/change_password">Forgot your password?</NavLink>
                 <button> Login </button>
             </form>
             <button onClick={e => props.setLoginShowing(false)}>Register</button>
         </div>
-    ) : <Redirect to="/home" />
+    ) : currentUser?.currentUserData?.activated === true ? <Redirect to="/home" /> : <Redirect to="/not_activated" />
 }

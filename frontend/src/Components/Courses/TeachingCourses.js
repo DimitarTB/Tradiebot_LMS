@@ -30,7 +30,7 @@ const EnrolledCourses = props => {
             description="View your courses."
             component={(
                 <div id="enrolled">
-                    {allCourses.map(course => <CourseCard course={course} />)}
+                    {allCourses.map(course => <CourseCard course={course} edit={true} />)}
                 </div>
             )}
         />

@@ -66,6 +66,9 @@ export const register = createAsyncThunk(
 
             const response = await fetch(API_URL + "api/register", requestOptions)
             const data2 = await response.json()
+            if (response.status !== 200) {
+                return ext.rejectWithValue(data2.message)
+            }
             return data2
         } catch (error) {
             return ext.rejectWithValue(error.message)

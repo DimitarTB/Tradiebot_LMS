@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, make_response
 from config import db, mail
 from werkzeug.security import generate_password_hash
 import datetime
@@ -23,11 +23,12 @@ class User:
         data = request.get_json()
         users = db.users
 
+        print(data)
         if users.find_one({"username": data["username"]}):
-            return jsonify({"message": "Unique username!!!"})
+            return make_response(jsonify({"message": "Unique username!!!"}), 401)
 
         if users.find_one({"email": data["email"]}):
-            return jsonify({"message": "Unique email!!!"})
+            return make_response(jsonify({"message": "Unique email!!!"}), 401)
         hashed_password = generate_password_hash(data['password'], method='sha256')
         tNow = datetime.datetime.utcnow()
         rnd = str(uuid.uuid4())

@@ -6,6 +6,8 @@ export const CoursesSlice = createSlice({
     name: 'courses',
     initialState: {
         loadingStatus: statuses.idle,
+        updateStatus: statuses.idle,
+        updateError: null,
         allCourses: []
     },
     reducers: {
@@ -49,7 +51,15 @@ export const CoursesSlice = createSlice({
         [editCourse.fulfilled]: (state, action) => {
             let course = state.allCourses.findIndex(course => course._id === action.payload.course_id)
             state.allCourses[course] = action.payload.course
+            state.updateStatus = statuses.fulfilled
         },
+        [editCourse.pending]: (state, action) => {
+            state.updateStatus = statuses.pending
+        },
+        [editCourse.rejected]: (state, action) => {
+            state.updateStatus = statuses.rejected
+            state.updateError = action.payload.message
+        }
     }
 })
 

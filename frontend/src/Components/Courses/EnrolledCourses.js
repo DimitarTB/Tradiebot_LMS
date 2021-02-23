@@ -14,8 +14,8 @@ const EnrolledCourses = props => {
     const dispatch = useDispatch()
     const currentUser = useSelector(state => state.user)
     // const enrolledCourses = useSelector(state => state?.courses?.allCourses?.filter(course => state.user.currentUserData?.enrolledCourses?.includes(course._id)))
-    const allCourses = useSelector(state => state.courses?.allCourses.filter(course => currentUser.currentUserData.enrolledCourses.includes(course?._id)))
-    
+    const allCourses = useSelector(state => state.courses.allCourses.filter(course => currentUser.currentUserData.enrolledCourses.includes(course?._id)))
+
     useEffect(() => {
         console.log(currentUser.currentUser)
         if (currentUser.currentUser !== null) {

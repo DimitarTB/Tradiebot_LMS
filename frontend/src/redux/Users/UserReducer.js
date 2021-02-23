@@ -12,6 +12,7 @@ export const UserSlice = createSlice({
         loadingStatus: statuses.idle,
         loginStatus: statuses.idle,
         registerStatus: statuses.idle,
+        registerError: null,
         currentUserData: null
     },
     reducers: {
@@ -66,19 +67,19 @@ export const UserSlice = createSlice({
         [register.fulfilled]: (state, action) => {
             state.allUsers.push(action.payload)
             state.registerStatus = statuses.fulfilled
-            console.log(state.registerStatus)
+            console.log("FF")
         },
         [register.rejected]: (state, action) => {
-            state.loadingError = action.payload
+            state.registerError = action.payload
             state.registerStatus = statuses.rejected
         },
 
-        [enrollCourse.fulfilled]: (state,action) => {
+        [enrollCourse.fulfilled]: (state, action) => {
             console.log("PL", action.payload)
             state.currentUserData.enrolledCourses = [...state.currentUserData.enrolledCourses, action.payload._id]
         },
 
-        [unEnrollCourse.fulfilled]: (state,action) => {
+        [unEnrollCourse.fulfilled]: (state, action) => {
             console.log(action.payload._id)
             state.currentUserData.enrolledCourses = state.currentUserData.enrolledCourses.filter(course => course !== action.payload._id)
         }

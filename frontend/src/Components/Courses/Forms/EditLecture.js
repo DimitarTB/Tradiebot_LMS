@@ -1,7 +1,7 @@
 import { current } from "@reduxjs/toolkit"
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams, NavLink } from "react-router-dom"
+import { useParams, NavLink, Redirect } from "react-router-dom"
 import axios from 'axios'
 import { API_URL, getFileName } from "../../../redux/constants"
 
@@ -23,7 +23,10 @@ export default props => {
 
     const lecture_id = useParams().id
 
-    const currentLecture = useSelector(state => state.lectures.allLectures.find(lecture => lecture._id === lecture_id))
+    const lectures = useSelector(state => state.lectures)
+    const currentLecture = lectures.allLectures.find(lecture => lecture._id === lecture_id)
+    const lectureCourse = useSelector(state => state.courses?.allCourses.find(c => c?._id === currentLecture?.course_id))
+    const currentUser = useSelector(state => state.user)
 
     const [info, setInfo] = useState({ type: null, message: null })
     const [lecture, setLecture] = useState({
@@ -45,7 +48,7 @@ export default props => {
             minLength: 0,
             maxLength: 10
         },
-        videoFile: {
+        video_file: {
             type: "string",
             isNullable: false
         }
@@ -66,8 +69,12 @@ export default props => {
         const data = { "id": lecture_id }
         dispatch(getOneLecture(data))
     }, [])
-
-    return (
+    useEffect(() => {
+        if (lectures.updateStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!" })
+        else if (lectures.updateStatus === "rejected") setInfo({ type: "error", message: lectures.updateError })
+        else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+    })
+    return (lectureCourse?.teachers?.includes(currentUser?.currentUserData?._id) || currentUser?.currentUserData?.roles?.includes("SuperAdmin")) ? (
         <div style={{ "width": "100%" }}>
             <Form
                 name="Edit Lecture"
@@ -83,8 +90,7 @@ export default props => {
                 }}
                 handleSubmit={e => {
                     e.preventDefault()
-                    // if (validator(lecture, lectureValidator) !== true) return
-                    setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+                    if (validator(lecture, lectureValidator) !== true) return
                     const data = {
                         name: lecture.name,
                         files: currentLecture.files ? currentLecture.files : [],
@@ -129,5 +135,5 @@ export default props => {
             />
             <div class="lectures">{currentLecture?.files?.map(fl => <Fragment><h2>{getFileName(fl)}</h2><div class="icon"><FcCancel /></div></Fragment>)}</div>
         </div>
-    )
+    ) : <Redirect to="/" />
 }

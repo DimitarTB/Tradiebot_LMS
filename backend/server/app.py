@@ -12,7 +12,7 @@ from flask_jwt_extended import (
     jwt_required, create_access_token,
     get_jwt_identity
 )
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from bson.objectid import ObjectId
 
@@ -32,6 +32,59 @@ def sendMail():
         return jsonify({"message": "Account successfully activated!"})
     else:
         return jsonify({"message": "Invalid token!"})
+
+@app.route('/api/change_password', methods=["POST"])
+@jwt_required
+def changePassword():
+    data = request.get_json()
+    user = get_jwt_identity()
+    users = db.users
+    if check_password_hash(user["password"], data["currentPassword"]):
+        users = db.users
+        hashed_pw = generate_password_hash(data['newPassword'], method='sha256')
+        users.update({"username": user["username"]}, {"$set": {"password": hashed_pw}})
+        user["password"] = hashed_pw
+        return jsonify({"message": "Successfully changed password!", "token": create_access_token(identity=user)})
+    return make_response(jsonify({"message": "Invalid password!"}), 401)
+
+@app.route('/api/change_password_token', methods=["POST"])
+def changePasswordToken():
+    data = request.get_json()
+    tokens = db.tokens
+    change_token = tokens.find_one({"username": data["username"]})
+    print("tk", change_token)
+    if change_token["rnd"] == data["token"]:
+        users = db.users
+        users.update({"username": data["username"]}, {"$set": {"password": generate_password_hash(data['password'], method='sha256')}})
+        tokens.find_one_and_delete(change_token)
+        return jsonify({"message": "Password successfully updated!"})
+    else:
+        return make_response({"message": "Invalid token!"}, 401)
+
+@app.route('/api/temporary_password', methods=["POST"])
+def temporaryPassword():
+    usr = request.args.get("user")
+    users = db.users
+    currentUser = users.find_one({"username": usr})
+    if not currentUser:
+        currentUser = users.find_one({"email": usr})
+    if not currentUser:
+        return make_response(jsonify({"message": "That user doesn't exist!"}), 401)
+    print("ovde", currentUser)
+    tokens = db.tokens
+    tokens.find_one_and_delete({"username": usr})
+    rnd = str(uuid.uuid4())
+    print(tokens.insert({"username": currentUser["username"], "rnd": rnd}))
+    msg = Message( 
+            'Change your password', 
+            sender ='flaskmailstest@gmail.com', 
+            recipients = [currentUser["email"]]
+            ) 
+    msg.body = ("Token for changing password for " + currentUser["username"] + ": " + rnd)
+    mail.send(msg)
+    return jsonify({"message": "A token has been sent to your e-mail address!"})
+
+
 @app.route('/api/register', methods=["POST"])
 def register():
     print(request)
