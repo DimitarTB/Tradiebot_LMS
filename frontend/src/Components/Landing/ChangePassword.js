@@ -24,22 +24,24 @@ function ChangePassword() {
         fetch("http://127.0.0.1:5000/api/temporary_password?user=" + info.username, requestOptions)
             .then(response => response.status === 200 ? setRedirect(true) : alert('User not found!'))
     }
+
+    console.log(redirect)
+
     return redirect === false ? (
         <div className="landing">
             <div className="landing-container">
-                <div className="image">
-                    <div className="login form">
-                        <h3> LOGIN </h3>
-                        <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
-                            <label htmlFor="">Username or email</label>
-                            <input type="text" name="username" />
-                            <button> Submit </button>
-                        </form>
-                    </div>
+                <div className="image"></div>
+                <div className="login form">
+                    <h3> LOGIN </h3>
+                    <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
+                        <label htmlFor="">Username or email</label>
+                        <input type="text" name="username" />
+                        <button> Submit </button>
+                    </form>
                 </div>
             </div>
         </div>
-    ) : <Redirect to="/" />
+    ) : <Redirect to="/submit_token" />
 }
 
 export default ChangePassword

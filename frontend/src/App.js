@@ -26,6 +26,7 @@ import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
 import { getAllCourses } from './redux/Courses/CoursesActions'
 import NotActivated from './Components/Landing/NotActivated'
 import ChangePassword from './Components/Landing/ChangePassword'
+import SubmitToken from './Components/Landing/SubmitToken'
 
 function App() {
 
@@ -36,13 +37,17 @@ function App() {
     return (
         <div className="App">
             <Router>
-                <Route path="/register">
-                    <Register />
-                </Route>
-                <Route path="/change_password">
-                    <ChangePassword />
-                </Route>
-                {user?.currentUser === null ? <Redirect to="/" /> : <Nav />}
+                {user?.currentUser === null ? <>
+                    <Route path="/submit_token">
+                        <SubmitToken />
+                    </Route>
+                    <Route path="/register">
+                        <Register />
+                    </Route>
+                    <Route path="/change_password">
+                        <ChangePassword />
+                    </Route>
+                </> : <Nav />}
                 {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
                 <Switch>
                     <Route path="/not_activated">
@@ -69,6 +74,7 @@ function App() {
                         <Route path="/course/:course_id">
                             <CourseContainer />
                         </Route>
+
                         <Route path="/user/:username">
                             <Profile></Profile>
                         </Route>
@@ -90,13 +96,11 @@ function App() {
                         <Route path="/courses/create">
                             <CreateCourse />
                         </Route>
-
                         <Route path="/lectures/edit/:id">
                             <EditLecture></EditLecture>
                         </Route>
-
                         <Route exact path="/">
-                            <Landing />
+                            {user?.currentUser === null ? <Landing /> : <Redirect to="/home" />}
                         </Route>
                     </>)}
 

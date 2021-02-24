@@ -5,12 +5,13 @@ import datetime
 import numpy
 import json
 class Course:
-    def __init__(self, name, description, teachers, dateCreated, manualEnroll=True):
+    def __init__(self, name, description, teachers, dateCreated, manualEnroll=True, thumbnail=""):
         self.name = name
         self.description = description
         self.teachers = teachers
         self.dateCreated = dateCreated
         self.manualEnroll = manualEnroll
+        self.thumbnail = thumbnail
 
     def create(request):
         userCourse = request.args.get("username")
@@ -18,7 +19,6 @@ class Course:
         remove = request.args.get("remove")
         if cID is not None and userCourse is not None:
             users = db.users
-
             if remove is not None:
                 users.update({"username": userCourse}, { "$pull": {"enrolledCourses": cID}})
             else:
@@ -47,7 +47,7 @@ class Course:
         if course_id is not None:
             data = courses.find_one({"_id": ObjectId(course_id)})
             print(data)
-            ret_course = {"_id": course_id, "dateCreated": data["dateCreated"], "description": data["description"], "manualEnroll": data["manualEnroll"], "name": data["name"], "teachers": data["teachers"]}
+            ret_course = {"_id": course_id, "dateCreated": data["dateCreated"], "description": data["description"], "manualEnroll": data["manualEnroll"], "name": data["name"], "teachers": data["teachers"], "thumbnail": data["thumbnail"]}
             return jsonify({"courses": ret_course})
         else:
             userCourse = request.args.get("username")

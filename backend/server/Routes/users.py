@@ -6,7 +6,7 @@ import uuid
 from flask_mail import Message
 
 class User:
-    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None, enrolledCourses = []):
+    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None, enrolledCourses = [], profile_picture="lms/public/profile_pictures/default.jpg"):
         self.username = username
         self.email = email
         self.password = password
@@ -16,6 +16,7 @@ class User:
         self.dateJoined = dateJoined
         self.activated = False
         self.rnd = rnd
+        self.profile_picture = profile_picture
         if id != None:
             self._id = id
 
@@ -51,7 +52,7 @@ class User:
         users = db.users
         if usern is not None:
             data = users.find_one({"username": usern})
-            ret_user = User(data["username"], data["email"], data["password"], data["types"], data["dateJoined"], enrolledCourses=data["enrolledCourses"])
+            ret_user = User(data["username"], data["email"], data["password"], data["types"], data["dateJoined"], enrolledCourses=data["enrolledCourses"], profile_picture=data["profile_picture"])
             return jsonify(ret_user.__dict__)
         else:
             users = users.find({})

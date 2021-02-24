@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { API_URL } from "../constants"
-import Axios from "axios"
+import axios from "axios"
 export const fetchAll = createAsyncThunk(
     'user/fetchAll',
     async (token, ext) => {
@@ -90,7 +90,7 @@ export const enrollCourse = createAsyncThunk(
             };
 
 
-            const response = await fetch(("http://127.0.0.1:5000/api/course?username=" + data.username + "&course_id=" + data.course_id), requestOptions)
+            const response = await fetch((API_URL + "api/course?username=" + data.username + "&course_id=" + data.course_id), requestOptions)
             const data2 = await response.json()
             return data2
         }
@@ -115,8 +115,30 @@ export const unEnrollCourse = createAsyncThunk(
             };
 
 
-            const response = await fetch(("http://127.0.0.1:5000/api/course?username=" + data.username + "&course_id=" + data.course_id + "&remove=True"), requestOptions)
+            const response = await fetch((API_URL + "api/course?username=" + data.username + "&course_id=" + data.course_id + "&remove=True"), requestOptions)
             const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log("fetch3", error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const profilePicture = createAsyncThunk(
+    'user/profilePicture',
+    async (data, ext) => {
+        try {
+            var formData = new FormData();
+            formData.append("image", data.file)
+            const response = await axios.post((API_URL + ("api/profile_picture?user=" + data.username)), formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': ('Bearer ' + ext.getState().user.currentUser)
+                }
+            })
+            const data2 = await response.data
             return data2
         }
         catch (error) {

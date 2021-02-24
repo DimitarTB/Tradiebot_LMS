@@ -27,6 +27,9 @@ export default props => {
         console.log(user)
         dispatch(register(user))
 
+        while(currentUser.registerStatus === "pending" || currentUser.registerStatus === "idle") {
+            ""
+        }
         if (currentUser.registerStatus === "fulfilled") alert("A message with an activation link has been sent to your e-mail address!")
         else if (currentUser.registerStatus === "rejected") alert(currentUser.registerError)
     }

@@ -90,8 +90,8 @@ export default props => {
             }}
             handleSubmit={e => {
                 e.preventDefault()
-                if (validator(course, courseValidator) !== true) return
-                else setInfo({ type: "loading", message: "Request is being processed. PLease wait." })
+                // if (validator(course, courseValidator) !== true) return
+                setInfo({ type: "loading", message: "Request is being processed. Please wait." })
             }}
             fields={[
                 {

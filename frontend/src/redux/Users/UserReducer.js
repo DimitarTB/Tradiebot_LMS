@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { enrollCourse, fetchAll, loginUser, unEnrollCourse } from "./UserActions"
+import { enrollCourse, fetchAll, loginUser, profilePicture, unEnrollCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from './UserActions'
 
@@ -13,7 +13,8 @@ export const UserSlice = createSlice({
         loginStatus: statuses.idle,
         registerStatus: statuses.idle,
         registerError: null,
-        currentUserData: null
+        currentUserData: null,
+        profilePictureStatus: statuses.idle
     },
     reducers: {
         logout: (state) => {
@@ -49,7 +50,7 @@ export const UserSlice = createSlice({
             state.loginStatus = statuses.fulfilled
             console.log(state.currentUser)
             const decoded = jwt_decode(state.currentUser).identity
-            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "roles": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated, "profile_picture": decoded.profile_picture }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)
@@ -82,7 +83,22 @@ export const UserSlice = createSlice({
         [unEnrollCourse.fulfilled]: (state, action) => {
             console.log(action.payload._id)
             state.currentUserData.enrolledCourses = state.currentUserData.enrolledCourses.filter(course => course !== action.payload._id)
-        }
+        },
+        
+        [profilePicture.fulfilled]: (state, action) => {
+            const upd_user = state.allUsers.findIndex(usr => usr.username === action.payload.username)
+            const new_user = state.allUsers[upd_user]
+            new_user.profile_picture = action.payload.picture
+            state.allUsers[upd_user] = new_user
+            state.currentUserData = new_user
+            state.profilePictureStatus = statuses.fulfilled
+        },
+        [profilePicture.pending]: (state, action) => {
+            state.profilePictureStatus = statuses.pending
+        },
+        [profilePicture.rejected]: (state, action) => {
+            state.profilePictureStatus = statuses.rejected
+        },
     },
 })
 

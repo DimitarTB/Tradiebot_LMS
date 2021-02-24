@@ -72,7 +72,7 @@ def temporaryPassword():
         return make_response(jsonify({"message": "That user doesn't exist!"}), 401)
     print("ovde", currentUser)
     tokens = db.tokens
-    tokens.find_one_and_delete({"username": usr})
+    tokens.find_one_and_delete({"username": currentUser["username"]})
     rnd = str(uuid.uuid4())
     print(tokens.insert({"username": currentUser["username"], "rnd": rnd}))
     msg = Message( 
@@ -99,6 +99,25 @@ def upl_img():
     image.save(("./static/lms/public/thumbnails/" + c_id + ".jpg"))
     return "success"
 
+@app.route('/api/profile_picture', methods=["POST"])
+@jwt_required
+def upload_profile_picture():
+    print(request)
+    check_user = get_jwt_identity()
+    username = request.args.get('user')
+    if(check_user["username"] != username):
+        return jsonify({"message": "You cannot change someone else's profile picture!"})
+    print("2")
+    files = request.files
+    print(files)
+    image = files["image"]
+    picture_name = ("lms/public/profile_pictures/" + get_random() + username + ".jpg")
+    print("3")
+    image.save(("./static/" + picture_name))
+    print("4")
+    users = db.users
+    print("Upd", users.update({"username": username}, {"$set": {"profile_picture": picture_name}}))
+    return jsonify({"message": "Profile picture changed successfully!", "username": username, "picture": picture_name})
 @app.route('/api/upload_file', methods=["POST"])
 @jwt_required
 def upl_file():
@@ -149,7 +168,7 @@ def login():
     if not userJ:
         userJ = users.find_one({"email": auth["username"]})
 
-    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "rnd": userJ["rnd"]})
+    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "rnd": userJ["rnd"], "profile_picture": userJ["profile_picture"]})
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     if check_password_hash(user["password"], auth["password"]):

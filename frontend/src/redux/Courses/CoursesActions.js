@@ -52,9 +52,8 @@ export const createCourse = createAsyncThunk(
     async (data, ext) => {
         try {
             var myHeaders = new Headers();
-            myHeaders.append("Authorization", ("Bearer " + data.token));
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
-
             var raw = JSON.stringify({ "name": data.name, "description": data.description, "teachers": data.teachers, "manualEnroll": data.manualEnroll });
 
             var requestOptions = {
@@ -64,10 +63,7 @@ export const createCourse = createAsyncThunk(
                 redirect: 'follow'
             };
 
-            console.log("fetch")
-
             const response = await fetch((API_URL + "api/course?username=" + data.username), requestOptions)
-            console.log("fetch2")
             const data2 = await response.json()
             return data2
         }
