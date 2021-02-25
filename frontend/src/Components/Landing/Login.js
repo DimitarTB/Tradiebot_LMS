@@ -2,7 +2,7 @@ import React from "react"
 
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { loginUser } from "../../redux/Users/UserActions"
+import { fetchAll, loginUser } from "../../redux/Users/UserActions"
 import { NavLink, Redirect } from "react-router-dom"
 
 export default props => {

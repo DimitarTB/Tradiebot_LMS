@@ -27,6 +27,7 @@ import { getAllCourses } from './redux/Courses/CoursesActions'
 import NotActivated from './Components/Landing/NotActivated'
 import ChangePassword from './Components/Landing/ChangePassword'
 import SubmitToken from './Components/Landing/SubmitToken'
+import { fetchAll } from './redux/Users/UserActions'
 
 function App() {
 
@@ -69,7 +70,8 @@ function App() {
                                         <h3>Hello again</h3>
                                     </Fragment>
                                 )}
-                            />
+                            >
+                            </Container>
                         </Route>
                         <Route path="/course/:course_id">
                             <CourseContainer />

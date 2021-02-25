@@ -90,14 +90,27 @@ def register():
     print(request)
     return methodExec(request, User)
 
-@app.route('/api/upload_image', methods=["POST"])
+@app.route('/api/upload_thumbnail', methods=["POST"])
+@jwt_required
 def upl_img():
-    print(request)
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"] or "Teacher" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    courses = db.courses
     c_id = request.args.get('course_id')
+    c_course = courses.find_one({"_id": ObjectId(c_id)})
+    if str(c_user["_id"]) not in c_course["teachers"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    print(request)
+
     files = request.files
+    print(files)
     image = files["image"]
-    image.save(("./static/lms/public/thumbnails/" + c_id + ".jpg"))
-    return "success"
+    name = ("lms/public/thumbnails/" + get_random() + c_id + ".jpg")
+    image.save("./static/" + name)
+    print("OVDEE")
+    print(courses.update({"_id": ObjectId(c_id)}, {"$set": {"thumbnail": name}}))
+    return jsonify({"message": "Success!", "course_id": c_id, "thumbnail": name})
 
 @app.route('/api/profile_picture', methods=["POST"])
 @jwt_required
@@ -122,13 +135,18 @@ def upload_profile_picture():
 @jwt_required
 def upl_file():
     print(request)
+    c_user = get_jwt_identity()
     l_id = request.args.get('lecture_id')
+    if "SuperAdmin" not in c_user["types"] or "Teacher" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    lectures = db.lectures
+    
     files = []
     for file in request.files.getlist('file'):
         filename = "lms/public/files/" + get_random() + "_" + file.filename
         file.save(("./static/" + filename))
         files.append(filename)    
-    lectures = db.lectures
+    
     print(files)
     for file in files:
         lectures.update({"_id": ObjectId(l_id)}, { "$push": {"files": file}})

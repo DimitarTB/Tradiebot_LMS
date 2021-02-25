@@ -11,7 +11,7 @@ import Form, {
     multipleSelect,
     select
 } from '../../../react-former/Form'
-import { editCourse } from "../../../redux/Courses/CoursesActions"
+import { editCourse, getOneCourse, uploadThumbnail } from "../../../redux/Courses/CoursesActions"
 import VideoBrowser from "../CourseContent/VideoBrowser"
 import "./Edit.css"
 
@@ -24,7 +24,7 @@ export default props => {
     console.log("CID", course_id)
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
     const courses = useSelector(state => state.courses)
-    const currentCourse = courses.allCourses.find(course => course._id === course_id)
+    const currentCourse = courses?.allCourses.find(course => course?._id === course_id)
     console.log("CC", currentCourse)
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
@@ -35,8 +35,9 @@ export default props => {
         description: currentCourse?.description,
         teachers: currentCourse?.teachers,
         manualEnroll: currentCourse?.manualEnroll === true ? "Manual Enroll" : "Self Enroll",
+        thumbnail: null
     })
-
+    const [ff, setFulfilled] = useState(false)
     const courseValidator = {
         name: {
             type: "string",
@@ -59,6 +60,12 @@ export default props => {
         manualEnroll: {
             type: "string",
             isNullable: false
+        },
+        files: {
+            type: "object",
+            isNullable: true,
+            minLength: 0,
+            maxLength: 10
         }
     }
 
@@ -97,18 +104,21 @@ export default props => {
     }
 
     useEffect(() => {
+        dispatch(getOneCourse({ "id": course_id }))
         dispatch(getAllLectures(currentUser.currentUser))
-        if (info.type === "loading") {
-            course.dateCreated = currentCourse.dateCreated
-            course._id = course_id
-            course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
-            const data = {
-                course: course,
-                token: currentUser.currentUser
+        if (ff === true) {
+            if (course.thumbnail !== null) {
+                if (courses.thumbnailStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!!" })
+                else if (courses.thumbnailStatus === "rejected") setInfo({ type: "error", message: courses.updateError })
+                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
             }
-            dispatch(editCourse(data))
+            else {
+                if (courses.updateStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!!" })
+                else if (courses.updateStatus === "rejected") setInfo({ type: "error", message: courses.updateError })
+                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+            }
         }
-    }, [info.type])
+    }, [courses.thumbnailStatus, courses.updateStatus])
 
     return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.roles.includes("SuperAdmin")) ? (
         <Fragment><Form
@@ -125,11 +135,25 @@ export default props => {
             }}
             handleSubmit={e => {
                 e.preventDefault()
-                if (validator(course, courseValidator) !== true) return
-                if (courses.updateStatus === "fulfilled") setInfo({ type: "success", message: "Course updated successfully!" })
-                else if (courses.updateStatus === "rejected") setInfo({ type: "error", message: courses.updateError })
-                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
-            }}
+                // if (validator(course, courseValidator) !== true) return
+                course.dateCreated = currentCourse.dateCreated
+                course._id = course_id
+                course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
+                let data = {
+                    course: course,
+                    token: currentUser.currentUser
+                }
+                dispatch(editCourse(data))
+                if (course.thumbnail !== null) {
+                    const data = {
+                        id: course_id,
+                        file: course.thumbnail
+                    }
+                    dispatch(uploadThumbnail(data))
+                }
+                setFulfilled(true)
+            }
+            }
             fields={[
                 {
                     name: "name",
@@ -163,6 +187,12 @@ export default props => {
                     displayField: "name",
                     valueField: "name"
                 },
+                {
+                    name: "thumbnail",
+                    label: "Select Thumbnail",
+                    fieldType: file,
+                    multiple: false
+                }
             ]}
         />
             <div class="lectures">{courseLectures.map(lecture => <Fragment><NavLink class="item" to={"/lectures/edit/" + lecture._id}><h2>{lecture.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser.currentUser, id: lecture._id }))} /></div></Fragment>)}

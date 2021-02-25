@@ -4,6 +4,7 @@ import CourseCard from "./CourseCard"
 import "./enrolled.css"
 import Container from "../Global/Container"
 import { getAllCourses } from "../../redux/Courses/CoursesActions"
+import { fetchAll } from '../../redux/Users/UserActions'
 
 
 function BrowseCourses() {
@@ -15,9 +16,10 @@ function BrowseCourses() {
     const showCourses = _showCourses.filter(course => !(currentUser.currentUserData.enrolledCourses.includes(course._id)))
     const [search, setSearch] = useState("")
     // const [showingCourses, setShowCourses] = useState([])
-    
+
     useEffect(() => {
         if (currentUser.currentUser !== null) {
+            dispatch(fetchAll(currentUser.currentUser))
             dispatch(getAllCourses(currentUser.currentUser))
         }
     }, [])

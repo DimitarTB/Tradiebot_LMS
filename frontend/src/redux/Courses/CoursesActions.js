@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { API_URL } from "../constants"
+import axios from 'axios'
 
 export const getAllCourses = createAsyncThunk(
     'courses/fetchAll',
@@ -122,6 +123,28 @@ export const editCourse = createAsyncThunk(
         }
         catch (error) {
             console.log(error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const uploadThumbnail = createAsyncThunk(
+    'lectures/uploadThumbnail',
+    async (data, ext) => {
+        try {
+            console.log("Thumbnail22")
+            var formData = new FormData();
+            formData.append("image", data.file)
+            const response = await axios.post((API_URL + ("api/upload_thumbnail?course_id=" + data.id)), formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': ('Bearer ' + ext.getState().user.currentUser)
+                }
+            })
+            const data2 = await response.data
+            return data2
+        }
+        catch (error) {
             return ext.rejectWithValue(error.message)
         }
     }

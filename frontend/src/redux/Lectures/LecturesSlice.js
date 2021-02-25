@@ -10,7 +10,8 @@ export const LecturesSlice = createSlice({
         loadingStatus: statuses.idle,
         createStatus: statuses.idle,
         updateStatus: statuses.idle,
-        updateError: null
+        updateError: null,
+        filesStatus: statuses.idle
     },
     reducers: {
     },
@@ -49,7 +50,7 @@ export const LecturesSlice = createSlice({
             state.allLectures.push(...action.payload.lectures)
         },
 
-        
+
         [createLecture.pending]: (state, action) => {
             state.createStatus = statuses.pending
         },
@@ -87,6 +88,7 @@ export const LecturesSlice = createSlice({
             if (idx === -1) return
             state.allLectures[idx].files.push(...action.payload.files)
             console.log(current(state))
+            state.filesStatus = statuses.fulfilled
             // lecture.files.push(...action.payload.files)
             // console.log(lecture.files)
             // const upd_lect = state.allLectures.findIndex(lect => lect._id === action.payload.id)
@@ -95,6 +97,12 @@ export const LecturesSlice = createSlice({
             // else new_lect.files = [action.payload?.files]
             // state.allLectures[upd_lect] = new_lect
         },
+        [uploadFile.rejected]: (state, action) => {
+            state.filesStatus = statuses.rejected
+        },
+        [uploadFile.pending]: (state, action) => {
+            state.filesStatus = statuses.pending
+        }
     }
 })
 

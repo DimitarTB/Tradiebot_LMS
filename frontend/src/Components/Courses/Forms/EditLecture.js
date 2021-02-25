@@ -34,6 +34,7 @@ export default props => {
         files: [],
         video_file: currentLecture?.video_file
     })
+    const [ff, setFulfilled] = useState(false)
 
     const lectureValidator = {
         name: {
@@ -64,16 +65,24 @@ export default props => {
 
         return true
     }
-
     useEffect(() => {
         const data = { "id": lecture_id }
         dispatch(getOneLecture(data))
     }, [])
     useEffect(() => {
-        if (lectures.updateStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!" })
-        else if (lectures.updateStatus === "rejected") setInfo({ type: "error", message: lectures.updateError })
-        else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
-    })
+        if (ff === true) {
+            if (lecture.files.length > 0) {
+                if (lectures.filesStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!!" })
+                else if (lectures.filesStatus === "rejected") setInfo({ type: "error", message: lectures.updateError })
+                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+            }
+            else {
+                if (lectures.updateStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!!" })
+                else if (lectures.updateStatus === "rejected") setInfo({ type: "error", message: lectures.updateError })
+                else setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+            }
+        }
+    }, [lectures.updateStatus, lectures.filesStatus])
     return (lectureCourse?.teachers?.includes(currentUser?.currentUserData?._id) || currentUser?.currentUserData?.roles?.includes("SuperAdmin")) ? (
         <div style={{ "width": "100%" }}>
             <Form
@@ -82,6 +91,7 @@ export default props => {
                 buttonText="Proceed"
                 data={lecture}
                 handleChange={e => {
+                    setFulfilled(false)
                     setInfo({ type: null, message: null })
                     setLecture({
                         ...lecture,
@@ -93,7 +103,7 @@ export default props => {
                     if (validator(lecture, lectureValidator) !== true) return
                     const data = {
                         name: lecture.name,
-                        files: currentLecture.files ? currentLecture.files : [],
+                        files: currentLecture?.files ? currentLecture.files : [],
                         video_file: lecture.video_file,
                         dateCreated: currentLecture.dateCreated,
                         course_id: currentLecture.course_id,
@@ -110,6 +120,7 @@ export default props => {
                         }
                         dispatch(uploadFile(data))
                     }
+                    setFulfilled(true)
                 }}
                 fields={[
                     {

@@ -6,7 +6,7 @@ export const fetchAll = createAsyncThunk(
     async (token, ext) => {
         try {
             var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + token);
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
 
             var requestOptions = {
                 method: 'GET',

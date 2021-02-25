@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { getAllCourses, createCourse, enrollCourse, editCourse, getOneCourse } from "./CoursesActions"
+import { getAllCourses, createCourse, enrollCourse, editCourse, getOneCourse, uploadThumbnail } from "./CoursesActions"
 
 export const CoursesSlice = createSlice({
     name: 'courses',
@@ -8,7 +8,8 @@ export const CoursesSlice = createSlice({
         loadingStatus: statuses.idle,
         updateStatus: statuses.idle,
         updateError: null,
-        allCourses: []
+        allCourses: [],
+        thumbnailStatus: statuses.idle
     },
     reducers: {
     },
@@ -29,7 +30,7 @@ export const CoursesSlice = createSlice({
         },
 
         [getOneCourse.fulfilled]: (state, action) => {
-            const idx = state.allCourses.findIndex(crs => crs._id === action.payload.course?._id)
+            const idx = state.allCourses.findIndex(crs => crs?._id === action.payload.course?._id)
             if (idx === -1) return
             const new_course = action.payload.course
             state.allCourses[idx] = new_course
@@ -49,6 +50,7 @@ export const CoursesSlice = createSlice({
         },
 
         [editCourse.fulfilled]: (state, action) => {
+            if (action.payload.course === null) return
             let course = state.allCourses.findIndex(course => course._id === action.payload.course_id)
             state.allCourses[course] = action.payload.course
             state.updateStatus = statuses.fulfilled
@@ -59,6 +61,20 @@ export const CoursesSlice = createSlice({
         [editCourse.rejected]: (state, action) => {
             state.updateStatus = statuses.rejected
             state.updateError = action.payload.message
+        },
+
+        [uploadThumbnail.fulfilled]: (state, action) => {
+            const upd_course = state.allCourses.findIndex(crs => crs._id === action.payload.course_id)
+            const new_course = state.allCourses[upd_course]
+            new_course.thumbnail = action.payload.thumbnail
+            state.allCourses[upd_course] = new_course
+            state.thumbnailStatus = statuses.fulfilled
+        },
+        [uploadThumbnail.rejected]: (state, action) => {
+            state.thumbnailStatus = statuses.rejected
+        },
+        [uploadThumbnail.pending]: (state, action) => {
+            state.thumbnailStatus = statuses.pending
         }
     }
 })

@@ -57,13 +57,14 @@ class Lecture:
                 lectures.update({"_id": ObjectId(lecture_id)}, { "$push": {"files": file}})
                 new_files.append(file)
             print("new_files2", new_files)
-            new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], new_files, data["video_file"])
-            return jsonify({"message": "Updated f!","lecture": new_lecture.__dict__, "lecture_id": lecture_id})
+            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"]}
+            return jsonify({"message": "Updated f!","lecture": new_lecture, "lecture_id": lecture_id})
         else:
             data = request.get_json()
             new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], data["files"], data["video_file"])
             lectures.update({"_id": ObjectId(lecture_id)}, (new_lecture.__dict__))
-            return jsonify({"message": "Updated!","lecture": new_lecture.__dict__, "lecture_id": lecture_id})
+            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"]}
+            return jsonify({"message": "Updated!","lecture": new_lecture, "lecture_id": lecture_id})
         
     def delete(request):
         lecture_id = request.args["id"]
