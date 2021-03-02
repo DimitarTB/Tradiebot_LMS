@@ -8,11 +8,15 @@ import VideoPlayer from "./VideoPlayer"
 import VideoBrowser from "./VideoBrowser"
 import CourseInfoSection from "./CourseInfoSection"
 
+
 import "./CourseContainer.css"
 import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 
 const CourseContainer = props => {
 
+    function stopWatching() {
+        dispatch({ type: 'user/stopWatching', payload: {"id": currentCourse._id} })
+    }
     const params = useParams()
     const dispatch = useDispatch()
 
@@ -20,6 +24,9 @@ const CourseContainer = props => {
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
     const [selectedLecture, setSelectedLecture] = useState(currentLectures[0])
 
+    window.addEventListener('locationchange', stopWatching, false)
+    window.addEventListener("beforeunload", stopWatching, false);
+    window.addEventListener("unload", stopWatching, false);
     useEffect(() => {
         console.log("changed")
         dispatch(getOneLecture({ "id": selectedLecture?._id }))
@@ -28,10 +35,14 @@ const CourseContainer = props => {
 
 
     useEffect(() => {
+        dispatch({ type: 'user/startWatching', payload: { id: currentCourse._id } })
         dispatch(getCourseLectures({ "course_id": params.course_id }))
-        const data = { "id": params.course_id }
+        const data = { "id": params.course_id, "tracking": true }
         dispatch(getOneCourse(data))
         dispatch(getLectureComments({ "lecture_id": selectedLecture?._id }))
+
+
+        return () => stopWatching()
     }, [])
 
     return currentLectures.length > 0 ? (

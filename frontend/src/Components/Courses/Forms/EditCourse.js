@@ -120,7 +120,7 @@ export default props => {
         }
     }, [courses.thumbnailStatus, courses.updateStatus])
 
-    return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.roles.includes("SuperAdmin")) ? (
+    return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.types?.includes("SuperAdmin")) ? (
         <Fragment><Form
             name="Edit Course"
             info={info}

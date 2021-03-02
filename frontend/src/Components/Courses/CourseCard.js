@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom'
+import { FILES_URL } from '../../redux/constants'
 import { enrollCourse } from '../../redux/Users/UserActions'
 import { unEnrollCourse } from '../../redux/Users/UserActions'
 
@@ -23,7 +24,7 @@ export default props => {
     return (
         <div className="course-card">
             <NavLink to={"/course/" + props.course._id}>
-                <img src={"http://localhost:88/lms/public/thumbnails/" + props.course._id + ".jpg"} />
+                <img src={FILES_URL + props.course.thumbnail} />
                 <h3>{props.course.name}</h3>
             </NavLink>
             <p>{props.course.description}</p>

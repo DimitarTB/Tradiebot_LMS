@@ -170,3 +170,31 @@ export const uploadFile = createAsyncThunk(
         }
     }
 )
+
+
+export const deleteFile = createAsyncThunk(
+    'lectures/deteleFile',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "file": data.file });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/delete_file?lecture_id=" + data.id, requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

@@ -13,7 +13,7 @@ import Form, {
     select
 } from '../../../react-former/Form'
 import { editCourse } from "../../../redux/Courses/CoursesActions"
-import { getOneLecture, updateLecture, uploadFile } from "../../../redux/Lectures/LecturesActions"
+import { getOneLecture, updateLecture, uploadFile, deleteFile } from "../../../redux/Lectures/LecturesActions"
 import "./Edit.css"
 import { FcCancel } from "react-icons/fc";
 
@@ -83,7 +83,7 @@ export default props => {
             }
         }
     }, [lectures.updateStatus, lectures.filesStatus])
-    return (lectureCourse?.teachers?.includes(currentUser?.currentUserData?._id) || currentUser?.currentUserData?.roles?.includes("SuperAdmin")) ? (
+    return (lectureCourse?.teachers?.includes(currentUser?.currentUserData?._id) || currentUser?.currentUserData?.types?.includes("SuperAdmin")) ? (
         <div style={{ "width": "100%" }}>
             <Form
                 name="Edit Lecture"
@@ -144,7 +144,7 @@ export default props => {
                     }
                 ]}
             />
-            <div class="lectures">{currentLecture?.files?.map(fl => <Fragment><h2>{getFileName(fl)}</h2><div class="icon"><FcCancel /></div></Fragment>)}</div>
+            <div class="lectures">{currentLecture?.files?.map(fl => <Fragment><h2>{getFileName(fl)}</h2><div class="icon"><FcCancel onClick={() => dispatch(deleteFile({"id": currentLecture?._id, "file": fl}))} /></div></Fragment>)}</div>
         </div>
     ) : <Redirect to="/" />
 }

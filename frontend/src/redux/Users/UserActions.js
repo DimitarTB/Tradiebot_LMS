@@ -24,6 +24,29 @@ export const fetchAll = createAsyncThunk(
     }
 )
 
+export const getOneUser = createAsyncThunk(
+    'user/getOneUser',
+    async (username, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/user?username=" + username, requestOptions)
+            const data = await response.json()
+            return data
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
 export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userData, ext) => {
@@ -143,6 +166,67 @@ export const profilePicture = createAsyncThunk(
         }
         catch (error) {
             console.log("fetch3", error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const changePassword = createAsyncThunk(
+    'user/changePassword',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            var raw = JSON.stringify({
+                "newPassword": data.newPassword,
+                "currentPassword": data.currentPassword
+            });
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                redirect: 'follow',
+                body: raw
+            };
+
+            const response = await fetch((API_URL + "api/change_password?user=" + ext.getState().user.currentUserData.username), requestOptions)
+            const data2 = await response.json()
+            if (response.status === 401) {
+                return ext.rejectWithValue(data2.message)
+            }
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const changeUsername = createAsyncThunk(
+    'user/changeUsername',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "username": data.username, "email": data.email });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/change_username?user=" + ext.getState().user.currentUserData.username), requestOptions)
+            const data2 = await response.json()
+            if (response.status === 401) {
+                return ext.rejectWithValue(data2.message)
+            }
+            return data2
+        }
+        catch (error) {
             return ext.rejectWithValue(error.message)
         }
     }

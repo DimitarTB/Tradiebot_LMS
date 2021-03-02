@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import './App.css'
 import Container from "./Components/Global/Container"
 import Nav from "./Components/Global/Nav/Nav"
@@ -32,13 +32,27 @@ import { fetchAll } from './redux/Users/UserActions'
 function App() {
 
     const user = useSelector(state => state.user)
+    const [redirect, setRedirect] = useState(false)
 
     const dispatch = useDispatch()
 
-    return (
+    const check_session = () => {
+        if (user.currentUserData !== null) {
+            console.log(typeof (user.currentUserData.token_exp), typeof (new Date()))
+            if (Date.parse(user.currentUserData.token_exp) <= (new Date())) {
+                setRedirect(true)
+                dispatch({ type: 'user/logout' })
+                alert('Your session has expired, please log in again!')
+            }
+        }
+    }
+    return redirect === true ? <Redirect to="/" /> : (
         <div className="App">
             <Router>
                 {user?.currentUser === null ? <>
+                    <Route path="/logout">
+                        <Redirect to="/" />
+                    </Route>
                     <Route path="/submit_token">
                         <SubmitToken />
                     </Route>
@@ -49,14 +63,16 @@ function App() {
                         <ChangePassword />
                     </Route>
                 </> : <Nav />}
+                {check_session()}
                 {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
                 <Switch>
                     <Route path="/not_activated">
-                        <NotActivated user={user.currentUserData?.username} />
+                        <NotActivated user={user.currentUserData?.username} activated={user.currentUserData?.activated} />
                     </Route>
                     <Route path="/logout">
                         {() => { dispatch({ type: 'user/logout' }) }}
                     </Route>
+
                     {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : (<>
                         <Route path="/home">
                             <Container
@@ -73,23 +89,23 @@ function App() {
                             >
                             </Container>
                         </Route>
-                        <Route path="/course/:course_id">
+                        <Route exact path="/course/:course_id">
                             <CourseContainer />
                         </Route>
 
                         <Route path="/user/:username">
                             <Profile></Profile>
                         </Route>
-                        <Route path="/courses/edit/:id">
+                        <Route exact path="/courses/edit/:id">
                             <EditCourse></EditCourse>
                         </Route>
-                        <Route path="/courses/created">
+                        <Route exact path="/courses/created">
                             <CreatedCourses />
                         </Route>
-                        <Route path="/courses/teaching">
+                        <Route exact path="/courses/teaching">
                             <TeachingCourses />
                         </Route>
-                        <Route path="/courses/enrolled">
+                        <Route exact path="/courses/enrolled">
                             <EnrolledCourses />
                         </Route>
                         <Route path="/courses/browse">

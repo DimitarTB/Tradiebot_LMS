@@ -34,7 +34,7 @@ function SubmitToken() {
             .then(response => {
                 if (response.status === 200) {
                     alert("Password changed successfully!")
-                    { <Redirect to="/" /> }
+                    setRedirect(true)
                 }
                 else {
                     alert("Invalid token or username!")

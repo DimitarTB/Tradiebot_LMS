@@ -38,7 +38,11 @@ export const getOneCourse = createAsyncThunk(
                 headers: myHeaders,
                 redirect: 'follow'
             };
-            const response = await fetch(API_URL + "api/course?id=" + data.id, requestOptions)
+            var fetch_url = API_URL + "api/course?id=" + data.id
+            if (data.tracking) {
+                fetch_url = fetch_url + "&tracking=1"
+            }
+            const response = await fetch(fetch_url, requestOptions)
             const data2 = await response.json()
             return data2
         }

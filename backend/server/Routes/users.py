@@ -52,14 +52,19 @@ class User:
         users = db.users
         if usern is not None:
             data = users.find_one({"username": usern})
-            ret_user = User(data["username"], data["email"], data["password"], data["types"], data["dateJoined"], enrolledCourses=data["enrolledCourses"], profile_picture=data["profile_picture"])
-            return jsonify(ret_user.__dict__)
+            ret_user = {"_id": str(data["_id"]), "username": data["username"], "email": data["email"], "types": data["types"], "dateJoined": data["dateJoined"], "enrolledCourses": data["enrolledCourses"], "profile_picture": data["profile_picture"], "activated": data["activated"], "createdCourses": data["createdCourses"]}
+            return jsonify({"user": ret_user})
         else:
             users = users.find({})
             ret_users = []
             for user in users:
                 user["_id"] = str(user["_id"])
+                user.pop("password")
+                user.pop("rnd")
                 ret_users.append(user)
             return jsonify(ret_users)
+    
+    def update(request):
+        usern = request.args.get("username")
 
     

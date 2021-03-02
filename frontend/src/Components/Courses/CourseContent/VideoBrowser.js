@@ -13,6 +13,8 @@ const VideoBrowser = props => {
         "name": ""
     })
 
+    
+
     console.log(props.lectures)
     const lectures = props.lectures.map((lecture, index, arr) => {
         return (

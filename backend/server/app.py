@@ -16,6 +16,46 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from bson.objectid import ObjectId
 
+
+
+
+
+
+# User Routes
+@app.route('/api/login', methods=["GET", "POST"])
+def login():
+    users = db.users
+    auth = json.loads(request.headers["Authorization"])
+
+    if not auth or not auth["username"] or not auth["password"]:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+
+    userJ = users.find_one({"username": auth["username"]})
+
+    if not userJ:
+        userJ = users.find_one({"email": auth["username"]})
+
+    user = ({"username": userJ["username"], "email": userJ["email"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "profile_picture": userJ["profile_picture"]})
+    if not user:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+    if check_password_hash(userJ["password"], auth["password"]):
+        user = user
+        print("User : ", user)
+        token = create_access_token(identity=user)
+
+        loginTracking = db.login_tracking
+
+        tNow = datetime.datetime.utcnow()
+        loginTracking.insert({"username": userJ["username"], "time": tNow})
+        return jsonify({'token': token})
+
+    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+
+@app.route('/api/register', methods=["POST"])
+def register():
+    print(request)
+    return methodExec(request, User)
+
 @app.route('/activate')
 def sendMail():
     tok = request.args.get("token")
@@ -29,7 +69,7 @@ def sendMail():
 
     if data["rnd"] == tok:
         users.update({"username": usr}, {"$set": {"activated": True}})
-        return jsonify({"message": "Account successfully activated!"})
+        return jsonify({"message": "Your account is successfully activated, you can now log in!"})
     else:
         return jsonify({"message": "Invalid token!"})
 
@@ -37,15 +77,41 @@ def sendMail():
 @jwt_required
 def changePassword():
     data = request.get_json()
-    user = get_jwt_identity()
+    usern = request.args.get("user")
     users = db.users
-    if check_password_hash(user["password"], data["currentPassword"]):
+    user = users.find_one({"username": usern})
+    jwt_user = get_jwt_identity()
+    if check_password_hash(user["password"], data["currentPassword"]) and jwt_user["username"] == user["username"]:
         users = db.users
         hashed_pw = generate_password_hash(data['newPassword'], method='sha256')
         users.update({"username": user["username"]}, {"$set": {"password": hashed_pw}})
         user["password"] = hashed_pw
+        user["_id"] = str(user["_id"])
         return jsonify({"message": "Successfully changed password!", "token": create_access_token(identity=user)})
-    return make_response(jsonify({"message": "Invalid password!"}), 401)
+    print(user["password"], data["currentPassword"])
+    print(check_password_hash(user["password"], data["currentPassword"]))
+    return make_response(jsonify({"message": "Passwords doesn't match!"}), 401)
+
+@app.route('/api/change_username', methods=["PUT"])
+@jwt_required
+def changeUsername():
+    data = request.get_json()
+    usern = request.args.get("user")
+    users = db.users
+    user = get_jwt_identity()
+
+    if usern != user["username"]:
+        return make_response(jsonify({"message": "You cannot perform this function!"}), 401)
+    
+    users.update({"username": usern}, {"$set": {"username": data["username"]}})
+    users.update({"username": usern}, {"$set": {"email": data["email"]}})
+
+    new_user_token = users.find_one({"username": data["username"]})
+    new_user_token["_id"] = str(new_user_token["_id"])
+    new_user_token.pop("password")
+    new_user_token.pop("rnd")
+    token = create_access_token(identity=new_user_token)
+    return jsonify({"message": "Data updated successfully!", "username": data["username"], "email": data["email"], "token": token})
 
 @app.route('/api/change_password_token', methods=["POST"])
 def changePasswordToken():
@@ -84,34 +150,6 @@ def temporaryPassword():
     mail.send(msg)
     return jsonify({"message": "A token has been sent to your e-mail address!"})
 
-
-@app.route('/api/register', methods=["POST"])
-def register():
-    print(request)
-    return methodExec(request, User)
-
-@app.route('/api/upload_thumbnail', methods=["POST"])
-@jwt_required
-def upl_img():
-    c_user = get_jwt_identity()
-    if "SuperAdmin" not in c_user["types"] or "Teacher" not in c_user["types"]:
-        return jsonify({"message": "You cannot perform that function!"})
-    courses = db.courses
-    c_id = request.args.get('course_id')
-    c_course = courses.find_one({"_id": ObjectId(c_id)})
-    if str(c_user["_id"]) not in c_course["teachers"]:
-        return jsonify({"message": "You cannot perform that function!"})
-    print(request)
-
-    files = request.files
-    print(files)
-    image = files["image"]
-    name = ("lms/public/thumbnails/" + get_random() + c_id + ".jpg")
-    image.save("./static/" + name)
-    print("OVDEE")
-    print(courses.update({"_id": ObjectId(c_id)}, {"$set": {"thumbnail": name}}))
-    return jsonify({"message": "Success!", "course_id": c_id, "thumbnail": name})
-
 @app.route('/api/profile_picture', methods=["POST"])
 @jwt_required
 def upload_profile_picture():
@@ -131,6 +169,61 @@ def upload_profile_picture():
     users = db.users
     print("Upd", users.update({"username": username}, {"$set": {"profile_picture": picture_name}}))
     return jsonify({"message": "Profile picture changed successfully!", "username": username, "picture": picture_name})
+
+@app.route('/api/resend', methods=["GET"])
+def resend():
+    print(request)
+    usr = request.args.get("user")
+    users = db.users
+
+    print("1")
+    data = users.find_one({"username": usr})
+    msg = Message( 
+        'Activate your account', 
+        sender ='flaskmailstest@gmail.com', 
+        recipients = [data["email"]]
+        ) 
+    msg.body = ("Click on the link to activate your account http://127.0.0.1:5000/activate?token=" + data["rnd"] + "&user=" + data["username"])
+    mail.send(msg)
+    return jsonify({"message": "Resend successfully!"})
+
+
+
+
+
+
+
+
+# Teacher routes
+
+@app.route('/api/upload_thumbnail', methods=["POST"])
+@jwt_required
+def upl_img():
+    print(request)
+    print("Thumb1")
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"] or "Teacher" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    print("Thumb2")
+    courses = db.courses
+    c_id = request.args.get('course_id')
+    print("Thumb3")
+    c_course = courses.find_one({"_id": ObjectId(c_id)})
+    if str(c_user["_id"]) not in c_course["teachers"] and "SuperAdmin" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    print("Thumb4")
+
+    files = request.files
+    print(files)
+    image = files["image"]
+    name = ("lms/public/thumbnails/" + get_random() + c_id + ".jpg")
+    image.save("./static/" + name)
+    print("OVDEE")
+    print(courses.update({"_id": ObjectId(c_id)}, {"$set": {"thumbnail": name}}))
+    return jsonify({"message": "Success!", "course_id": c_id, "thumbnail": name})
+
+
+
 @app.route('/api/upload_file', methods=["POST"])
 @jwt_required
 def upl_file():
@@ -152,66 +245,49 @@ def upl_file():
         lectures.update({"_id": ObjectId(l_id)}, { "$push": {"files": file}})
     return jsonify({"Message": "Inserted files!", "files": files, "id": l_id})
 
-@app.route('/api/get_image', methods=["GET"])
-def get_img():
+@app.route('/api/delete_file', methods=["PUT"])
+@jwt_required
+def del_file():
     print(request)
-    filename = "./static/lms/public/lp.jpg"
-    return send_file(filename, mimetype='image/gif')
-@app.route('/api/resend', methods=["GET"])
-def resend():
-    print(request)
-    usr = request.args.get("user")
-    users = db.users
+    data = request.get_json()
+    c_user = get_jwt_identity()
+    l_id = request.args.get('lecture_id')
+    if "SuperAdmin" not in c_user["types"] or "Teacher" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    lectures = db.lectures
+    
+    lect = lectures.find_one({"_id": ObjectId(l_id)})
 
-    print("1")
-    data = users.find_one({"username": usr})
-    msg = Message( 
-        'Activate your account', 
-        sender ='flaskmailstest@gmail.com', 
-        recipients = [data["email"]]
-        ) 
-    msg.body = ("Click on the link to activate your account http://127.0.0.1:5000/activate?token=" + data["rnd"] + "&user=" + data["username"])
-    mail.send(msg)
-    return jsonify({"message": "Resend successfully!"})
-@app.route('/api/login', methods=["GET", "POST"])
-def login():
-    users = db.users
-    auth = json.loads(request.headers["Authorization"])
+    lect_files = lect["files"]
+    # for fl, val in lect_files.items():
+    #     if val == data["file"]:
+    #         lect_files.pop(fl)
+    lect_files.remove(data["file"])
+    lectures.update({"_id": ObjectId(l_id)}, {"$set": {"files": lect_files}})  
+    
+    return jsonify({"Message": "Deleted file!", "files": lect_files, "id": l_id})
 
-    if not auth or not auth["username"] or not auth["password"]:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
 
-    userJ = users.find_one({"username": auth["username"]})
 
-    if not userJ:
-        userJ = users.find_one({"email": auth["username"]})
 
-    user = ({"username": userJ["username"], "email": userJ["email"], "password": userJ["password"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "rnd": userJ["rnd"], "profile_picture": userJ["profile_picture"]})
-    if not user:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
-    if check_password_hash(user["password"], auth["password"]):
-        user = user
-        print("User : ", user)
-        token = create_access_token(identity=user)
-        return jsonify({'token': token})
-
-    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+# Methods / Admin & User
 
 @app.route("/api/user", methods=["GET", "POST", "PUT", "DELETE"])
 @jwt_required
 def user():
     print(request)
 
-    # current_user = get_jwt_identity()
+    current_user = get_jwt_identity()
 
-    # isAdmin = False
+    isAdmin = False
 
-    # for admin in current_user["types"]:
-    #     if admin == "SuperAdmin":
-    #         isAdmin = True
-
-    # if isAdmin == False:
-    #     return jsonify({"message": "Cannot perform that function!"})
+    for admin in current_user["types"]:
+        if admin == "SuperAdmin":
+            isAdmin = True
+    
+    if request.method != "GET":
+        if isAdmin == False:
+            return make_response({"message": "You cannot perform this function!"}, 404)
 
     return methodExec(request, User)
 
@@ -233,6 +309,7 @@ def course():
     return methodExec(request, Course)
 
 @app.route("/api/lecture", methods=["GET", "POST", "PUT", "DELETE"])
+@jwt_required
 def lecture():
     print(request)
     return methodExec(request, Lecture)
@@ -242,6 +319,15 @@ def lecture():
 def comment():
     print(request)
     return methodExec(request, Comment)
+
+@app.route("/api/watched_course", methods=["POST"])
+@jwt_required
+def watched_course():
+    user = get_jwt_identity()
+    data = request.get_json()
+    watchedC = db.courses_tracking
+    watchedC.insert({"username": user["username"], "course_id": data["course_id"], "time_watched": data["time_watched"], "started_watching": data["started_watching"] })
+    return jsonify({"message": "Record successfully added!"})
 
 if __name__ == "__main__":
     app.run(debug=True)

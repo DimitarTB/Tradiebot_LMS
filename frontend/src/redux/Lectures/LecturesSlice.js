@@ -1,6 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { getAllLectures, createLecture, deleteLecture, updateLecture, uploadFile, getOneLecture, getCourseLectures } from './LecturesActions'
+import { getAllLectures, createLecture, deleteLecture, updateLecture, uploadFile, getOneLecture, getCourseLectures, deleteFile } from './LecturesActions'
 
 export const LecturesSlice = createSlice({
     name: 'lectures',
@@ -102,6 +102,9 @@ export const LecturesSlice = createSlice({
         },
         [uploadFile.pending]: (state, action) => {
             state.filesStatus = statuses.pending
+        },
+        [deleteFile.fulfilled]: (state,action) => {
+            
         }
     }
 })
