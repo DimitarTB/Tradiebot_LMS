@@ -19,7 +19,7 @@ const VideoBrowser = props => {
     const lectures = props.lectures.map((lecture, index, arr) => {
         return (
             <Fragment>
-                <button onClick={e => {
+                <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                     console.log(e, lecture)
                     props.setSelectedLecture(lecture)
                 }}>{lecture.name} <AiFillPlayCircle /></button>

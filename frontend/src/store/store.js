@@ -4,6 +4,7 @@ import CoursesReducer from "../redux/Courses/CoursesSlice"
 import LecturesReducer from "../redux/Lectures/LecturesSlice"
 import CommentsReducer from "../redux/Comments/CommentsSlice"
 import FilesReducer from "../redux/Files/FilesSlice"
+import TopicsReducer from "../redux/Topics/TopicsSlice"
 // import {pendingReducer} from "redux-pending"
 import { combineReducers } from 'redux'
 import { persistStore, persistReducer } from 'redux-persist'
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     courses: CoursesReducer,
     lectures: LecturesReducer,
     comments: CommentsReducer,
-    files: FilesReducer
+    files: FilesReducer,
+    topics: TopicsReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

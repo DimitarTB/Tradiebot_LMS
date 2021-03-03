@@ -1,6 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { getAllLectures, createLecture, deleteLecture, updateLecture, uploadFile, getOneLecture, getCourseLectures, deleteFile } from './LecturesActions'
+import { getAllLectures, createLecture, deleteLecture, updateLecture, uploadFile, getOneLecture, getCourseLectures, deleteFile, watchedLecture } from './LecturesActions'
 
 export const LecturesSlice = createSlice({
     name: 'lectures',
@@ -86,8 +86,8 @@ export const LecturesSlice = createSlice({
         [uploadFile.fulfilled]: (state, action) => {
             const idx = state.allLectures.findIndex(lecture => lecture._id = action.payload.id)
             if (idx === -1) return
-            state.allLectures[idx].files.push(...action.payload.files)
-            console.log(current(state))
+            console.log(action.payload.files)
+            action.payload.files.forEach(file => state.allLectures[idx].files.push(file))
             state.filesStatus = statuses.fulfilled
             // lecture.files.push(...action.payload.files)
             // console.log(lecture.files)
@@ -103,9 +103,20 @@ export const LecturesSlice = createSlice({
         [uploadFile.pending]: (state, action) => {
             state.filesStatus = statuses.pending
         },
-        [deleteFile.fulfilled]: (state,action) => {
-            
+        [deleteFile.fulfilled]: (state, action) => {
+            const lectIdx = state.allLectures.find(lect => lect._id === action.payload.id)
+            if (lectIdx === -1) return
+            console.log("PL", action.payload)
+            console.log(lectIdx)
+            state.allLectures[lectIdx].files = [action.payload?.files]
+        },
+
+
+        [watchedLecture.fulfilled]: (state, action) => {
+            const lectIdx = state.allLectures.findIndex(lect => lect._id === action.payload.lecture_id)
+            state.allLectures[lectIdx].watchedBy.push(action.payload.user_id)
         }
+
     }
 })
 

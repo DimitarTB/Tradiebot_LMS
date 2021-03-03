@@ -23,6 +23,9 @@
     cursor: pointer;
     transition: 300ms;
 }
+.course-container > .video-browser > #watched {
+    color:green;
+}
 
 .course-container > .video-browser > button:hover {
     background: var(--white);

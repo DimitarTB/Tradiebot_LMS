@@ -4,6 +4,7 @@ from Routes.users import User
 from Routes.courses import Course
 from Routes.lectures import Lecture
 from Routes.comments import Comment
+from Routes.topics import Topic
 from models import methodExec
 import datetime
 from flask_mail import Message
@@ -320,6 +321,11 @@ def comment():
     print(request)
     return methodExec(request, Comment)
 
+@app.route("/api/topic", methods=["GET", "POST", "PUT", "DELETE"])
+def topic():
+    print(request)
+    return methodExec(request, Topic)
+
 @app.route("/api/watched_course", methods=["POST"])
 @jwt_required
 def watched_course():
@@ -328,6 +334,16 @@ def watched_course():
     watchedC = db.courses_tracking
     watchedC.insert({"username": user["username"], "course_id": data["course_id"], "time_watched": data["time_watched"], "started_watching": data["started_watching"] })
     return jsonify({"message": "Record successfully added!"})
+
+@app.route("/api/watched_lecture", methods=["POST"])
+@jwt_required
+def watched_lecture():
+    user = get_jwt_identity()
+    data = request.get_json()
+    lectures = db.lectures
+    lectures.update({"_id": ObjectId(data["id"])}, { "$push": {"watchedBy": str(user["_id"])}})
+    
+    return jsonify({"message": "Record successfully added!", "lecture_id": data["id"], "user_id": str(user["_id"])})
 
 if __name__ == "__main__":
     app.run(debug=True)

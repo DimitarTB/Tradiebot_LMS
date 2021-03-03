@@ -130,7 +130,7 @@ export const updateLecture = createAsyncThunk(
             myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
             myHeaders.append("Content-Type", "application/json");
             console.log("Files:", data.files.length)
-            var raw = JSON.stringify({ "name": data.name, "files": data.files, "dateCreated": data.dateCreated, "video_file": data.video_file, "course_id": data.course_id });
+            var raw = JSON.stringify({ "name": data.name, "files": data.files, "dateCreated": data.dateCreated, "video_file": data.video_file, "course_id": data.course_id, "watchedBy": data.watchedBy });
 
             var requestOptions = {
                 method: 'PUT',
@@ -190,6 +190,33 @@ export const deleteFile = createAsyncThunk(
             };
 
             const response = await fetch(API_URL + "api/delete_file?lecture_id=" + data.id, requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const watchedLecture = createAsyncThunk(
+    'lectures/watchedLecture',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "id": data.id });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/watched_lecture", requestOptions)
             const data2 = await response.json()
             return data2
         }

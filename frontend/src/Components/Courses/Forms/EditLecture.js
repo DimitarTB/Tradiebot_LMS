@@ -108,6 +108,7 @@ export default props => {
                         dateCreated: currentLecture.dateCreated,
                         course_id: currentLecture.course_id,
                         id: lecture_id,
+                        watchedBy: currentLecture.watchedBy
                     }
                     if (lecture.files.length > 0) data.file = true
                     console.log("dispatch")

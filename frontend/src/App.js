@@ -28,6 +28,7 @@ import NotActivated from './Components/Landing/NotActivated'
 import ChangePassword from './Components/Landing/ChangePassword'
 import SubmitToken from './Components/Landing/SubmitToken'
 import { fetchAll } from './redux/Users/UserActions'
+import TopicsTest from './Components/TopicsTest'
 
 function App() {
 
@@ -88,6 +89,9 @@ function App() {
                                 )}
                             >
                             </Container>
+                        </Route>
+                        <Route path="/topics_test">
+                            <TopicsTest />
                         </Route>
                         <Route exact path="/course/:course_id">
                             <CourseContainer />
