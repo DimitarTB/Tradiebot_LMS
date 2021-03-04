@@ -8,9 +8,11 @@
     display:flex;
     width:100%;
     position:relative;
+    margin-left: 10px;
 }
 .icon {
     display:inline-flex;
+    margin-left:10px;
 }
 :root {
     --blue: #0061f2;

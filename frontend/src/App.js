@@ -29,6 +29,7 @@ import ChangePassword from './Components/Landing/ChangePassword'
 import SubmitToken from './Components/Landing/SubmitToken'
 import { fetchAll } from './redux/Users/UserActions'
 import TopicsTest from './Components/TopicsTest'
+import EditTopic from './Components/Courses/Forms/EditTopic'
 
 function App() {
 
@@ -90,8 +91,8 @@ function App() {
                             >
                             </Container>
                         </Route>
-                        <Route path="/topics_test">
-                            <TopicsTest />
+                        <Route path="/topics_test/:id">
+                            <EditTopic />
                         </Route>
                         <Route exact path="/course/:course_id">
                             <CourseContainer />

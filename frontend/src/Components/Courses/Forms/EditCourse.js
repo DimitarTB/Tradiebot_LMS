@@ -16,6 +16,7 @@ import VideoBrowser from "../CourseContent/VideoBrowser"
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
+import { getAllTopics } from "../../../redux/Topics/TopicsActions"
 
 export default props => {
 
@@ -28,6 +29,7 @@ export default props => {
     console.log("CC", currentCourse)
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
+    const topics = useSelector(state => state.topics?.allTopics.filter(topic => topic?.course_id === course_id))
 
     const [info, setInfo] = useState({ type: null, message: null })
     const [course, setCourse] = useState({
@@ -80,18 +82,22 @@ export default props => {
         })
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = (e, topic) => {
         e.preventDefault();
-
         const data = {
             "token": currentUser.currentUser,
             "name": lectureName.name,
-            "course_id": course_id
+            "course_id": course_id,
+            "topic_id": topic._id
         }
         dispatch(createLecture(data))
-
     }
 
+    const topicLectures = (lectr, lectures) => {
+        const fnd = lectures.filter(lect => lect._id === String(lectr))
+        console.log(fnd)
+        return fnd
+    }
     const validator = (data, tester) => {
         for (const field in data) {
             if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
@@ -106,6 +112,11 @@ export default props => {
     useEffect(() => {
         dispatch(getOneCourse({ "id": course_id }))
         dispatch(getAllLectures(currentUser.currentUser))
+        dispatch(getAllTopics())
+        console.log(topics)
+        console.log(courseLectures)
+    }, [])
+    useEffect(() => {
         if (ff === true) {
             if (course.thumbnail !== null) {
                 if (courses.thumbnailStatus === "fulfilled") setInfo({ type: "success", message: "Lecture updated successfully!!" })
@@ -195,8 +206,15 @@ export default props => {
                 }
             ]}
         />
-            <div class="lectures">{courseLectures.map(lecture => <Fragment><NavLink class="item" to={"/lectures/edit/" + lecture._id}><h2>{lecture.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser.currentUser, id: lecture._id }))} /></div></Fragment>)}
-                {<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div>
+            <div class="lectures">{topics.map(topic =>
+                topic.lectures.map((lect, idx) => {
+                    const lecture = topicLectures(lect, courseLectures)[0]
+                    return (<Fragment>{idx === 0 ? <div><h1>{topic.name}</h1>{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} /></div></Fragment>)
+                })
+
+
+            )}
+            </div>
         </Fragment>
     ) : <Redirect to="/" />
 }

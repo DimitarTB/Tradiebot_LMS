@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { API_URL } from "../constants"
 import axios from 'axios'
+import { addTopicLectures } from "../Topics/TopicsActions";
 
 export const getAllLectures = createAsyncThunk(
     'lectures/getAllLectures',
@@ -79,7 +80,7 @@ export const createLecture = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + data.token));
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id, "video_file": "" });
+            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id, "video_file": "", "topic_id": data.topic_id });
 
             var requestOptions = {
                 method: 'POST',
@@ -90,6 +91,9 @@ export const createLecture = createAsyncThunk(
 
             const response = await fetch(API_URL + "api/lecture", requestOptions)
             const data2 = await response.json()
+            console.log("ovde")
+            console.log(data2)
+            ext.dispatch({ type: "topics/addLecturesToTopic", payload: { "id": data2.topic_id, "lecture_id": data2.lecture._id } })
             return data2
         }
         catch (error) {
@@ -112,6 +116,11 @@ export const deleteLecture = createAsyncThunk(
             };
             const response = await fetch(API_URL + "api/lecture?id=" + data.id, requestOptions)
             const data2 = await response.json()
+
+            const fndTopic = ext.getState().topics.allTopics.findIndex(topic => topic._id === data.topic_id)
+            const arr = ext.getState().topics.allTopics[fndTopic].lectures.filter(lect => lect !== data2.id)
+
+            ext.dispatch(addTopicLectures({ "id": data.topic_id, "lectures": arr }))
             return data2
         }
         catch (error) {

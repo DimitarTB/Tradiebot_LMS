@@ -18,9 +18,10 @@ class Lecture:
         new_lecture = Lecture(data["name"], data["course_id"], tNow, video_file = data["video_file"]).__dict__
 
         inserted_ids = lectures.insert(new_lecture)
-
         new_lecture = {"_id": str(inserted_ids), "name": data["name"], "course_id": data["course_id"], "dateCreated": tNow, "video_file": data["video_file"] }
-        return jsonify({"lecture": new_lecture})
+        topics = db.topics
+        topic = topics.update({"_id": ObjectId(data["topic_id"])}, {"$push": {"lectures": str(inserted_ids)}})
+        return jsonify({"lecture": new_lecture, "topic_id": data["topic_id"]})
 
     def read(request):
         lecture_id = request.args.get("id")

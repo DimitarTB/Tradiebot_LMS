@@ -24,6 +24,29 @@ export const getAllTopics = createAsyncThunk(
     }
 )
 
+export const getOneTopic = createAsyncThunk(
+    'topics/getOneTopic',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/topic?id=" + data.id, requestOptions)
+            const data = await response.json()
+            return data
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
 export const addTopic = createAsyncThunk(
     'topics/addTopic',
     async (data, ext) => {

@@ -57,6 +57,7 @@ export const LecturesSlice = createSlice({
         [createLecture.fulfilled]: (state, action) => {
             state.createStatus = statuses.fulfilled
             console.log("Lecture created!", action.payload.id)
+
             state.allLectures = [...state.allLectures, action.payload.lecture]
         },
         [createLecture.rejected]: (state, action) => {
