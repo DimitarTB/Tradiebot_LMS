@@ -16,7 +16,7 @@ import VideoBrowser from "../CourseContent/VideoBrowser"
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
-import { getAllTopics } from "../../../redux/Topics/TopicsActions"
+import { addTopic, deleteTopic, getAllTopics } from "../../../redux/Topics/TopicsActions"
 
 export default props => {
 
@@ -39,6 +39,7 @@ export default props => {
         manualEnroll: currentCourse?.manualEnroll === true ? "Manual Enroll" : "Self Enroll",
         thumbnail: null
     })
+    const [topicName, setTopicName] = useState("")
     const [ff, setFulfilled] = useState(false)
     const courseValidator = {
         name: {
@@ -131,6 +132,20 @@ export default props => {
         }
     }, [courses.thumbnailStatus, courses.updateStatus])
 
+    let display = []
+
+    topics.map(topic => {
+        if (topic.lectures.length === 0) { display.push(<div><h1>{topic.name}</h1><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} /><br /> Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>) }
+        else {
+            topic.lectures.map((lect, idx) => {
+                const lecture = topicLectures(lect, courseLectures)[0]
+                display.push(<Fragment>{idx === 0 ? <div><h1>{topic.name}</h1><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} /></div></Fragment>)
+            })
+        }
+    }
+    )
+
+
     return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.types?.includes("SuperAdmin")) ? (
         <Fragment><Form
             name="Edit Course"
@@ -206,14 +221,16 @@ export default props => {
                 }
             ]}
         />
-            <div class="lectures">{topics.map(topic =>
-                topic.lectures.map((lect, idx) => {
-                    const lecture = topicLectures(lect, courseLectures)[0]
-                    return (<Fragment>{idx === 0 ? <div><h1>{topic.name}</h1>{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} /></div></Fragment>)
-                })
-
-
-            )}
+            <div class="lectures">
+                {display}
+                < br /><br /><hr />
+                <div>Add Topic<form
+                    onChange={e => console.log(e)}
+                    onSubmit={e => {
+                        e.preventDefault()
+                        console.log(e.target.name.value)
+                        dispatch(addTopic({ "name": e.target.name.value, "course_id": currentCourse._id }))
+                    }}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>
             </div>
         </Fragment>
     ) : <Redirect to="/" />

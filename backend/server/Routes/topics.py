@@ -24,7 +24,7 @@ class Topic:
         topics = db.topics
         new_topic = Topic(data["name"], data["course_id"])
         inserted_id = topics.insert(new_topic.__dict__)
-        return jsonify({"message": "Topic created!", "topic": {"name": data["name"], "course_id": data["course_id"], "_id": str(inserted_id)}})
+        return jsonify({"message": "Topic created!", "topic": {"name": data["name"], "course_id": data["course_id"], "_id": str(inserted_id), "lectures": []}})
 
     def update(request):
         topics = db.topics

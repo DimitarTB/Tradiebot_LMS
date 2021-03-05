@@ -15,7 +15,7 @@ import VideoBrowser from "../CourseContent/VideoBrowser"
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
-import { getAllTopics } from "../../../redux/Topics/TopicsActions"
+import { addTopicLectures, changeTopicName, getAllTopics } from "../../../redux/Topics/TopicsActions"
 
 export default props => {
 
@@ -27,7 +27,7 @@ export default props => {
     const lectures = useSelector(state => state.lectures?.allLectures.filter(lect => lect?.course_id === course?._id))
     const courseLectures = []
 
-    lectures.forEach(lect => courseLectures.push(lect.name))
+    lectures.forEach(lect => topic.lectures.includes(lect._id) ? courseLectures.push(lect._id) : "")
     console.log(courseLectures)
 
     const [info, setInfo] = useState({ type: null, message: null })
@@ -55,7 +55,7 @@ export default props => {
 
     }
 
-    const handleSubmit = (e, topic) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
     }
@@ -71,10 +71,6 @@ export default props => {
     }
 
     useEffect(() => {
-        console.log(topic_id)
-        console.log(cTopic)
-    }, [])
-    useEffect(() => {
         if (ff === true) {
 
         }
@@ -82,7 +78,7 @@ export default props => {
 
         }
     }, [])
-
+    console.log(cTopic.lectures)
     return (
         <Fragment><Form
             name="Edit Topic"
@@ -90,12 +86,16 @@ export default props => {
             buttonText="Proceed"
             data={cTopic}
             handleChange={e => {
-
+                setTopic({
+                    ...cTopic,
+                    [e.target.name]: e.target.value
+                })
             }}
             handleSubmit={e => {
                 e.preventDefault()
                 // if (validator(course, courseValidator) !== true) return
-
+                if (cTopic.name !== topic.name) dispatch(changeTopicName({ "id": topic._id, "name": cTopic.name }))
+                if (cTopic.lectures !== courseLectures) dispatch(addTopicLectures({ "id": topic._id, "lectures": cTopic.lectures }))
             }
             }
             fields={[
@@ -111,9 +111,10 @@ export default props => {
                     label: "Select Lectures",
                     placeholder: "Please Select Lectures for this topic",
                     fieldType: multipleSelect,
-                    options: cTopic.lectures,
-                    displayField: "username",
-                    valueField: "_id"
+                    options: lectures,
+                    displayField: "name",
+                    valueField: "_id",
+                    special: true
                 }
             ]}
         />

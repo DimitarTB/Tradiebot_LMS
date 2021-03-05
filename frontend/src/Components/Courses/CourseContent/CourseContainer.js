@@ -49,6 +49,8 @@ const CourseContainer = props => {
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
     const [selectedLecture, setSelectedLecture] = useState(currentLectures[0])
     const currentUser = useSelector(state => state.user)
+    const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse._id))
+    console.log("topics", topics)
 
     window.addEventListener('locationchange', stopWatching, false)
     window.addEventListener("beforeunload", stopWatching, false);
@@ -58,7 +60,7 @@ const CourseContainer = props => {
             console.log("changed")
             dispatch(getOneLecture({ "id": selectedLecture?._id }))
             dispatch(getLectureComments({ "lecture_id": selectedLecture?._id }))
-            if (!(selectedLecture?.watchedBy.includes(currentUser.currentUserData._id))) {
+            if (!(selectedLecture?.watchedBy?.includes(currentUser.currentUserData._id))) {
                 const data = {
                     "id": selectedLecture?._id
                 }
@@ -88,7 +90,7 @@ const CourseContainer = props => {
                 <VideoPlayer url={selectedLecture?.video_file} />
                 <CourseInfoSection lecture={selectedLecture} course={currentCourse} />
             </div>
-            <VideoBrowser user_id={currentUser.currentUserData._id} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} />
+            <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} />
         </div>
     ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
             details={currentCourse.name}
