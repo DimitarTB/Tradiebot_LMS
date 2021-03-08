@@ -20,8 +20,10 @@ class Lecture:
         inserted_ids = lectures.insert(new_lecture)
         new_lecture = {"_id": str(inserted_ids), "name": data["name"], "course_id": data["course_id"], "dateCreated": tNow, "video_file": data["video_file"] }
         topics = db.topics
-        topic = topics.update({"_id": ObjectId(data["topic_id"])}, {"$push": {"lectures": str(inserted_ids)}})
-        return jsonify({"lecture": new_lecture, "topic_id": data["topic_id"]})
+        tp = topics.find_one({"_id": ObjectId(data["topic_id"])})
+        idx = len(tp["lectures"])
+        topics.update({"_id": ObjectId(data["topic_id"])}, {"$push": {"lectures": {"id": str(inserted_ids), "index": idx}}})
+        return jsonify({"lecture": new_lecture, "topic_id": data["topic_id"], "index": idx})
 
     def read(request):
         lecture_id = request.args.get("id")

@@ -335,6 +335,21 @@ def watched_course():
     watchedC.insert({"username": user["username"], "course_id": data["course_id"], "time_watched": data["time_watched"], "started_watching": data["started_watching"] })
     return jsonify({"message": "Record successfully added!"})
 
+@app.route("/api/lecture_down", methods=["POST"])
+def lecture_down():
+    data = request.get_json()
+    topics = db.topics
+    topic = topics.find_one({"_id": ObjectId(data["topic_id"])})
+    print(data)
+    a = -1
+    counter = 0
+    
+
+    # topic["lectures"][a]["index"] = topic["lectures"][a]["index"] - 1
+
+    # topic["lectures"][a - 1]["index"] = topic["lectures"][a - 1]["index"] + 1
+    # topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": topic})
+    return jsonify({"message": "True", "id": data["topic_id"]})
 @app.route("/api/watched_lecture", methods=["POST"])
 @jwt_required
 def watched_lecture():

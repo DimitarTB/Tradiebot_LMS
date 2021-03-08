@@ -11,19 +11,20 @@ export const TopicsSlice = createSlice({
     reducers: {
         addLecturesToTopic: (state, action) => {
             const idx = state.allTopics.findIndex(topic => topic._id === action.payload.id)
-            state.allTopics[idx].lectures.push(action.payload.lecture_id)
+            state.allTopics[idx].lectures.push({ id: action.payload.lecture_id, index: action.payload.index })
         }
     },
     extraReducers: {
         [getAllTopics.fulfilled]: (state, action) => {
             console.log(action.payload)
             state.allTopics = action.payload.topics
+            state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         },
 
         [getOneTopic.fulfilled]: (state, action) => {
             const idx = state.allTopics.findIndex(topic => topic._id === action.payload._id)
             state.allTopics[idx] = action.payload
-
+            state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         },
 
         [addTopic.fulfilled]: (state, action) => {
@@ -38,7 +39,9 @@ export const TopicsSlice = createSlice({
         },
 
         [addTopicLectures.fulfilled]: (state, action) => {
+            console.log(action.payload.lectures)
             state.allTopics.map(topic => topic._id === action.payload.id ? topic.lectures = action.payload.lectures : "")
+            state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         },
 
 

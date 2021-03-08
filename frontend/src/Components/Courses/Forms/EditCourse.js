@@ -16,7 +16,7 @@ import VideoBrowser from "../CourseContent/VideoBrowser"
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
-import { addTopic, deleteTopic, getAllTopics } from "../../../redux/Topics/TopicsActions"
+import { addTopic, deleteTopic, getAllTopics, topicDown } from "../../../redux/Topics/TopicsActions"
 
 export default props => {
 
@@ -94,6 +94,10 @@ export default props => {
         dispatch(createLecture(data))
     }
 
+    const idxUp = (idx, tp) => {
+        dispatch(topicDown({ "topic_id": tp, "index": idx }))
+    }
+
     const topicLectures = (lectr, lectures) => {
         const fnd = lectures.filter(lect => lect._id === String(lectr))
         console.log(fnd)
@@ -135,11 +139,11 @@ export default props => {
     let display = []
 
     topics.map(topic => {
-        if (topic.lectures.length === 0) { display.push(<div><h1>{topic.name}</h1><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} /><br /> Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>) }
+        if (topic.lectures.length === 0) { display.push(<div><NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} /><br /> Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>) }
         else {
             topic.lectures.map((lect, idx) => {
-                const lecture = topicLectures(lect, courseLectures)[0]
-                display.push(<Fragment>{idx === 0 ? <div><h1>{topic.name}</h1><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} /></div></Fragment>)
+                const lecture = topicLectures(lect.id, courseLectures)[0]
+                display.push(<Fragment>{idx === 0 ? <div><NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name + " " + idx}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} />{idx !== 0 ? <button onClick={() => idxUp(idx, topic._id)}>^</button> : ""}</div></Fragment>)
             })
         }
     }

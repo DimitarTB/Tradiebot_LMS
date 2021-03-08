@@ -35,6 +35,7 @@ class Topic:
         if lecture is not None:
             # for lect in data["lectures"]:
             #     topics.update({"_id": ObjectId(tID)}, {"$push": {"lectures": lect}})
+            print(data)
             topics.update({"_id": ObjectId(tID)}, {"$set": {"lectures": data["lectures"]}})
             return jsonify({"message": "Lectures successfully added!", "id": tID, "lectures": data["lectures"]})
         topics.update({"_id": ObjectId(tID)}, {"$set": {"name": data["name"]}})

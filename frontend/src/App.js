@@ -91,7 +91,7 @@ function App() {
                             >
                             </Container>
                         </Route>
-                        <Route path="/topics_test/:id">
+                        <Route path="/topics/edit/:id">
                             <EditTopic />
                         </Route>
                         <Route exact path="/course/:course_id">

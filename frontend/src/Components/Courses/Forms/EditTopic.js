@@ -27,7 +27,13 @@ export default props => {
     const lectures = useSelector(state => state.lectures?.allLectures.filter(lect => lect?.course_id === course?._id))
     const courseLectures = []
 
-    lectures.forEach(lect => topic.lectures.includes(lect._id) ? courseLectures.push(lect._id) : "")
+
+    lectures.forEach(lect => Object.values(topic.lectures).findIndex(tp => tp.id === lect._id) > -1 ? courseLectures.push(lect._id) : "")
+    // lectures.forEach(lect => {
+    //     console.log(lect._id)
+    //     console.log(Object.values(topic.lectures)["_id"] === lect._id)
+    // })
+    courseLectures.sort((a, b) => a.index > b.index)
     console.log(courseLectures)
 
     const [info, setInfo] = useState({ type: null, message: null })
@@ -90,12 +96,16 @@ export default props => {
                     ...cTopic,
                     [e.target.name]: e.target.value
                 })
+                console.log(cTopic)
             }}
             handleSubmit={e => {
                 e.preventDefault()
                 // if (validator(course, courseValidator) !== true) return
                 if (cTopic.name !== topic.name) dispatch(changeTopicName({ "id": topic._id, "name": cTopic.name }))
-                if (cTopic.lectures !== courseLectures) dispatch(addTopicLectures({ "id": topic._id, "lectures": cTopic.lectures }))
+                if (cTopic.lectures !== courseLectures) {
+                    dispatch(addTopicLectures({ "id": topic._id, "lectures": cTopic.lectures }))
+                    console.log("addLL")
+                }
             }
             }
             fields={[

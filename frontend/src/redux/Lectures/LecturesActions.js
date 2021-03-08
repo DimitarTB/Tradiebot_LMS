@@ -93,7 +93,7 @@ export const createLecture = createAsyncThunk(
             const data2 = await response.json()
             console.log("ovde")
             console.log(data2)
-            ext.dispatch({ type: "topics/addLecturesToTopic", payload: { "id": data2.topic_id, "lecture_id": data2.lecture._id } })
+            ext.dispatch({ type: "topics/addLecturesToTopic", payload: { "id": data2.topic_id, "lecture_id": data2.lecture._id, "index": data2.index } })
             return data2
         }
         catch (error) {
@@ -118,7 +118,8 @@ export const deleteLecture = createAsyncThunk(
             const data2 = await response.json()
 
             const fndTopic = ext.getState().topics.allTopics.findIndex(topic => topic._id === data.topic_id)
-            const arr = ext.getState().topics.allTopics[fndTopic].lectures.filter(lect => lect !== data2.id)
+            const arr = ext.getState().topics.allTopics[fndTopic].lectures.filter(lect => lect.id !== data2.id)
+            console.log(arr)
 
             ext.dispatch(addTopicLectures({ "id": data.topic_id, "lectures": arr }))
             return data2
