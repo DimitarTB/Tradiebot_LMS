@@ -47,15 +47,15 @@ const CourseContainer = props => {
 
     const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === params.course_id))
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
-    const [selectedLecture, setSelectedLecture] = useState(currentLectures[0])
     const currentUser = useSelector(state => state.user)
     const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse._id))
-    console.log("topics", topics)
+    const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0]?.id)
 
     window.addEventListener('locationchange', stopWatching, false)
     window.addEventListener("beforeunload", stopWatching, false);
     window.addEventListener("unload", stopWatching, false);
     useEffect(() => {
+        console.log("Smeni", selectedLecture)
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse._id)) {
             console.log("changed")
             dispatch(getOneLecture({ "id": selectedLecture?._id }))

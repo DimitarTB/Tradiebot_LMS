@@ -1,6 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { addTopic, addTopicLectures, changeTopicName, deleteTopic, getAllTopics, getOneTopic } from './TopicsActions'
+import { addTopic, addTopicLectures, changeTopicName, deleteTopic, getAllTopics, getOneTopic, lectureDown, lectureUp, topicDown, topicUp } from './TopicsActions'
 
 export const TopicsSlice = createSlice({
     name: 'topics',
@@ -51,6 +51,18 @@ export const TopicsSlice = createSlice({
 
         [deleteTopic.fulfilled]: (state, action) => {
             state.allTopics = state.allTopics.filter(topic => topic._id !== action.payload.id)
+        },
+        
+        [lectureDown.fulfilled]: (state, action) => {
+            const idx = state.allTopics.findIndex(tp => tp._id === action.payload.id)
+            state.allTopics[idx].lectures = action.payload.lectures
+            state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
+        },
+
+        [lectureUp.fulfilled]: (state, action) => {
+            const idx = state.allTopics.findIndex(tp => tp._id === action.payload.id)
+            state.allTopics[idx].lectures = action.payload.lectures
+            state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         }
 
     }

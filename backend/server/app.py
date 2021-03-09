@@ -268,6 +268,126 @@ def del_file():
     
     return jsonify({"Message": "Deleted file!", "files": lect_files, "id": l_id})
 
+@app.route("/api/lecture_down", methods=["POST"])
+def lecture_down():
+    data = request.get_json()
+    topics = db.topics
+    topic = topics.find_one({"_id": ObjectId(data["topic_id"])})
+    print(data)
+    a = -1
+    counter = 0
+    idx = data["index"]
+
+    tList = topic["lectures"]
+    if idx == 0:
+        tdown = next(item for item in tList if item["index"] == idx)
+        tup = next(item for item in tList if item["index"] == (len(topic["lectures"]) - 1))
+
+        tdown.update({"index": (len(topic["lectures"]) - 1)})
+        tup.update({"index": idx})
+        topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": {"lectures": tList}})
+        return jsonify({"message": "True", "id": data["topic_id"], "lectures": tList})
+    tdown = next(item for item in tList if item["index"] == idx)
+    tup = next(item for item in tList if item["index"] == (idx - 1))
+
+    tdown.update({"index": (idx - 1)})
+    tup.update({"index": (idx)})
+
+    topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": {"lectures": tList}})
+    return jsonify({"message": "True", "id": data["topic_id"], "lectures": tList})
+
+@app.route("/api/lecture_up", methods=["POST"])
+def lecture_up():
+    data = request.get_json()
+    topics = db.topics
+    topic = topics.find_one({"_id": ObjectId(data["topic_id"])})
+    idx = data["index"]
+    tList = topic["lectures"]
+
+    if idx == (len(tList) - 1):
+        tdown = next(item for item in tList if item["index"] == idx)
+        tup = next(item for item in tList if item["index"] == 0)
+        tdown.update({"index": 0})
+        tup.update({"index": (len(tList) - 1)})
+
+        topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": {"lectures": tList}})
+        return jsonify({"message": "True", "id": data["topic_id"], "lectures": tList})
+    tdown = next(item for item in tList if item["index"] == idx)
+    tup = next(item for item in tList if item["index"] == (idx + 1))
+
+    tdown.update({"index": (idx + 1)})
+    tup.update({"index": (idx)})
+
+    topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": {"lectures": tList}})
+    return jsonify({"message": "True", "id": data["topic_id"], "lectures": tList})
+
+@app.route("/api/topic_down", methods=["POST"])
+def topic_down():
+    data = request.get_json()
+    topics = db.topics
+    course_topics = topics.find({"course_id": data["course_id"]})
+    idx = int(data["index"])
+    if idx == 0:
+        for topic in course_topics:
+            if topic["index"] == idx:
+                tdown = topic
+            elif topic["index"] == (course_topics.count() - 1):
+                tup = topic
+        tdown.update({"index": (course_topics.count() - 1)})
+        tup.update({"index": 0})
+        topics.replace_one({"_id": tdown["_id"]}, tdown)
+        topics.replace_one({"_id": tup["_id"]}, tup)
+        return jsonify({"message": "Successfully updated!"})
+
+    for topic in course_topics:
+        if topic["index"] == idx:
+            tdown = topic
+        elif topic["index"] == (idx - 1):
+            tup = topic
+
+    tdown.update({"index": (idx - 1)})
+    tup.update({"index": idx})
+
+    topics.replace_one({"_id": tdown["_id"]}, tdown)
+    topics.replace_one({"_id": tup["_id"]}, tup)
+
+    return jsonify({"message": "Successfully updated!"})
+
+@app.route("/api/topic_up", methods=["POST"])
+def topic_up():
+    data = request.get_json()
+    topics = db.topics
+    course_topics = topics.find({"course_id": data["course_id"]})
+    idx = int(data["index"])
+
+    if idx == (course_topics.count() - 1):
+        for topic in course_topics:
+            if topic["index"] == idx:
+                tdown = topic
+            elif topic["index"] == 0:
+                tup = topic
+        tdown.update({"index": 0})
+        tup.update({"index": idx})
+        topics.replace_one({"_id": tdown["_id"]}, tdown)
+        topics.replace_one({"_id": tup["_id"]}, tup)
+
+        return jsonify({"message": "Successfully updated!"})
+
+    for topic in course_topics:
+        if topic["index"] == idx:
+            tdown = topic
+        elif topic["index"] == (idx + 1):
+            tup = topic
+
+    tdown.update({"index": (idx + 1)})
+    tup.update({"index": idx})
+
+    topics.replace_one({"_id": tdown["_id"]}, tdown)
+    topics.replace_one({"_id": tup["_id"]}, tup)
+
+    return jsonify({"message": "Successfully updated!"})
+    
+
 
 
 
@@ -335,21 +455,7 @@ def watched_course():
     watchedC.insert({"username": user["username"], "course_id": data["course_id"], "time_watched": data["time_watched"], "started_watching": data["started_watching"] })
     return jsonify({"message": "Record successfully added!"})
 
-@app.route("/api/lecture_down", methods=["POST"])
-def lecture_down():
-    data = request.get_json()
-    topics = db.topics
-    topic = topics.find_one({"_id": ObjectId(data["topic_id"])})
-    print(data)
-    a = -1
-    counter = 0
-    
 
-    # topic["lectures"][a]["index"] = topic["lectures"][a]["index"] - 1
-
-    # topic["lectures"][a - 1]["index"] = topic["lectures"][a - 1]["index"] + 1
-    # topics.update({"_id": ObjectId(data["topic_id"])}, {"$set": topic})
-    return jsonify({"message": "True", "id": data["topic_id"]})
 @app.route("/api/watched_lecture", methods=["POST"])
 @jwt_required
 def watched_lecture():

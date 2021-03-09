@@ -18,16 +18,21 @@ const VideoBrowser = props => {
     //         </Fragment>
     //     )
     // })
+    const checkValue = (lectures, id) => {
+        for (var i = 0; i < lectures.length; i = i + 1) {
+            if (lectures[i].id === id) return true;
+        }
+        return false;
+    }
     useEffect(() => {
-        const lect_id = props.topics[0].lectures[0]
-        const lect = props.lectures.find(lec => lec._id === lect_id)
-        props.setSelectedLecture(lect)
+        console.log(props.topics[0]?.lectures[0]?.id)
+        props.setSelectedLecture(props.topics[0]?.lectures[0]?.id)
     }, [])
     const topicCompleted = (lectures) => {
         let watched = true
         lectures.map(lect => {
             const cLect = props.lectures.find(lectt => lectt._id === lect)
-            if (cLect.watchedBy.includes(props.user_id)) watched = true
+            if (cLect?.watchedBy?.includes(props.user_id)) watched = true
             else watched = false
         })
         return watched
@@ -36,29 +41,33 @@ const VideoBrowser = props => {
     let first = true
     props.topics.map((topic, tidx) => {
         first = true
+        console.log("st", topic)
         props.lectures.map((lecture, idx) => {
             {
-                if (topic.lectures.includes(lecture._id)) {
-                    console.log("najde", idx)
-                    console.log(lecture)
-                    console.log(topic.name)
+                first = true
+                if (checkValue(topic.lectures, lecture._id)) {
+                    console.log("Uslov")
                     display.push((<Fragment>
                         {first === true ? <h1>{topic.name}</h1> : ""}
                         <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             console.log(idx, props.topics)
                             if (tidx !== 0) {
+                                console.log("ne e 0")
                                 if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
                                 else alert("You haven't completed the previous topic!")
                             }
-                            else props.setSelectedLecture(lecture)
+                            else {
+                                console.log("0 e")
+                                props.setSelectedLecture(lecture)
+                            }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
+                        
                     </Fragment>))
                 }
-                if (topic.lectures.includes(lecture._id)) first = false
+                if (checkValue(topic.lectures, lecture._id)) first = false
             }
         })
     })
-    console.log("topics", display)
     return (
         <div className="video-browser">
             {display}
