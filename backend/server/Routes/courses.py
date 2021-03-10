@@ -84,8 +84,6 @@ class Course:
         #     return jsonify({"message": "Updated!", "course": course_id, "name": new_name})
         course_id = request.args.get("course")
         data = request.get_json()
-        if not "thumbnail" in data:
-            data["thumbnail"] = ""
         update_course = {"dateCreated": data["dateCreated"], "description": data["description"], "manualEnroll": data["manualEnroll"], "name": data["name"], "teachers": data["teachers"], "thumbnail": data["thumbnail"]}
         courses = db.courses
         courses.update({"_id": ObjectId(course_id)}, (update_course))

@@ -48,3 +48,21 @@
     --indigo: #5800e8;
     --purple: #6900c7;
 }
+
+#questions {
+    display:flex;
+    margin:10px;
+}
+
+.form {
+    width:100%;
+    margin-top:auto;
+}
+
+.pform {
+    display:center;
+    margin-left:50%;
+}
+.pform > input, select {
+    width:100px;
+}

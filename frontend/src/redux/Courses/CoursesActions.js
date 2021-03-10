@@ -111,7 +111,7 @@ export const editCourse = createAsyncThunk(
             myHeaders.append("Authorization", "Bearer " + data.token);
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "name": data.course.name, "description": data.course.description, "teachers": data.course.teachers, "manualEnroll": data.course.manualEnroll, "dateCreated": data.course.dateCreated });
+            var raw = JSON.stringify({ "name": data.course.name, "description": data.course.description, "teachers": data.course.teachers, "manualEnroll": data.course.manualEnroll, "dateCreated": data.course.dateCreated, "thumbnail": data.thumbnail });
 
             var requestOptions = {
                 method: 'PUT',

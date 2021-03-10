@@ -30,6 +30,8 @@ import SubmitToken from './Components/Landing/SubmitToken'
 import { fetchAll } from './redux/Users/UserActions'
 import TopicsTest from './Components/TopicsTest'
 import EditTopic from './Components/Courses/Forms/EditTopic'
+import EditQuiz from './Components/Courses/Forms/EditQuiz'
+import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
 
 function App() {
 
@@ -91,11 +93,21 @@ function App() {
                             >
                             </Container>
                         </Route>
+                        <Route path="/quizzes/edit/:id">
+                            <EditQuiz />
+                        </Route>
+                        <Route path="/pf">
+                            <PlastfixForm regions={["Plastfix Australia", "Plastfix New Zealand", "Plastfix USA"]} states={["7500", "2400"]} />
+                        </Route>
                         <Route path="/topics/edit/:id">
                             <EditTopic />
                         </Route>
                         <Route exact path="/course/:course_id">
                             <CourseContainer />
+                        </Route>
+
+                        <Route exact path="/test_quizzes">
+                            <TopicsTest />
                         </Route>
 
                         <Route path="/user/:username">

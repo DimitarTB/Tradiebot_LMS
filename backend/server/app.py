@@ -5,6 +5,7 @@ from Routes.courses import Course
 from Routes.lectures import Lecture
 from Routes.comments import Comment
 from Routes.topics import Topic
+from Routes.quizzes import Quiz
 from models import methodExec
 import datetime
 from flask_mail import Message
@@ -445,6 +446,11 @@ def comment():
 def topic():
     print(request)
     return methodExec(request, Topic)
+
+@app.route("/api/quiz", methods=["GET", "POST", "PUT", "DELETE"])
+def quiz():
+    print(request)
+    return methodExec(request, Quiz)
 
 @app.route("/api/watched_course", methods=["POST"])
 @jwt_required

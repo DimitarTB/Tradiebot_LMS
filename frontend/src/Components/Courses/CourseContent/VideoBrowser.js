@@ -29,11 +29,13 @@ const VideoBrowser = props => {
         props.setSelectedLecture(props.topics[0]?.lectures[0]?.id)
     }, [])
     const topicCompleted = (lectures) => {
+        console.log(lectures)
         let watched = true
         lectures.map(lect => {
-            const cLect = props.lectures.find(lectt => lectt._id === lect)
+            const cLect = props.lectures.find(lectt => lectt._id === lect.id)
             if (cLect?.watchedBy?.includes(props.user_id)) watched = true
             else watched = false
+            console.log(watched)
         })
         return watched
     }
@@ -44,7 +46,6 @@ const VideoBrowser = props => {
         console.log("st", topic)
         props.lectures.map((lecture, idx) => {
             {
-                first = true
                 if (checkValue(topic.lectures, lecture._id)) {
                     console.log("Uslov")
                     display.push((<Fragment>
@@ -61,8 +62,9 @@ const VideoBrowser = props => {
                                 props.setSelectedLecture(lecture)
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
-                        
+
                     </Fragment>))
+                    first = false
                 }
                 if (checkValue(topic.lectures, lecture._id)) first = false
             }

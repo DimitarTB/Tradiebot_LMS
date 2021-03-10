@@ -17,6 +17,7 @@ import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
 import { addTopic, deleteTopic, getAllTopics, lectureDown, lectureUp, topicDown, topicUp } from "../../../redux/Topics/TopicsActions"
+import { createQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 
 export default props => {
     const dispatch = useDispatch()
@@ -29,6 +30,7 @@ export default props => {
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
     const topics = useSelector(state => state.topics?.allTopics.filter(topic => topic?.course_id === course_id))
+    const quizzes = useSelector(state => state.quizzes?.allQuizzes?.filter(quiz => quiz?.course_id === course_id))
 
     topics.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0)
 
@@ -123,6 +125,7 @@ export default props => {
         dispatch(getOneCourse({ "id": course_id }))
         dispatch(getAllLectures(currentUser.currentUser))
         dispatch(getAllTopics())
+        dispatch(getAllQuizzes())
         console.log(topics)
         console.log(courseLectures)
     }, [])
@@ -144,16 +147,76 @@ export default props => {
     let display = []
 
     topics.map((topic, tIdx) => {
-        if (topic.lectures.length === 0) { display.push(<div><NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} /><button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button><button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button><br /> Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>) }
+        if (topic.lectures.length === 0) {
+            display.push
+                (
+                    <div>
+                        <NavLink to={"/topics/edit/" + topic._id}>
+                            <h1>{topic.name}</h1>
+                        </NavLink>
+                        <FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />
+                        <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button
+                        ><button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button>
+                        <br />
+                    Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form>
+                        {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 ?
+                            <Fragment>
+                                Add quiz
+                            <form onSubmit={(e) => { e.preventDefault(); dispatch(createQuiz({ "name": e.target.name.value, "topic_id": topic?._id, "course_id": course_id })) }}>
+                                    <input name="name"></input>
+                                    <button>Add</button>
+                                </form>
+                            </Fragment> : ""}
+                    </div>
+                )
+        }
         else {
             topic.lectures.map((lect, idx, len) => {
                 const lecture = topicLectures(lect.id, courseLectures)[0]
-                display.push(<Fragment>{idx === 0 ? <div><NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink><FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} /> <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button><button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button>{<div>Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>}</div> : ""}<NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink><div class="icon"><FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} />{idx !== 0 || idx === 0 ? <Fragment><button onClick={() => idxDown(idx, topic._id)}>↑</button> {idx !== (len - 1) ? <button onClick={() => idxUp(idx, topic._id)}>↓</button> : ""}</Fragment> : idx !== (len - 1) ? <button onClick={() => idxUp(idx, topic._id)}>↓</button> : ""}</div></Fragment>)
+                display.push
+                    (
+                        <Fragment>
+                            {idx === 0 ?
+                                <div>
+                                    <NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink>
+                                    <FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />
+                                    <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button>
+                                    <button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button>
+                                    {
+                                        <div>
+                                            Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form>
+                                            {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 ?
+                                                <Fragment>
+                                                    Add quiz<form onSubmit={
+                                                        (e) => {
+                                                            e.preventDefault(); dispatch(createQuiz({ "name": e.target.name.value, "topic_id": topic?._id, "course_id": course_id }))
+                                                        }}>
+                                                        <input name="name"></input>
+                                                        <button>Add</button>
+                                                    </form>
+                                                </Fragment>
+                                                : ""}
+                                        </div>
+                                    }</div> : ""}
+                            <NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink>
+                            <div class="icon">
+                                <FcCancel onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} />
+                                {idx !== 0 || idx === 0 ?
+                                    <Fragment>
+                                        <button onClick={() => idxDown(idx, topic._id)}>↑</button>
+                                        {idx !== (len - 1) ?
+                                            <button onClick={() => idxUp(idx, topic._id)}>↓</button>
+                                            : ""}</Fragment> : idx !== (len - 1) ?
+                                        <button onClick={() => idxUp(idx, topic._id)}>↓</button>
+                                        : ""}
+                            </div>
+                            {idx === (len.length - 1) ? <h2>Quiz: {quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}</h2> : ""}
+                        </Fragment>
+                    )
             })
         }
     }
     )
-
 
     return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.types?.includes("SuperAdmin")) ? (
         <Fragment><Form
@@ -176,10 +239,12 @@ export default props => {
                 course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
                 let data = {
                     course: course,
-                    token: currentUser.currentUser
+                    token: currentUser.currentUser,
+                    thumbnail: course.thumbnail === null ? currentCourse.thumbnail : course.thumbnail
                 }
                 dispatch(editCourse(data))
                 if (course.thumbnail !== null) {
+                    console.log("Ne e null", course.thumbnail)
                     const data = {
                         id: course_id,
                         file: course.thumbnail
