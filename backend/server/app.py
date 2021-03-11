@@ -387,8 +387,51 @@ def topic_up():
     topics.replace_one({"_id": tup["_id"]}, tup)
 
     return jsonify({"message": "Successfully updated!"})
-    
 
+
+@app.route("/api/public_answer", methods=["POST", "DELETE"])
+def public_answer():
+    data = request.get_json()
+    quizzes = db.quizzes
+    if request.method == "POST":
+        quiz = quizzes.find_one({"_id": ObjectId(data["quiz_id"])})
+        questions = quiz["questions"]
+        for quest in questions:
+            if quest["index"] == data["index"]:
+                quest["public_answers"].append(data["answer"])
+        quizzes.update({"_id": ObjectId(data["quiz_id"])}, {"$set": {"questions": questions}})
+        return jsonify({"id": data["quiz_id"], "questions": questions})
+    quiz = quizzes.find_one({"_id": ObjectId(data["quiz_id"])})
+    questions = quiz["questions"]
+    for quest in questions:
+        if quest["index"] == data["index"]:
+            print("Brisi", quest["public_answers"])
+            print(data["answer"])
+            quest["public_answers"].remove(data["answer"])
+    quizzes.update({"_id": ObjectId(data["quiz_id"])}, {"$set": {"questions": questions}})
+    return jsonify({"id": data["quiz_id"], "questions": questions})
+
+@app.route("/api/correct_answer", methods=["POST", "DELETE"])
+def correct_answer():
+    data = request.get_json()
+    quizzes = db.quizzes
+    if request.method == "POST":
+        quiz = quizzes.find_one({"_id": ObjectId(data["quiz_id"])})
+        questions = quiz["questions"]
+        for quest in questions:
+            if quest["index"] == data["index"]:
+                quest["correct_answers"].append(data["answer"])
+        quizzes.update({"_id": ObjectId(data["quiz_id"])}, {"$set": {"questions": questions}})
+        return jsonify({"id": data["quiz_id"], "questions": questions})
+    quiz = quizzes.find_one({"_id": ObjectId(data["quiz_id"])})
+    questions = quiz["questions"]
+    for quest in questions:
+        if quest["index"] == data["index"]:
+            print("Brisi", quest["correct_answers"])
+            print(data["answer"])
+            quest["correct_answers"].remove(data["answer"])
+    quizzes.update({"_id": ObjectId(data["quiz_id"])}, {"$set": {"questions": questions}})
+    return jsonify({"id": data["quiz_id"], "questions": questions})
 
 
 

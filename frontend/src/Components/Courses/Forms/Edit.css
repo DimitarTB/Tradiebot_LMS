@@ -66,3 +66,14 @@
 .pform > input, select {
     width:100px;
 }
+
+.question {
+    margin-top:50px;
+    margin-right:100px;
+}
+.question > select, input {
+    width:100%;
+}
+#delete {
+    background:red;
+}

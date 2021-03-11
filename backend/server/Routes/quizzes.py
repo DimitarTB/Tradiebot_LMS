@@ -37,3 +37,21 @@ class Quiz:
             question = {"index": data["index"], "question": data["question"], "type": data["type"], "public_answers": data["public_answers"], "correct_answers": data["correct_answers"]}
             quizzes.update({"_id": ObjectId(quiz_id)}, {"$push": {"questions": question}})
             return jsonify({"id": quiz_id, "question": question})
+        elif request.args.get("rquestion") is not None:
+            data = request.get_json()
+            quizzes = db.quizzes
+            quiz = quizzes.find_one({"_id": ObjectId(quiz_id)})
+
+            questions = quiz["questions"]
+            for qs in questions:
+                if qs["question"] == data["question"]:
+                    questions.remove(qs)
+
+            counter = 0
+            for qs in questions:
+                qs["index"] = counter
+                counter = counter + 1
+
+            question = {"index": data["index"], "question": data["question"], "type": data["type"], "public_answers": data["public_answers"], "correct_answers": data["correct_answers"]}
+            quizzes.update({"_id": ObjectId(quiz_id)}, {"$set": {"questions": questions}})
+            return jsonify({"id": quiz_id, "question": question})
