@@ -130,7 +130,7 @@ export default props => {
                         e.preventDefault()
                         dispatch(addQuestion({
                             question: e.target.quest_name.value,
-                            type: e.target.quest_name.value,
+                            type: e.target.question_types.value,
                             index: currentQuiz.questions.length,
                             quiz_id: currentQuiz._id
                         }))
@@ -150,8 +150,8 @@ export default props => {
                 <input name="quest_name" placeholder="New Question"></input>
                 <select name="question_types">
                     <option value="Multiple Choice">Multiple Choice</option>
-                    <option value="Input">Input</option>
-                    <option value="Multiple Select">Multiple Select</option>
+                    <option value="Single Choice">Single Choice</option>
+                    <option value="input">Input</option>
                 </select>
                 <button type="submit">Add</button>
                 <br />
@@ -187,7 +187,13 @@ export default props => {
                 dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addPublic.value }))
             }}>
                 <h2>Public answers:</h2>
-                {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => dispatch(deletePublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }))}>Delete</p><hr /></Fragment>)}
+                {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => {
+                    dispatch(deletePublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }));
+                    let new_ob = selectedQuestion
+                    new_ob.public_answers = selectedQuestion?.public_answers?.filter(pa => pa.answer !== answer)
+                    setSelectedQuestion(new_ob)
+                }
+                }>Delete</p><hr /></Fragment>)}
                 <input name="addPublic" placeholder="Answer"></input>
                 <button type="submit" onClick={e => e.preventDefault}>Add</button>
             </form>
@@ -196,7 +202,7 @@ export default props => {
                 dispatch(addCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addCorrect.value }))
             }}>
                 <h2>Correct answers:</h2>
-                {selectedQuestion.correct_answers.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => dispatch(deleteCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }))}>Delete</p><hr /></Fragment>)}
+                {selectedQuestion?.correct_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => dispatch(deleteCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }))}>Delete</p><hr /></Fragment>)}
                 <input name="addCorrect" placeholder="Answer"></input>
                 <button type="submit" onClick={e => e.preventDefault}>Add</button>
             </form>

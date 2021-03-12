@@ -16,6 +16,7 @@ function BrowseCourses() {
     const showCourses = _showCourses.filter(course => !(currentUser.currentUserData.enrolledCourses.includes(course._id)))
     const [search, setSearch] = useState("")
     // const [showingCourses, setShowCourses] = useState([])
+    console.log(showCourses)
 
     useEffect(() => {
         if (currentUser.currentUser !== null) {
@@ -49,5 +50,3 @@ function BrowseCourses() {
 }
 
 export default BrowseCourses
-
-

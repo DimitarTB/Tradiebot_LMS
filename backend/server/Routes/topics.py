@@ -45,5 +45,13 @@ class Topic:
     def delete(request):
         topics = db.topics
         tID = request.args.get("id")
+        course_id = topics.find_one({"_id": ObjectId(tID)})["course_id"]
         topics.remove({"_id": ObjectId(tID)})
+        all_topics = topics.find({"course_id": course_id})
+        sorted_topics = sorted(all_topics, key=lambda k: k['index'])
+        counter = 0
+        for tp in sorted_topics:
+            topics.update({"_id": tp["_id"]}, {"$set": {"index": counter}})
+            counter = counter + 1
+        
         return jsonify({"message": "Topic deleted!", "id": tID})

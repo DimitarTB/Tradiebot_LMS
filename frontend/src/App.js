@@ -21,7 +21,6 @@ import {
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
-import CourseComponent from "./Components/Courses/CourseComponent"
 import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
 import { getAllCourses } from './redux/Courses/CoursesActions'
 import NotActivated from './Components/Landing/NotActivated'
@@ -32,6 +31,8 @@ import TopicsTest from './Components/TopicsTest'
 import EditTopic from './Components/Courses/Forms/EditTopic'
 import EditQuiz from './Components/Courses/Forms/EditQuiz'
 import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
+import Quiz from './Components/Courses/CourseContent/Quiz'
+import QuizContainer from "./Components/Quiz/QuizContainer"
 
 function App() {
 
@@ -95,6 +96,9 @@ function App() {
                         </Route>
                         <Route path="/quizzes/edit/:id">
                             <EditQuiz />
+                        </Route>
+                        <Route path="/quiz/:id">
+                            <QuizContainer />
                         </Route>
                         <Route path="/pf">
                             <PlastfixForm regions={["Plastfix Australia", "Plastfix New Zealand", "Plastfix USA"]} states={["7500", "2400"]} />

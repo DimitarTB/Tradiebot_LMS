@@ -17,6 +17,7 @@ from flask_jwt_extended import (
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 from bson.objectid import ObjectId
+from bson.json_util import dumps
 
 
 
@@ -189,8 +190,23 @@ def resend():
     mail.send(msg)
     return jsonify({"message": "Resend successfully!"})
 
+@app.route('/api/submit_quiz', methods=["POST"])
+def submit_quiz():
+    print(request)
+    quiz_records = db.quiz_records
+    data = request.get_json()
+    
+    points = 0
+    for answer in data["answers"]:
+        if answer["correct"] == True:
+            points = points + 1
 
-
+    passed = False
+    if points >= (len(data["answers"]) / 2):
+        passed = True
+    insert_q = {"user": data["user_id"], "quiz_id": data["quiz_id"], "time": datetime.datetime.utcnow(), "answers": data["answers"], "passed": passed, "points": points}
+    quiz_records.insert(insert_q)
+    return jsonify({"message": "Record inserted!", "record": insert_q})
 
 
 
@@ -362,7 +378,9 @@ def topic_up():
     idx = int(data["index"])
 
     if idx == (course_topics.count() - 1):
+        print(idx)
         for topic in course_topics:
+            print(topic["index"])
             if topic["index"] == idx:
                 tdown = topic
             elif topic["index"] == 0:
@@ -432,6 +450,14 @@ def correct_answer():
             quest["correct_answers"].remove(data["answer"])
     quizzes.update({"_id": ObjectId(data["quiz_id"])}, {"$set": {"questions": questions}})
     return jsonify({"id": data["quiz_id"], "questions": questions})
+
+@app.route("/api/quiz_records", methods=["GET"])
+def quiz_records():
+    print(request)
+    quiz_records = db.quiz_records
+    ret = quiz_records.find({})
+    json_data = dumps(ret, indent = 2)  
+    return (json_data)
 
 
 

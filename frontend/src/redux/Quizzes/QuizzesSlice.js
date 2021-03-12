@@ -1,12 +1,14 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { addCorrectAnswer, addPublicAnswer, addQuestion, createQuiz, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, getAllQuizzes } from './QuizzesActions'
+import { getQuizRecords, addCorrectAnswer, addPublicAnswer, addQuestion, createQuiz, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, getAllQuizzes, submitQuiz } from './QuizzesActions'
 
 export const QuizzesSlice = createSlice({
     name: 'quizzes',
     initialState: {
         allQuizzes: [],
-        addStatus: statuses.idle
+        addStatus: statuses.idle,
+        submitQuizStatus: statuses.idle,
+        quizRecords: []
     },
     reducers: {
 
@@ -63,6 +65,15 @@ export const QuizzesSlice = createSlice({
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
             console.log(idx)
             state.allQuizzes[idx].questions = action.payload.questions
+        },
+
+        [getQuizRecords.fulfilled]: (state, action) => {
+            state.quizRecords = action.payload
+        },
+
+        [submitQuiz.fulfilled]: (state, action) => {
+            state.quizRecords.push(action.payload.record)
+            state.submitQuizStatus = statuses.fulfilled
         }
     }
 })

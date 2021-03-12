@@ -49,7 +49,7 @@ const VideoBrowser = props => {
                 if (checkValue(topic.lectures, lecture._id)) {
                     console.log("Uslov")
                     display.push((<Fragment>
-                        {first === true ? <h1>{topic.name}</h1> : ""}
+                        {first === true ? <h1>{topic.name}</h1> : <Fragment></Fragment>}
                         <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             console.log(idx, props.topics)
                             if (tidx !== 0) {
@@ -62,7 +62,7 @@ const VideoBrowser = props => {
                                 props.setSelectedLecture(lecture)
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
-
+                        {idx === (topic.lectures.length - 1) ? display.push(<button id="quiz">{"Quiz: " + props?.quizzes?.find(qz => qz?.topic_id, topic._id)?.name}</button>) : <Fragment></Fragment>}
                     </Fragment>))
                     first = false
                 }

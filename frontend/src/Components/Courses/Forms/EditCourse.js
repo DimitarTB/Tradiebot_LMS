@@ -155,8 +155,8 @@ export default props => {
                             <h1>{topic.name}</h1>
                         </NavLink>
                         <FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />
-                        <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button
-                        ><button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button>
+                        <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": topic.index }))}>↑</button
+                        ><button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": topic.index }))}>↓</button>
                         <br />
                     Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form>
                         {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 ?
@@ -180,8 +180,8 @@ export default props => {
                                 <div>
                                     <NavLink to={"/topics/edit/" + topic._id}><h1>{topic.name}</h1></NavLink>
                                     <FcCancel onClick={() => dispatch(deleteTopic({ "id": topic._id }))} />
-                                    <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": tIdx }))}>↑</button>
-                                    <button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": tIdx }))}>↓</button>
+                                    <button onClick={() => dispatch(topicDown({ "course_id": topic.course_id, "index": topic.index }))}>↑</button>
+                                    <button onClick={() => dispatch(topicUp({ "course_id": topic.course_id, "index": topic.index }))}>↓</button>
                                     {
                                         <div>
                                             Add lecture<form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, topic)}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form>
@@ -210,7 +210,7 @@ export default props => {
                                         <button onClick={() => idxUp(idx, topic._id)}>↓</button>
                                         : ""}
                             </div>
-                            {idx === (len.length - 1) ? <h2>Quiz: {quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}</h2> : ""}
+                            {idx === (len.length - 1) ? <h2>Quiz: <NavLink to={"/quizzes/edit/" + quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}>{quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}</NavLink></h2> : ""}
                         </Fragment>
                     )
             })

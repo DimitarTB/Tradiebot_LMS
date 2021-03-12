@@ -39,6 +39,10 @@ const CourseContainer = props => {
         idleTimer()
     }, [])
 
+    useEffect(() => {
+        setSelectedLecture(topics[0]?.lectures[0])
+    }, [])
+
     function stopWatching() {
         dispatch({ type: 'user/stopWatching', payload: { "id": currentCourse._id } })
     }
@@ -49,7 +53,8 @@ const CourseContainer = props => {
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
     const currentUser = useSelector(state => state.user)
     const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse._id))
-    const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0]?.id)
+    const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
+    const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0])
 
     window.addEventListener('locationchange', stopWatching, false)
     window.addEventListener("beforeunload", stopWatching, false);
@@ -90,13 +95,13 @@ const CourseContainer = props => {
                 <VideoPlayer url={selectedLecture?.video_file} />
                 <CourseInfoSection lecture={selectedLecture} course={currentCourse} />
             </div>
-            <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} />
+            <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} />
         </div>
     ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
-            details={currentCourse.name}
-            description={currentCourse.description}
-            component={<div><h2>Lectures:</h2>{currentLectures.map(lect => <h4>{lect.name}</h4>)}</div>}
-        />
+        details={currentCourse.name}
+        description={currentCourse.description}
+        component={<div><h2>Lectures:</h2>{currentLectures.map(lect => <h4>{lect.name}</h4>)}</div>}
+    />
 
 }
 

@@ -55,3 +55,8 @@ class Quiz:
             question = {"index": data["index"], "question": data["question"], "type": data["type"], "public_answers": data["public_answers"], "correct_answers": data["correct_answers"]}
             quizzes.update({"_id": ObjectId(quiz_id)}, {"$set": {"questions": questions}})
             return jsonify({"id": quiz_id, "question": question})
+        else:
+            data = request.get_json()
+            quizzes = db.quizzes
+            quizzes.update({"_id": ObjectId(quiz_id)}, {"$set": {"name": data["name"]}})
+            return jsonify({"id": quiz_id, "name": data["name"]})

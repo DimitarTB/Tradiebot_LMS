@@ -54,7 +54,7 @@ export const addTopic = createAsyncThunk(
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
-            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id, "index": ext.getState().topics.allTopics.length });
+            var raw = JSON.stringify({ "name": data.name, "course_id": data.course_id, "index": ext.getState().topics.allTopics.filter(tp => tp.course_id === data.course_id).length });
 
             var requestOptions = {
                 method: 'POST',
