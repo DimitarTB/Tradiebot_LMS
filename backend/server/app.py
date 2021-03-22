@@ -206,6 +206,7 @@ def submit_quiz():
         passed = True
     insert_q = {"user": data["user_id"], "quiz_id": data["quiz_id"], "time": datetime.datetime.utcnow(), "answers": data["answers"], "passed": passed, "points": points}
     quiz_records.insert(insert_q)
+    insert_q["_id"] = str(insert_q["_id"])
     return jsonify({"message": "Record inserted!", "record": insert_q})
 
 
@@ -458,6 +459,28 @@ def quiz_records():
     ret = quiz_records.find({})
     json_data = dumps(ret, indent = 2)  
     return (json_data)
+
+@app.route("/api/edit_question", methods=["PUT"])
+def edit_question():
+    print(request)
+    data = request.get_json()
+    quiz_id = request.args.get("quiz")
+
+
+    quizzes = db.quizzes
+    quiz = quizzes.find_one({"_id": ObjectId(quiz_id)})
+
+    questions = quiz["questions"]
+    for qs in questions:
+        print(qs["question"])
+        print(data["question"])
+        if qs["question"] == data["question"]:
+            qs["question"] = data["question_name"]
+            qs["type"] = data["question_type"]
+
+    print(questions)
+    quizzes.update({"_id": ObjectId(quiz_id)}, {"$set": {"questions": questions}})
+    return jsonify({"id": quiz_id, "questions": questions})
 
 
 

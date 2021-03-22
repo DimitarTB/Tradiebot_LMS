@@ -1,6 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { statuses } from '../constants'
-import { getQuizRecords, addCorrectAnswer, addPublicAnswer, addQuestion, createQuiz, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, getAllQuizzes, submitQuiz } from './QuizzesActions'
+import { getQuizRecords, addCorrectAnswer, addPublicAnswer, addQuestion, createQuiz, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, getAllQuizzes, submitQuiz, editQuestion } from './QuizzesActions'
 
 export const QuizzesSlice = createSlice({
     name: 'quizzes',
@@ -74,6 +74,11 @@ export const QuizzesSlice = createSlice({
         [submitQuiz.fulfilled]: (state, action) => {
             state.quizRecords.push(action.payload.record)
             state.submitQuizStatus = statuses.fulfilled
+        },
+
+        [editQuestion.fulfilled]: (state, action) => {
+            const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
+            state.allQuizzes[idx].questions = action.payload.questions
         }
     }
 })

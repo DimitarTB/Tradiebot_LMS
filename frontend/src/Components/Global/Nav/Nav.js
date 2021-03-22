@@ -43,6 +43,7 @@ export default props => {
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
                         <li><NavLink to="/logout"> Logout</NavLink></li>
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
                     </ul>
                 </div>
 

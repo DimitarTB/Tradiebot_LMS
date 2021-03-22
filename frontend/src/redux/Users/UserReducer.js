@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { API_URL, statuses } from '../constants'
-import { changePassword, changeUsername, enrollCourse, fetchAll, getOneUser, loginUser, profilePicture, unEnrollCourse } from "./UserActions"
+import { addTeacher, changePassword, changeUsername, enrollCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from './UserActions'
 
@@ -172,6 +172,20 @@ export const UserSlice = createSlice({
         [changeUsername.pending]: (state) => {
             state.changeUsernameStatus = statuses.pending
         },
+
+        [addTeacher.fulfilled]: (state, action) => {
+            const idx = state.allUsers.findIndex(usr => usr._id === action.payload.id)
+            state.allUsers[idx].types.push("Teacher")
+        },
+
+        [removeTeacher.fulfilled]: (state, action) => {
+            console.log(action.payload.id)
+            const idx = state.allUsers.findIndex(usr => usr._id === action.payload.id)
+            console.log(idx)
+            const roles = state.allUsers[idx].types.filter(role => role !== "Teacher")
+            state.allUsers[idx].types = roles
+            console.log(state.allUsers[idx])
+        }
     },
 })
 

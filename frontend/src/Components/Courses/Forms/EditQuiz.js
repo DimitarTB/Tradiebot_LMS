@@ -12,7 +12,7 @@ import Form, {
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
-import { addCorrectAnswer, addPublicAnswer, addQuestion, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import { addCorrectAnswer, addPublicAnswer, addQuestion, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, editQuestion, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 
 export default props => {
     const quiz_id = useParams().id
@@ -26,6 +26,15 @@ export default props => {
         name: currentQuiz.name,
         questions: currentQuiz?.quizQuestions?.map(q => q.question)
     })
+
+    useEffect(() => {
+        setQuiz({
+            name: currentQuiz.name,
+            questions: currentQuiz?.quizQuestions?.map(q => q.question)
+        })
+        setSelectedQuestion(currentQuiz.questions[selectedQuestion.index])
+    }, [currentQuiz])
+
     const [ff, setFulfilled] = useState(false)
     const courseValidator = {
         name: {
@@ -108,16 +117,6 @@ export default props => {
                     type: "text",
                     fieldType: input
                 },
-                {
-                    name: "questions",
-                    label: "Select Questions",
-                    placeholder: "Please Select Questions for this quiz",
-                    fieldType: multipleSelect,
-                    options: currentQuiz.questions,
-                    displayField: "question",
-                    valueField: "question",
-                    special: true
-                }
             ]}
         />
         </div>
@@ -134,6 +133,8 @@ export default props => {
                             index: currentQuiz.questions.length,
                             quiz_id: currentQuiz._id
                         }))
+                        alert("Question added successfully!")
+                        e.target.quest_name.value = ""
                         setFulfilled(true)
                     }
                 }>
@@ -142,7 +143,7 @@ export default props => {
                     {currentQuiz.questions.map(qt => {
                         return (
                             <Fragment>
-                                <option value={JSON.stringify(qt)}>{qt.index + ". " + qt.question}</option>
+                                <option value={JSON.stringify(qt)}>{qt.question}</option>
                             </Fragment>
                         )
                     })}
@@ -156,19 +157,20 @@ export default props => {
                 <button type="submit">Add</button>
                 <br />
             </form>
-            <form class="question">
+            <form class="question" onSubmit={(e) => {
+                e.preventDefault()
+                dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
+            }}>
                 <label for="question">Question</label>
-                <input name="question" value={selectedQuestion.question} onChange={e => questionChange(e)}></input><br />
-                <label for="index">Index</label>
-                <input name="index" value={selectedQuestion.index} onChange={e => questionChange(e)}></input>
+                <input name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br />
                 <label for="type">Type</label><br />
                 <select name="question_types">
                     <option value="Multiple Choice">Multiple Choice</option>
                     <option value="Input">Input</option>
                     <option value="Multiple Select">Multiple Select</option>
                 </select>
-                <br /><br />
-                <button id="delete" onClick={(e) => {
+                <button type="submit">Save</button>
+                <button type="button" id="delete" onClick={(e) => {
                     e.preventDefault()
                     dispatch(deleteQuestion({
                         question: selectedQuestion.question,
@@ -181,6 +183,7 @@ export default props => {
 
                 }}>Delete</button>
             </form>
+            <br /><br />
             <form onSubmit={(e) => {
                 e.preventDefault();
                 console.log("ovde")

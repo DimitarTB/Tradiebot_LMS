@@ -3,6 +3,7 @@ from config import db, mail
 from werkzeug.security import generate_password_hash
 import datetime
 import uuid
+from bson.objectid import ObjectId
 from flask_mail import Message
 
 class User:
@@ -33,7 +34,7 @@ class User:
         hashed_password = generate_password_hash(data['password'], method='sha256')
         tNow = datetime.datetime.utcnow()
         rnd = str(uuid.uuid4())
-        new_user = User(data["username"], data["email"], hashed_password, "Student", tNow, rnd=rnd)
+        new_user = User(data["username"], data["email"], hashed_password, ["Student"], tNow, rnd=rnd)
         users.insert(new_user.__dict__)
 
         msg = Message( 
@@ -65,6 +66,16 @@ class User:
             return jsonify(ret_users)
     
     def update(request):
-        usern = request.args.get("username")
+        user_id = request.args.get("id")
+        users = db.users
+
+        teacher = request.args.get("teacher")
+
+        if teacher is not None:
+            users.update({"_id": ObjectId(user_id)}, {"$push": {"types": "Teacher"}})
+            return jsonify({"id": user_id})
+        else:
+            users.update({"_id": ObjectId(user_id)}, {"$pull": {"types": "Teacher"}})
+            return jsonify({"id": user_id})
 
     

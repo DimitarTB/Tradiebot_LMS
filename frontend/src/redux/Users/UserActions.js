@@ -231,3 +231,56 @@ export const changeUsername = createAsyncThunk(
         }
     }
 )
+
+export const addTeacher = createAsyncThunk(
+    'user/addTeacher',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const user_id = ext.getState().user.allUsers.find(usr => usr.username === data.username)._id
+            const response = await fetch((API_URL + "api/user?id=" + user_id + "&teacher=1"), requestOptions)
+            const data2 = await response.json()
+            if (response.status === 401) {
+                return ext.rejectWithValue(data2.message)
+            }
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const removeTeacher = createAsyncThunk(
+    'user/removeTeacher',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/user?id=" + data.user_id), requestOptions)
+            const data2 = await response.json()
+            if (response.status === 401) {
+                return ext.rejectWithValue(data2.message)
+            }
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

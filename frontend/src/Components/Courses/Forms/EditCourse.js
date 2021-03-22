@@ -22,14 +22,13 @@ import { createQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions
 export default props => {
     const dispatch = useDispatch()
     const course_id = useParams().id
-    console.log("CID", course_id)
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
     const courses = useSelector(state => state.courses)
     const currentCourse = courses?.allCourses.find(course => course?._id === course_id)
-    console.log("CC", currentCourse)
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
     const topics = useSelector(state => state.topics?.allTopics.filter(topic => topic?.course_id === course_id))
+    console.log(course_id)
     const quizzes = useSelector(state => state.quizzes?.allQuizzes?.filter(quiz => quiz?.course_id === course_id))
 
     topics.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0)
@@ -107,7 +106,6 @@ export default props => {
 
     const topicLectures = (lectr, lectures) => {
         const fnd = lectures.filter(lect => lect._id === String(lectr))
-        console.log(fnd)
         return fnd
     }
     const validator = (data, tester) => {
@@ -126,8 +124,6 @@ export default props => {
         dispatch(getAllLectures(currentUser.currentUser))
         dispatch(getAllTopics())
         dispatch(getAllQuizzes())
-        console.log(topics)
-        console.log(courseLectures)
     }, [])
     useEffect(() => {
         if (ff === true) {
@@ -145,6 +141,7 @@ export default props => {
     }, [courses.thumbnailStatus, courses.updateStatus])
 
     let display = []
+    console.log(quizzes)
 
     topics.map((topic, tIdx) => {
         if (topic.lectures.length === 0) {
@@ -244,7 +241,6 @@ export default props => {
                 }
                 dispatch(editCourse(data))
                 if (course.thumbnail !== null) {
-                    console.log("Ne e null", course.thumbnail)
                     const data = {
                         id: course_id,
                         file: course.thumbnail
@@ -299,10 +295,8 @@ export default props => {
                 {display}
                 < br /><br /><hr />
                 <div>Add Topic<form
-                    onChange={e => console.log(e)}
                     onSubmit={e => {
                         e.preventDefault()
-                        console.log(e.target.name.value)
                         dispatch(addTopic({ "name": e.target.name.value, "course_id": currentCourse._id }))
                     }}><input name="name" placeholder="Lecture Name"></input><button>Add</button></form></div>
             </div>

@@ -256,6 +256,39 @@ export const submitQuiz = createAsyncThunk(
 
             const response = await fetch(API_URL + "api/submit_quiz", requestOptions)
             const data2 = await response.json()
+            if (data2.status === 200) {
+                ext.dispatch(getQuizRecords())
+            }
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const editQuestion = createAsyncThunk(
+    'quizzes/editQuestion',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "question": data.question, "question_name": data.question_name, "question_type": data.question_type });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/edit_question?quiz=" + data.quiz_id), requestOptions)
+            const data2 = await response.json()
+            if (data2.status === 200) {
+                ext.dispatch(getQuizRecords())
+            }
             return data2
         }
         catch (error) {

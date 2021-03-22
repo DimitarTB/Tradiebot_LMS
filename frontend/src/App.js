@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import './App.css'
 import Container from "./Components/Global/Container"
 import Nav from "./Components/Global/Nav/Nav"
@@ -16,23 +16,20 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
-    DefaultRoute
+    Redirect
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
 import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
-import { getAllCourses } from './redux/Courses/CoursesActions'
 import NotActivated from './Components/Landing/NotActivated'
 import ChangePassword from './Components/Landing/ChangePassword'
 import SubmitToken from './Components/Landing/SubmitToken'
-import { fetchAll } from './redux/Users/UserActions'
 import TopicsTest from './Components/TopicsTest'
 import EditTopic from './Components/Courses/Forms/EditTopic'
 import EditQuiz from './Components/Courses/Forms/EditQuiz'
 import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
-import Quiz from './Components/Courses/CourseContent/Quiz'
 import QuizContainer from "./Components/Quiz/QuizContainer"
+import Teachers from './Components/Landing/Teachers'
 
 function App() {
 
@@ -137,6 +134,9 @@ function App() {
                         </Route>
                         <Route path="/lectures/edit/:id">
                             <EditLecture></EditLecture>
+                        </Route>
+                        <Route path="/teachers">
+                            {user?.currentUserData?.types?.includes("SuperAdmin") ? <Teachers /> : <Redirect to="/" />}
                         </Route>
                         <Route exact path="/">
                             {user?.currentUser === null ? <Landing /> : <Redirect to="/home" />}

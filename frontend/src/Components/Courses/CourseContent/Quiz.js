@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import "./quiz.css"
 import Form, {
     multipleSelect,
     select,
     input
 } from '../../../react-former/Form'
+import { getAllQuizzes } from '../../../redux/Quizzes/QuizzesActions'
 
 function Quiz() {
     const quiz_id = useParams().id
-
+    const dispatch = useDispatch()
     const [answers, setAnswers] = useState([])
 
     const quiz = useSelector(state => state?.quizzes?.allQuizzes?.find(qz => qz?._id === quiz_id))
 
     const [page, setSelectedPage] = useState(-1)
+
+    useEffect(() => {
+        dispatchEvent(getAllQuizzes())
+    }, [])
 
     return (
         page === -1 ?
