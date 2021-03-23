@@ -12,6 +12,8 @@ import CourseInfoSection from "./CourseInfoSection"
 import "./CourseContainer.css"
 import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 import Container from "../../Global/Container"
+import { getAllTopics } from "../../../redux/Topics/TopicsActions"
+import { getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 
 const CourseContainer = props => {
 
@@ -59,9 +61,14 @@ const CourseContainer = props => {
     window.addEventListener('locationchange', stopWatching, false)
     window.addEventListener("beforeunload", stopWatching, false);
     window.addEventListener("unload", stopWatching, false);
+
+    useEffect(() => {
+        dispatch(getAllTopics())
+        dispatch(getAllQuizzes())
+    }, [])
     useEffect(() => {
         console.log("Smeni", selectedLecture)
-        if (currentUser.currentUserData.enrolledCourses.includes(currentCourse._id)) {
+        if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
             console.log("changed")
             dispatch(getOneLecture({ "id": selectedLecture?._id }))
             dispatch(getLectureComments({ "lecture_id": selectedLecture?._id }))
@@ -77,8 +84,8 @@ const CourseContainer = props => {
 
     useEffect(() => {
         console.log(currentLectures)
-        if (currentUser.currentUserData.enrolledCourses.includes(currentCourse._id)) {
-            dispatch({ type: 'user/startWatching', payload: { id: currentCourse._id } })
+        if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
+            dispatch({ type: 'user/startWatching', payload: { id: currentCourse?._id } })
             dispatch(getCourseLectures({ "course_id": params.course_id }))
             const data = { "id": params.course_id, "tracking": true }
             dispatch(getOneCourse(data))
@@ -89,7 +96,7 @@ const CourseContainer = props => {
         }
     }, [])
 
-    return currentUser.currentUserData.enrolledCourses.includes(currentCourse._id) ? (currentLectures.length > 0 ? (
+    return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (currentLectures.length > 0 ? (
         <div className="course-container">
             <div className="left">
                 <VideoPlayer url={selectedLecture?.video_file} />
@@ -98,8 +105,8 @@ const CourseContainer = props => {
             <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} />
         </div>
     ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
-        details={currentCourse.name}
-        description={currentCourse.description}
+        details={currentCourse?.name}
+        description={currentCourse?.description}
         component={<div><h2>Lectures:</h2>{currentLectures.map(lect => <h4>{lect.name}</h4>)}</div>}
     />
 

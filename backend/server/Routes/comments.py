@@ -1,6 +1,7 @@
 from config import db
 from flask import jsonify
 import datetime
+from bson.objectid import ObjectId
 
 class Comment:
     def __init__(self, creator_id, lecture_id, comment, dateCreated, replyTo=""):
@@ -42,4 +43,9 @@ class Comment:
             for comment in data:
                 ret_comments.append({"_id": str(comment["_id"]), "creator_id": comment["creator_id"], "lecture_id": comment["lecture_id"], "comment": comment["comment"], "dateCreated": comment["dateCreated"], "replyTo": comment["replyTo"]})
             return jsonify(ret_comments)
+    def delete(request):
+        comment_id = request.args.get("id")
+        comments = db.comments
+        comments.find_one_and_delete({"_id": ObjectId(comment_id)})
+        return jsonify({"id": comment_id})
             

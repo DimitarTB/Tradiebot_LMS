@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { createComment, getAllComments, getLectureComments } from "./CommentsActions"
+import { createComment, deleteComment, getAllComments, getLectureComments } from "./CommentsActions"
 
 export const CommentsSlice = createSlice({
     name: 'comments',
@@ -19,7 +19,7 @@ export const CommentsSlice = createSlice({
         },
         [getAllComments.fulfilled]: (state, action) => {
             console.log(action)
-            if ( typeof action.payload !== typeof []) state.allComments = []
+            if (typeof action.payload !== typeof []) state.allComments = []
             else state.allComments = action.payload
             state.loadingStatus = statuses.fulfilled
             console.log("Comments: ", state.allComments)
@@ -47,6 +47,10 @@ export const CommentsSlice = createSlice({
         [createComment.rejected]: (state, action) => {
             state.loadingError = action.payload
             state.createStatus = statuses.rejected
+        },
+
+        [deleteComment.fulfilled]: (state, action) => {
+            state.allComments = state.allComments.filter(comm => comm._id !== action.payload.id)
         }
     }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { createComment, getAllComments } from '../../../redux/Comments/CommentsActions'
+import { createComment, deleteComment, getAllComments } from '../../../redux/Comments/CommentsActions'
 import { fetchAll } from "../../../redux/Users/UserActions"
 import { useParams, NavLink, BrowserRouter, Link } from "react-router-dom"
 import "./comments.css"
@@ -9,6 +9,7 @@ import axios from 'axios'
 import DownloadLink from "react-download-link"
 import FileSaver from 'file-saver';
 import { MdInsertDriveFile } from 'react-icons/md'
+import { FcCancel } from "react-icons/fc";
 
 const CourseInfoSection = props => {
 
@@ -38,7 +39,7 @@ const CourseInfoSection = props => {
         })
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = (e, replyTo = "") => {
         e.preventDefault();
 
 
@@ -47,7 +48,7 @@ const CourseInfoSection = props => {
             "creator_id": allUsers.currentUserData._id,
             "lecture_id": props.lecture?._id,
             "comment": comment,
-            "replyTo": ""
+            "replyTo": replyTo
         }
 
         dispatch(createComment(data))
@@ -72,12 +73,30 @@ const CourseInfoSection = props => {
         ),
         (
             <div className="course-comments">
-                {displayComments.map(comment => <div id="comment">
+                {displayComments.map(comment => comment.replyTo === "" ? <div id="comment">
                     {comment.comment}
                     {allUsers.allUsers?.map(user => {
-                        if (user?._id === comment?.creator_id) return <h6>{user?.username}</h6>
+                        if (user?._id === comment?.creator_id) {
+                            if (props.course.teachers.includes(allUsers.currentUserData._id)) {
+                                return (
+                                    <Fragment>
+                                        {comment.creator_id === allUsers.currentUserData._id ? <FcCancel onClick={() => dispatch(deleteComment({ "id": comment._id }))} /> : null}
+                                        <h6>{user?.username}</h6>
+                                        {selectComments.map(comm => comm.replyTo === comment._id ? <div id="comment">{comm.comment}{comm.creator_id === allUsers.currentUserData._id ? <FcCancel onClick={() => dispatch(deleteComment({ "id": comm._id }))} /> : null}<h6>{allUsers.allUsers.find(usr => usr._id === comm.creator_id).username}</h6></div> : null)}
+                                        <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, comment._id)}>
+                                            <input id="comment" name="comment" placeholder="Reply..."></input><button>Post</button>
+                                        </form>
+                                    </Fragment>
+                                )
+                            }
+                            return (<Fragment>
+                                <FcCancel onClick={() => dispatch(deleteComment({ "id": comment._id }))} />
+                                <h6>{user?.username}</h6>
+                                {selectComments.map(comm => comm.replyTo === comment._id ? <div id="comment">{comm.comment}<h6>{allUsers.allUsers.find(usr => usr._id === comm.creator_id).username}</h6></div> : null)}
+                            </Fragment>)
+                        }
                     })}
-                </div>)}
+                </div> : null)}
                 <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
                     <input id="comment" name="comment" placeholder="Message..."></input><button>Post</button>
                 </form>

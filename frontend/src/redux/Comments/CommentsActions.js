@@ -73,3 +73,31 @@ export const createComment = createAsyncThunk(
         }
     }
 )
+
+export const deleteComment = createAsyncThunk(
+    'comments/deleteComment',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            console.log(data.lecture_id)
+            var raw = "";
+
+            var requestOptions = {
+                method: 'DELETE',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/comment?id=" + data.id, requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

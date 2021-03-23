@@ -284,3 +284,34 @@ export const removeTeacher = createAsyncThunk(
         }
     }
 )
+
+export const changeUserPassword = createAsyncThunk(
+    'user/changeUserPassword',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "password": data.password, "id": data.id });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/change_user_password"), requestOptions)
+            const data2 = await response.json()
+            if (response.status === 401) {
+                return ext.rejectWithValue(data2.message)
+            }
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

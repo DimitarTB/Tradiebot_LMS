@@ -32,7 +32,7 @@ export default props => {
             name: currentQuiz.name,
             questions: currentQuiz?.quizQuestions?.map(q => q.question)
         })
-        setSelectedQuestion(currentQuiz.questions[selectedQuestion.index])
+        setSelectedQuestion(currentQuiz?.questions[selectedQuestion?.index])
     }, [currentQuiz])
 
     const [ff, setFulfilled] = useState(false)

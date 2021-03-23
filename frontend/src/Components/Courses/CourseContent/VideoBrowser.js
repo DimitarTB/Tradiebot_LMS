@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { AiFillPlayCircle } from 'react-icons/ai'
 import { createLecture } from '../../../redux/Lectures/LecturesActions'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 
 const VideoBrowser = props => {
 
@@ -48,6 +48,8 @@ const VideoBrowser = props => {
         return true
     }
     const hasQuizzes = (topic_id) => {
+        console.log(topic_id)
+        console.log(props.quizzes)
         if (props.quizzes.findIndex(qz => qz.topic_id === topic_id) === -1) return false
         return true
     }
@@ -55,15 +57,18 @@ const VideoBrowser = props => {
     let first = true
     props.topics.map((topic, tidx) => {
         first = true
-        props.lectures.map((lecture, idx) => {
+        props.lectures.map((lecture, idx, arr) => {
             {
                 if (checkValue(topic.lectures, lecture._id)) {
+                    console.log("DISPLAY " + topic)
                     display.push((<Fragment>
                         {first === true ? <h1>{topic.name}</h1> : <Fragment></Fragment>}
                         <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
+                                console.log("Ne e 0")
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
+                                    console.log("ima kviz")
                                     if (quizCompleted(props.topics[tidx - 1]?._id)) props.setSelectedLecture(lecture)
                                     else alert("You haven't completed the quiz of the previous topic!")
                                 }
@@ -74,11 +79,10 @@ const VideoBrowser = props => {
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
 
-                        { idx === topic.lectures.length - 1 && props.quizzes.length !== 0 ? display.push(
-                            (
-                                <button id="quiz">{"Quiz: " + props?.quizzes?.find(qz => qz?.topic_id === topic?._id)?.name}</button>
-                            )
-                        ) : null}
+                        {idx === arr.length - 1 ? props.quizzes.map(qz => {
+                            console.log("USLOV", topic)
+                            if (qz.topic_id === topic._id) display.push(<button>{"Quiz: " + qz.name}</button>)
+                        }) : null}
                     </Fragment>))
                     first = false
                 }

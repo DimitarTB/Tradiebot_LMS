@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useParams } from "react-router-dom"
 import { FILES_URL, API_URL } from "../../redux/constants"
 import axios from 'axios'
-import { changePassword, changeUsername, fetchAll, getOneUser, profilePicture } from '../../redux/Users/UserActions'
+import { changePassword, changeUsername, changeUserPassword, fetchAll, getOneUser, profilePicture } from '../../redux/Users/UserActions'
 
 function Profile() {
     const propUser = useParams().username
@@ -139,6 +139,19 @@ function Profile() {
                     {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
                     <h3>{selectedProfile?.username}</h3>
                     <h3>{selectedProfile?.email}</h3>
+                    {currentUser.currentUserData.types.includes("SuperAdmin") ?
+                        <div>
+                            <hr />
+                            <h3>Change this user's password</h3>
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                dispatch(changeUserPassword({ "password": e.target.pw.value, "id": propUser }))
+                            }}>
+                                <input placeholder="Password" name="pw"></input>
+                                <button type="submit">Change</button>
+                            </form>
+                        </div>
+                        : null}
                 </div>}>
         </Container>
     ) : <Redirect to="/" />

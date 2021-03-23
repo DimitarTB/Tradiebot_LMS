@@ -510,15 +510,17 @@ def user():
 def course():
     current_user = get_jwt_identity()
 
-    isAdmin = False
+    enroll = request.args.get("username")
+    if enroll is None:
+        isAdmin = False
 
-    for admin in current_user["types"]:
-        if admin == "SuperAdmin":
-            isAdmin = True
+        for admin in current_user["types"]:
+            if admin == "SuperAdmin":
+                isAdmin = True
 
-    if request.method is "POST" or request.method is "PUT" or request.method is "DELETE":
-        if isAdmin is not True:
-            return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+        if request.method == "POST" or request.method == "PUT" or request.method == "DELETE":
+            if isAdmin is not True:
+                return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     print("courses")
     return methodExec(request, Course)
 
@@ -563,6 +565,20 @@ def watched_lecture():
     lectures.update({"_id": ObjectId(data["id"])}, { "$push": {"watchedBy": str(user["_id"])}})
     
     return jsonify({"message": "Record successfully added!", "lecture_id": data["id"], "user_id": str(user["_id"])})
+
+@app.route("/api/change_user_password", methods=["POST"])
+@jwt_required
+def user_password():
+    print(request)
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    data = request.get_json()
+    users = db.users
+    hashed_pw = generate_password_hash(data['password'], method='sha256')
+    users.update({"_id": ObjectId(data["id"])}, {"$set": {"password": hashed_pw}})
+    return jsonify({"message": "Password successfully changed!"})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

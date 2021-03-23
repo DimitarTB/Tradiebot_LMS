@@ -11,7 +11,7 @@ function TopicsTest() {
     return (
         <div>
             <button onClick={() => {
-                dispatch(createQuiz({name: "Ime", topic_id: "21", course_id: "22"}))
+                dispatch(createQuiz({ name: "Ime", topic_id: "21", course_id: "22" }))
             }}></button>
         </div>
     )
