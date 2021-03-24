@@ -7,9 +7,8 @@ export const getAllCourses = createAsyncThunk(
     async (token, ext) => {
         try {
             var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + token);
+            myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
 
-            console.log("All Courses:", token)
 
             var requestOptions = {
                 method: 'GET',
@@ -70,6 +69,11 @@ export const createCourse = createAsyncThunk(
 
             const response = await fetch((API_URL + "api/course?username=" + data.username), requestOptions)
             const data2 = await response.json()
+
+            if (response.status === 200) {
+                ext.dispatch({ type: 'user/addCreatedCourse', payload: { new_course: data2.new_course, _id: data2.inserted_id } })
+            }
+
             return data2
         }
         catch (error) {
@@ -133,13 +137,40 @@ export const editCourse = createAsyncThunk(
 )
 
 export const uploadThumbnail = createAsyncThunk(
-    'lectures/uploadThumbnail',
+    'courses/uploadThumbnail',
     async (data, ext) => {
         try {
             console.log("Thumbnail22")
             var formData = new FormData();
             formData.append("image", data.file)
             const response = await axios.post((API_URL + ("api/upload_thumbnail?course_id=" + data.id)), formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': ('Bearer ' + ext.getState().user.currentUser)
+                }
+            })
+            const data2 = await response.data
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const coursesTracking = createAsyncThunk(
+    'courses/coursesTracking',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            const response = await axios.get(API_URL + "api/courses_tracking", {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': ('Bearer ' + ext.getState().user.currentUser)

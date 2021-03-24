@@ -15,6 +15,7 @@ const EnrolledCourses = props => {
     const currentUser = useSelector(state => state.user)
     const allCourses = useSelector(state => state.courses.allCourses?.filter(course => (currentUser.currentUserData.createdCourses.includes(course?._id))))
 
+    
     useEffect(() => {
         console.log(currentUser.currentUser)
         if (currentUser.currentUser !== null) {

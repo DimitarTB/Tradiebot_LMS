@@ -30,6 +30,7 @@ import EditQuiz from './Components/Courses/Forms/EditQuiz'
 import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
 import QuizContainer from "./Components/Quiz/QuizContainer"
 import Teachers from './Components/Landing/Teachers'
+import CoursesTracking from './Components/Courses/CoursesTracking'
 
 function App() {
 
@@ -126,7 +127,7 @@ function App() {
                         <Route exact path="/courses/enrolled">
                             <EnrolledCourses />
                         </Route>
-                        <Route path="/courses/browse">
+                        <Route exact path="/courses/browse">
                             <BrowseCourses />
                         </Route>
                         <Route path="/courses/create">
@@ -137,6 +138,9 @@ function App() {
                         </Route>
                         <Route path="/teachers">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <Teachers /> : <Redirect to="/" />}
+                        </Route>
+                        <Route path="/courses_tracking">
+                            {user?.currentUserData?.types?.includes("SuperAdmin") ? <CoursesTracking /> : <Redirect to="/" />}
                         </Route>
                         <Route exact path="/">
                             {user?.currentUser === null ? <Landing /> : <Redirect to="/home" />}

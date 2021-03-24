@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { getAllCourses, createCourse, enrollCourse, editCourse, getOneCourse, uploadThumbnail } from "./CoursesActions"
+import { getAllCourses, createCourse, enrollCourse, editCourse, getOneCourse, uploadThumbnail, coursesTracking } from "./CoursesActions"
 
 export const CoursesSlice = createSlice({
     name: 'courses',
@@ -9,7 +9,8 @@ export const CoursesSlice = createSlice({
         updateStatus: statuses.idle,
         updateError: null,
         allCourses: [],
-        thumbnailStatus: statuses.idle
+        thumbnailStatus: statuses.idle,
+        coursesTracking: []
     },
     reducers: {
     },
@@ -75,6 +76,16 @@ export const CoursesSlice = createSlice({
         },
         [uploadThumbnail.pending]: (state, action) => {
             state.thumbnailStatus = statuses.pending
+        },
+
+        [coursesTracking.fulfilled]: (state, action) => {
+            console.log(action)
+            var counter = 0;
+            action.payload.tracking.map(tr => {
+                tr.id = counter
+                counter++
+            })
+            state.coursesTracking = action.payload?.tracking
         }
     }
 })

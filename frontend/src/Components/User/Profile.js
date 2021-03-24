@@ -10,7 +10,7 @@ function Profile() {
     const propUser = useParams().username
     const currentUser = useSelector(state => state.user)
 
-    const selectedProfile = currentUser.allUsers.find(usr => usr._id === propUser)
+    const selectedProfile = currentUser?.allUsers?.find(usr => usr?._id === propUser)
 
     const dispatch = useDispatch()
 

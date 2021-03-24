@@ -38,6 +38,8 @@ def login():
     if not userJ:
         userJ = users.find_one({"email": auth["username"]})
 
+    print(userJ)
+
     user = ({"username": userJ["username"], "email": userJ["email"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "profile_picture": userJ["profile_picture"]})
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
@@ -578,6 +580,22 @@ def user_password():
     hashed_pw = generate_password_hash(data['password'], method='sha256')
     users.update({"_id": ObjectId(data["id"])}, {"$set": {"password": hashed_pw}})
     return jsonify({"message": "Password successfully changed!"})
+
+@app.route("/api/courses_tracking", methods=["GET"])
+@jwt_required
+def courses_tracking():
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    
+    c_tracking = db.courses_tracking
+    all_tracking = c_tracking.find()
+    ret_tracking = []
+    for track in all_tracking:
+        track.pop("_id")
+        ret_tracking.append(track)
+    print(ret_tracking)
+    return jsonify({"tracking": ret_tracking})
 
 
 if __name__ == "__main__":

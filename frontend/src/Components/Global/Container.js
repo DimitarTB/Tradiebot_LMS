@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { usew } from "react-redux"
 import { Redirect } from "react-router-dom"
 import "./Container.css"
 
 const Container = props => {
-    const dispatch = useDispatch()
     const [redirect, setRedirect] = useState(false)
     function idleTimer() {
         var t;

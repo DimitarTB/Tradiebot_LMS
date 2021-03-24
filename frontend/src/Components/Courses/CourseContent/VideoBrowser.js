@@ -79,9 +79,9 @@ const VideoBrowser = props => {
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
 
-                        {idx === arr.length - 1 ? props.quizzes.map(qz => {
+                        {idx === arr.length - 3 ? props.quizzes.map(qz => {
                             console.log("USLOV", topic)
-                            if (qz.topic_id === topic._id) display.push(<button>{"Quiz: " + qz.name}</button>)
+                            if (qz.topic_id === topic._id) display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>)
                         }) : null}
                     </Fragment>))
                     first = false

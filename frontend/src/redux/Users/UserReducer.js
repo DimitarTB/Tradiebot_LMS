@@ -48,6 +48,9 @@ export const UserSlice = createSlice({
             };
 
             fetch(API_URL + "/api/watched_course", requestOptions)
+        },
+        addCreatedCourse: (state, action) => {
+            state.currentUserData.createdCourses.push(action.payload._id)
         }
     },
     extraReducers: {
@@ -85,7 +88,7 @@ export const UserSlice = createSlice({
             const decodedPl = jwt_decode(state.currentUser)
             const decoded = decodedPl.identity
             const expDate = (new Date(decodedPl.exp * 1000)).toString()
-            console.log(typeof (expDate))
+            console.log(decoded)
             const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "types": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated, "profile_picture": decoded.profile_picture, "token_exp": expDate }
             state.currentUserData = new_user
 

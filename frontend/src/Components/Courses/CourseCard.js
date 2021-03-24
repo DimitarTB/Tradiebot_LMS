@@ -13,7 +13,7 @@ export default props => {
     const users = currentUser.allUsers
     const dispatch = useDispatch()
 
-    const _users = users.length > 3 ? users.filter(user => props.course.teachers.includes(user._id)) : []
+    const _users = users.length > 0 ? users.filter(user => props.course.teachers.includes(user._id)) : []
     let teachers = ""
 
     for (const _user of _users) {
@@ -56,7 +56,7 @@ export default props => {
             }
             }>Unenroll</button> : ""
             }
-            {props.edit === true ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
+            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
         </div>
     )
 }

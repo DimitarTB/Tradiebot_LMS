@@ -93,123 +93,133 @@ export default props => {
     }
 
     return (
-        <Fragment><div class="form"><Form
-            name="Edit Quiz"
-            info={info}
-            buttonText="Proceed"
-            data={quiz}
-            handleChange={e => {
-                setQuiz({
-                    ...quiz,
-                    [e.target.name]: e.target.value
-                })
-            }}
-            handleSubmit={e => {
-                e.preventDefault()
-                // if (validator(course, courseValidator) !== true) return
-            }
-            }
-            fields={[
-                {
-                    name: "name",
-                    label: "Quiz Name",
-                    placeholder: "Please Enter Quiz Name",
-                    type: "text",
-                    fieldType: input
-                },
-            ]}
-        />
-        </div>
-            <form
-                onChange={
-                    (e) => { setSelectedQuestion(JSON.parse(e.target.value)) }
-                }
-                onSubmit={
-                    (e) => {
+        <div id="edit-quiz-container">
+            <div className="form">
+                <Form
+                    name="Edit Quiz"
+                    info={info}
+                    buttonText="Proceed"
+                    data={quiz}
+                    handleChange={e => {
+                        setQuiz({
+                            ...quiz,
+                            [e.target.name]: e.target.value
+                        })
+                    }}
+                    handleSubmit={e => {
                         e.preventDefault()
-                        dispatch(addQuestion({
-                            question: e.target.quest_name.value,
-                            type: e.target.question_types.value,
+                        // if (validator(course, courseValidator) !== true) return
+                    }
+                    }
+                    fields={[
+                        {
+                            name: "name",
+                            label: "Quiz Name",
+                            placeholder: "Please Enter Quiz Name",
+                            type: "text",
+                            fieldType: input
+                        },
+                    ]}
+                />
+            </div>
+            <div className="rest">
+                <form
+                    onChange={
+                        (e) => { setSelectedQuestion(JSON.parse(e.target.value)) }
+                    }
+                    onSubmit={
+                        (e) => {
+                            e.preventDefault()
+                            dispatch(addQuestion({
+                                question: e.target.quest_name.value,
+                                type: e.target.question_types.value,
+                                index: currentQuiz.questions.length,
+                                quiz_id: currentQuiz._id
+                            }))
+                            alert("Question added successfully!")
+                            e.target.quest_name.value = ""
+                            setFulfilled(true)
+                        }
+                    }>
+                    <label for="cars">Choose a question:</label>
+                    <select name="questions">
+                        {currentQuiz.questions.map(qt => {
+                            return (
+                                <Fragment>
+                                    <option value={JSON.stringify(qt)}>{qt.question}</option>
+                                </Fragment>
+                            )
+                        })}
+                    </select>
+                    <input name="quest_name" placeholder="New Question"></input>
+                    <select name="question_types">
+                        <option value="Multiple Choice">Multiple Choice</option>
+                        <option value="Single Choice">Single Choice</option>
+                        <option value="input">Input</option>
+                    </select>
+                    <button type="submit">Add</button>
+                    <br />
+                </form>
+            </div>
+            <div className="rest smaller">
+                <form class="question" onSubmit={(e) => {
+                    e.preventDefault()
+                    dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
+                }}>
+                    <label for="question">Question</label>
+                    <input name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br />
+                    <label for="type">Type</label><br />
+                    <select name="question_types">
+                        <option value="Multiple Choice">Multiple Choice</option>
+                        <option value="Input">Input</option>
+                        <option value="Single Choice">Single Choice</option>
+                    </select>
+                    <button type="submit">Save</button>
+                    <button type="button" id="delete" onClick={(e) => {
+                        e.preventDefault()
+                        dispatch(deleteQuestion({
+                            question: selectedQuestion.question,
+                            type: selectedQuestion.type,
                             index: currentQuiz.questions.length,
                             quiz_id: currentQuiz._id
                         }))
-                        alert("Question added successfully!")
-                        e.target.quest_name.value = ""
-                        setFulfilled(true)
+                        setSelectedQuestion(currentQuiz.questions[0])
+
+
+                    }}>Delete</button>
+                </form>
+            </div>
+            <div className="rest smaller">
+                <br /><br />
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    console.log("ovde")
+                    dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addPublic.value }))
+                }}>
+                    <h2>Public answers:</h2>
+                    {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => {
+                        dispatch(deletePublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }));
+                        let new_ob = selectedQuestion
+                        new_ob.public_answers = selectedQuestion?.public_answers?.filter(pa => pa.answer !== answer)
+                        setSelectedQuestion(new_ob)
                     }
-                }>
-                <label for="cars">Choose a question:</label>
-                <select name="questions">
-                    {currentQuiz.questions.map(qt => {
-                        return (
-                            <Fragment>
-                                <option value={JSON.stringify(qt)}>{qt.question}</option>
-                            </Fragment>
-                        )
-                    })}
-                </select>
-                <input name="quest_name" placeholder="New Question"></input>
-                <select name="question_types">
-                    <option value="Multiple Choice">Multiple Choice</option>
-                    <option value="Single Choice">Single Choice</option>
-                    <option value="input">Input</option>
-                </select>
-                <button type="submit">Add</button>
-                <br />
-            </form>
-            <form class="question" onSubmit={(e) => {
-                e.preventDefault()
-                dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
-            }}>
-                <label for="question">Question</label>
-                <input name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br />
-                <label for="type">Type</label><br />
-                <select name="question_types">
-                    <option value="Multiple Choice">Multiple Choice</option>
-                    <option value="Input">Input</option>
-                    <option value="Multiple Select">Multiple Select</option>
-                </select>
-                <button type="submit">Save</button>
-                <button type="button" id="delete" onClick={(e) => {
+                    }>Delete</p><hr /></Fragment>)}
+                    <input name="addPublic" placeholder="Answer"></input>
+                    <button type="submit" onClick={e => e.preventDefault}>Add</button>
+                </form>
+            </div>
+            <div className="rest smaller">
+                <form onSubmit={(e) => {
                     e.preventDefault()
-                    dispatch(deleteQuestion({
-                        question: selectedQuestion.question,
-                        type: selectedQuestion.type,
-                        index: currentQuiz.questions.length,
-                        quiz_id: currentQuiz._id
-                    }))
-                    setSelectedQuestion(currentQuiz.questions[0])
+                    dispatch(addCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addCorrect.value }))
+                }}>
+                    <h2>Correct answers:</h2>
+                    {selectedQuestion?.correct_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => dispatch(deleteCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }))}>Delete</p><hr /></Fragment>)}
+                    <input name="addCorrect" placeholder="Answer"></input>
+                    <button type="submit" onClick={e => e.preventDefault}>Add</button>
+                </form>
 
-
-                }}>Delete</button>
-            </form>
-            <br /><br />
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                console.log("ovde")
-                dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addPublic.value }))
-            }}>
-                <h2>Public answers:</h2>
-                {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => {
-                    dispatch(deletePublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }));
-                    let new_ob = selectedQuestion
-                    new_ob.public_answers = selectedQuestion?.public_answers?.filter(pa => pa.answer !== answer)
-                    setSelectedQuestion(new_ob)
-                }
-                }>Delete</p><hr /></Fragment>)}
-                <input name="addPublic" placeholder="Answer"></input>
-                <button type="submit" onClick={e => e.preventDefault}>Add</button>
-            </form>
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                dispatch(addCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addCorrect.value }))
-            }}>
-                <h2>Correct answers:</h2>
-                {selectedQuestion?.correct_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => dispatch(deleteCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }))}>Delete</p><hr /></Fragment>)}
-                <input name="addCorrect" placeholder="Answer"></input>
-                <button type="submit" onClick={e => e.preventDefault}>Add</button>
-            </form>
-
-        </Fragment >
+            </div>
+        </div >
     )
 }

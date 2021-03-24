@@ -50,14 +50,21 @@
 }
 
 #questions {
-    display:flex;
-    margin:10px;
+    display: flex;
+    margin: 10px;
 }
 
 .form {
-    width:100%;
-    margin-top:auto;
+    /* height:0px; */
+    /* width:50%; */
 }
+
+
+/* .rest {
+    display: inline-block;
+    height: 100%;
+
+} */
 
 .pform {
     display:center;
@@ -76,4 +83,52 @@
 }
 #delete {
     background:red;
+}
+
+#edit-quiz-container {
+    display: flex;
+    flex-direction: column;
+    width: 1080px;
+    margin: 30px auto;
+}
+
+#edit-quiz-container > .rest {
+    margin: 30px 0px;
+}
+
+#edit-quiz-container > .rest > form {
+    width: 950px;
+    margin: 0px auto;
+    background: #FFF;
+    padding: 50px 47.5px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px 0 rgb(82 63 105 / 10%);
+    border-radius: .42rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-quiz-container > .rest > form > * {
+    margin: 8px 0px;
+}
+
+#edit-quiz-container > .rest > form > p:hover {
+    cursor: pointer;
+}
+
+#edit-quiz-container > .rest > form > button {
+    border: none;
+    max-width: 300px;
+    background: var(--primary);
+    color: #FFF;
+    border-radius: .42rem;
+    padding: 8px 0px;
+}
+
+#edit-quiz-container >.rest > form > button#delete {
+    background: var(--danger);
+}
+
+#edit-quiz-container > .rest.smaller > form {
+    width: 750px;
 }

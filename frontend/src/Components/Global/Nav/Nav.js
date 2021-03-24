@@ -60,6 +60,7 @@ export default props => {
                         <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
                         {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
                         {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
                         <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>
