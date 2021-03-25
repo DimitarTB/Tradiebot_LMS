@@ -41,9 +41,6 @@ const CourseContainer = props => {
         idleTimer()
     }, [])
 
-    useEffect(() => {
-        setSelectedLecture(topics[0]?.lectures[0])
-    }, [])
 
     function stopWatching() {
         dispatch({ type: 'user/stopWatching', payload: { "id": currentCourse._id } })
@@ -67,9 +64,7 @@ const CourseContainer = props => {
         dispatch(getAllQuizzes())
     }, [])
     useEffect(() => {
-        console.log("Smeni", selectedLecture)
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
-            console.log("changed")
             dispatch(getOneLecture({ "id": selectedLecture?._id }))
             dispatch(getLectureComments({ "lecture_id": selectedLecture?._id }))
             if (!(selectedLecture?.watchedBy?.includes(currentUser.currentUserData._id))) {
@@ -83,7 +78,6 @@ const CourseContainer = props => {
 
 
     useEffect(() => {
-        console.log(currentLectures)
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
             dispatch({ type: 'user/startWatching', payload: { id: currentCourse?._id } })
             dispatch(getCourseLectures({ "course_id": params.course_id }))

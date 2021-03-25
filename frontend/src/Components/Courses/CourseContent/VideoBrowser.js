@@ -8,7 +8,6 @@ import { NavLink, Redirect } from 'react-router-dom'
 const VideoBrowser = props => {
 
     const records = useSelector(state => state.quizzes.quizRecords.filter(rec => rec.user === props.user_id))
-    console.log(props.quizzes)
     // const lectures = props.lectures.map((lecture, index, arr) => {
     //     return (
     //         <Fragment>
@@ -27,7 +26,9 @@ const VideoBrowser = props => {
         return false;
     }
     useEffect(() => {
-        props.setSelectedLecture(props.topics[0]?.lectures[0]?.id)
+        const firstLec = props.lectures.find(lect => lect._id === props.topics[0].lectures[0].id)
+        console.log(firstLec)
+        props.setSelectedLecture(firstLec)
     }, [])
     const topicCompleted = (lectures) => {
         let watched = true
@@ -39,17 +40,11 @@ const VideoBrowser = props => {
         return watched
     }
     const quizCompleted = (topic_id) => {
-        console.log(topic_id)
-        console.log(props.quizzes)
         const quiz_id = props.quizzes.find(qz => qz.topic_id === topic_id)
-        console.log(quiz_id)
-        console.log(records)
         if (records.findIndex(rec => rec.quiz_id === quiz_id._id) === -1) return false
         return true
     }
     const hasQuizzes = (topic_id) => {
-        console.log(topic_id)
-        console.log(props.quizzes)
         if (props.quizzes.findIndex(qz => qz.topic_id === topic_id) === -1) return false
         return true
     }
@@ -60,15 +55,12 @@ const VideoBrowser = props => {
         props.lectures.map((lecture, idx, arr) => {
             {
                 if (checkValue(topic.lectures, lecture._id)) {
-                    console.log("DISPLAY " + topic)
                     display.push((<Fragment>
                         {first === true ? <h1>{topic.name}</h1> : <Fragment></Fragment>}
                         <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
-                                console.log("Ne e 0")
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
-                                    console.log("ima kviz")
                                     if (quizCompleted(props.topics[tidx - 1]?._id)) props.setSelectedLecture(lecture)
                                     else alert("You haven't completed the quiz of the previous topic!")
                                 }
@@ -80,7 +72,6 @@ const VideoBrowser = props => {
                         }}>{lecture.name} <AiFillPlayCircle /></button>
 
                         {idx === arr.length - 3 ? props.quizzes.map(qz => {
-                            console.log("USLOV", topic)
                             if (qz.topic_id === topic._id) display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>)
                         }) : null}
                     </Fragment>))

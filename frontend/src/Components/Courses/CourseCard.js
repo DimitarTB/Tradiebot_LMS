@@ -30,9 +30,9 @@ export default props => {
             <p>{props.course.description}</p>
             <p>Teachers : {teachers}</p>
 
-            {props.enroll === true ? 
+            {props.enroll === true ?
                 <button id="enroll" onClick={e => {
-                    
+
                     const data = {
                         "username": currentUser.currentUserData.username,
                         "token": currentUser.currentUser,
@@ -43,20 +43,20 @@ export default props => {
                 }
                 }>Enroll</button> : ""
             }
-            {props.unenroll === true ? 
-            <button id="enroll" onClick={e => {
-                    
-                const data = {
-                    "username": currentUser.currentUserData.username,
-                    "token": currentUser.currentUser,
-                    "course_id": props.course._id
+            {props.unenroll === true ?
+                <button id="enroll" onClick={e => {
+
+                    const data = {
+                        "username": currentUser.currentUserData.username,
+                        "token": currentUser.currentUser,
+                        "course_id": props.course._id
+                    }
+                    dispatch(unEnrollCourse(data))
+                    alert("Course unenrolled!")
                 }
-                dispatch(unEnrollCourse(data))
-                alert("Course unenrolled!")
+                }>Unenroll</button> : ""
             }
-            }>Unenroll</button> : ""
-            }
-            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
+            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
         </div>
     )
 }

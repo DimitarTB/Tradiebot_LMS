@@ -32,6 +32,21 @@ export default props => {
             <div className="nav-body">
                 <h1>Tradiebot LMS</h1>
 
+                {user?.types?.includes("SuperAdmin") ? <div className="nav-item" onClick={e => toggleNavItem(e)} >
+                    <span>
+                        <span>
+                            <FaUserAlt />
+                            <h3>Admin Panel</h3>
+                        </span>
+                        <MdKeyboardArrowDown />
+                    </span>
+                    <ul>
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses_tracking"}> Courses Tracking</NavLink></li> : ""}
+                    </ul>
+                </div> : null}
                 <div className="nav-item" onClick={e => toggleNavItem(e)} >
                     <span>
                         <span>
@@ -43,7 +58,6 @@ export default props => {
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
                         <li><NavLink to="/logout"> Logout</NavLink></li>
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
                     </ul>
                 </div>
 
@@ -59,9 +73,6 @@ export default props => {
                         <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
                         <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
                         {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
-                        <li><NavLink to="/logout"> Logout</NavLink></li>
                     </ul>
                 </div>
             </div>

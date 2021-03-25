@@ -25,39 +25,37 @@ function CoursesTracking() {
             field: 'started_watching',
             headerName: 'Started Watching',
             type: 'dateTime',
-            sortComparator: (d1, d2) => d1.getTime() > d2.getTime(),
-            width: 700,
+            // sortComparator: (d1, d2) => d1.getTime() > d2.getTime(),
+            width: 250,
         },
         {
             field: 'time_watched',
-            headerName: 'Time Watched (seconds)',
+            headerName: 'Ended watching',
             width: 250,
-            type: 'number'
+            type: 'dateTime'
         },
     ];
 
     const rows = []
-    console.log(courses_tracking)
     courses_tracking.map(tr => {
         const cc = allCourses?.find(cr => {
-            console.log(cr)
-            console.log(tr.course_id)
             if (cr._id === tr.course_id) return cr
         })
         var ob = { ...tr }
-        console.log(cc?.name)
         ob.course_id = cc?.name
         ob.started_watching = Date.parse(ob.started_watching)
         ob.started_watching = new Date(ob.started_watching)
 
         ob.time_watched = parseInt(ob.time_watched)
-        ob.time_watched = ((ob.time_watched % 60000) / 1000).toFixed(0)
+        ob.time_watched = ob.started_watching.getTime() + ob.time_watched
+        ob.time_watched = new Date(ob.time_watched)
+        // ob.time_watched = ((ob.time_watched % 60000) / 1000).toFixed(0)
         rows.push(ob)
     })
     return (
         <div>
             <div class="table">
-                <DataGrid rows={rows} columns={columns} pagination={10} sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
+                <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5, 10, 25, 50, 100]} pagination sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
             </div>
         </div>
     )
