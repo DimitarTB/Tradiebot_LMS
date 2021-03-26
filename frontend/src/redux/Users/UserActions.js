@@ -315,3 +315,57 @@ export const changeUserPassword = createAsyncThunk(
         }
     }
 )
+
+export const unenrollUserCourse = createAsyncThunk(
+    'user/unenrollUserCourse',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({ "course_id": data.course_id, "user_id": data.user_id });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            console.log("fetch")
+            const response = await fetch((API_URL + "api/unenroll_user_course"), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log("fetch3", error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const enrollUserCourse = createAsyncThunk(
+    'user/enrollUserCourse',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({ "course_id": data.course_id, "user_id": data.user_id });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            console.log("fetch")
+            const response = await fetch((API_URL + "api/enroll_user_course"), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log("fetch3", error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

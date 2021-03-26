@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { API_URL, statuses } from '../constants'
-import { addTeacher, changePassword, changeUsername, enrollCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse } from "./UserActions"
+import { addTeacher, changePassword, changeUsername, enrollCourse, enrollUserCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse, unenrollUserCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from './UserActions'
 
@@ -188,6 +188,16 @@ export const UserSlice = createSlice({
             const roles = state.allUsers[idx].types.filter(role => role !== "Teacher")
             state.allUsers[idx].types = roles
             console.log(state.allUsers[idx])
+        },
+
+        [unenrollUserCourse.fulfilled]: (state, action) => {
+            const usr = state.allUsers.findIndex(usr => usr._id === action.payload.user_id)
+            state.allUsers[usr].enrolledCourses = state.allUsers[usr].enrolledCourses.filter(crs => crs !== action.payload.course_id)
+        },
+
+        [enrollUserCourse.fulfilled]: (state, action) => {
+            const usr = state.allUsers.findIndex(usr => usr._id === action.payload.user_id)
+            state.allUsers[usr].enrolledCourses.push(action.payload.course_id)
         }
     },
 })

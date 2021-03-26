@@ -1,0 +1,10 @@
+.grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.grid, input {
+    margin-left:10%;
+    margin-top:5.3%;
+}
+

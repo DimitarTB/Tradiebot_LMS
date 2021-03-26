@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useParams } from "react-router-dom"
 import { FILES_URL, API_URL } from "../../redux/constants"
 import axios from 'axios'
-import { changePassword, changeUsername, changeUserPassword, fetchAll, getOneUser, profilePicture } from '../../redux/Users/UserActions'
+import { changePassword, changeUsername, changeUserPassword, enrollUserCourse, fetchAll, getOneUser, profilePicture } from '../../redux/Users/UserActions'
+import CourseCard from '../Courses/CourseCard'
 
 function Profile() {
     const propUser = useParams().username
     const currentUser = useSelector(state => state.user)
+    const courses = useSelector(state => state.courses.allCourses)
 
     const selectedProfile = currentUser?.allUsers?.find(usr => usr?._id === propUser)
 
@@ -150,6 +152,18 @@ function Profile() {
                                 <input placeholder="Password" name="pw"></input>
                                 <button type="submit">Change</button>
                             </form>
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                dispatch(enrollUserCourse({ "user_id": selectedProfile._id, "course_id": e.target.id.value }))
+                                e.target.id.value = ""
+                            }
+                            }>
+                                <h2>Add user course</h2>
+                                <input name="id" placeholder="Course ID"></input>
+                                <button type="Submit">Add</button>
+                            </form>
+                            {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
+
                         </div>
                         : null}
                 </div>}>

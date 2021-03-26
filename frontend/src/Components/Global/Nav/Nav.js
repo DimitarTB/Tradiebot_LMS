@@ -58,6 +58,7 @@ export default props => {
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
                         <li><NavLink to="/logout"> Logout</NavLink></li>
+                        <li><NavLink to="/search_users"> Browse Users</NavLink></li>
                     </ul>
                 </div>
 

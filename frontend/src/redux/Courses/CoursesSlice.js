@@ -86,7 +86,7 @@ export const CoursesSlice = createSlice({
                 counter++
             })
             state.coursesTracking = action.payload?.tracking
-        }
+        },
     }
 })
 

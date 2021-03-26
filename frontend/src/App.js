@@ -31,6 +31,7 @@ import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
 import QuizContainer from "./Components/Quiz/QuizContainer"
 import Teachers from './Components/Landing/Teachers'
 import CoursesTracking from './Components/Courses/CoursesTracking'
+import SearchUsers from './Components/User/SearchUsers'
 
 function App() {
 
@@ -138,6 +139,9 @@ function App() {
                         </Route>
                         <Route path="/teachers">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <Teachers /> : <Redirect to="/" />}
+                        </Route>
+                        <Route path="/search_users">
+                            <SearchUsers></SearchUsers>
                         </Route>
                         <Route path="/courses_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <CoursesTracking /> : <Redirect to="/" />}

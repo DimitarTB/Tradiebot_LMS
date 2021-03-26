@@ -597,6 +597,30 @@ def courses_tracking():
     print(ret_tracking)
     return jsonify({"tracking": ret_tracking})
 
+@app.route("/api/unenroll_user_course", methods=["POST"])
+@jwt_required
+def unenroll_user_course():
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    data = request.get_json()
+    users = db.users
+    users.update({"_id": ObjectId(data["user_id"])}, {"$pull": {"enrolledCourses": data["course_id"]}})
+
+    return jsonify({"user_id": data["user_id"], "course_id": data["course_id"]})
+
+@app.route("/api/enroll_user_course", methods=["POST"])
+@jwt_required
+def enroll_user_course():
+    c_user = get_jwt_identity()
+    if "SuperAdmin" not in c_user["types"]:
+        return jsonify({"message": "You cannot perform that function!"})
+    data = request.get_json()
+    users = db.users
+    users.update({"_id": ObjectId(data["user_id"])}, {"$push": {"enrolledCourses": data["course_id"]}})
+
+    return jsonify({"user_id": data["user_id"], "course_id": data["course_id"]})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

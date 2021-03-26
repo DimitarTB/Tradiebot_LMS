@@ -55,7 +55,7 @@ function CoursesTracking() {
     return (
         <div>
             <div class="table">
-                <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5, 10, 25, 50, 100]} pagination sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
+                <DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[5, 10, 25, 50, 100]} pagination sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
             </div>
         </div>
     )

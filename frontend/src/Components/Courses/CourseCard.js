@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom'
 import { FILES_URL } from '../../redux/constants'
-import { enrollCourse } from '../../redux/Users/UserActions'
+import { enrollCourse, unenrollUserCourse } from '../../redux/Users/UserActions'
 import { unEnrollCourse } from '../../redux/Users/UserActions'
 
 import "./CourseCard.css"
@@ -27,7 +27,6 @@ export default props => {
                 <img src={FILES_URL + props.course.thumbnail} />
                 <h3>{props.course.name}</h3>
             </NavLink>
-            <p>{props.course.description}</p>
             <p>Teachers : {teachers}</p>
 
             {props.enroll === true ?
@@ -42,6 +41,10 @@ export default props => {
                     alert("Course enrolled!")
                 }
                 }>Enroll</button> : ""
+            }
+            {props.admin === true ?
+                <button onClick={() => dispatch(unenrollUserCourse({ "user_id": props.user_id, "course_id": props.course._id }))}>Unenroll User's Course</button>
+                : null
             }
             {props.unenroll === true ?
                 <button id="enroll" onClick={e => {
