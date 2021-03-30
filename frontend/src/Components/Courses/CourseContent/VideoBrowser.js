@@ -27,7 +27,6 @@ const VideoBrowser = props => {
     }
     useEffect(() => {
         const firstLec = props.lectures.find(lect => lect._id === props.topics[0].lectures[0].id)
-        console.log(firstLec)
         props.setSelectedLecture(firstLec)
     }, [])
     const topicCompleted = (lectures) => {
@@ -50,13 +49,31 @@ const VideoBrowser = props => {
     }
     let display = []
     let first = true
-    props.topics.map((topic, tidx) => {
-        first = true
+    // props.topics.map((topic, tidx) => {
+    //     first = true
+    //     var counter = 0
+    //     props.lectures.map((lecture, idx, arr) => {
+    //         {
+    //             if (checkValue(topic.lectures, lecture._id)) {
+    //                 display.push((<Fragment>
+
+    //                 </Fragment>))
+    //                 first = false
+    //             }
+    //             if (checkValue(topic.lectures, lecture._id)) first = false
+    //         }
+    //     })
+    // })
+    props.topics.map((topic, tidx, sz) => {
+        var lectureCount = 0
         props.lectures.map((lecture, idx, arr) => {
-            {
-                if (checkValue(topic.lectures, lecture._id)) {
-                    display.push((<Fragment>
-                        {first === true ? <h1>{topic.name}</h1> : <Fragment></Fragment>}
+            if (idx === 0 && tidx !== 0) {
+                props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]._id ? display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
+            }
+            if (checkValue(topic.lectures, lecture._id)) {
+                display.push(
+                    <Fragment>
+                        {lectureCount === 0 ? <h1>{topic.name}</h1> : null}
                         <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
@@ -70,16 +87,15 @@ const VideoBrowser = props => {
                                 props.setSelectedLecture(lecture)
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
-
-                        {idx === arr.length - 3 ? props.quizzes.map(qz => {
-                            if (qz.topic_id === topic._id) display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>)
-                        }) : null}
-                    </Fragment>))
-                    first = false
-                }
-                if (checkValue(topic.lectures, lecture._id)) first = false
+                    </Fragment>
+                )
+                lectureCount++
             }
+
         })
+        if (tidx === sz.length - 1) {
+            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
+        }
     })
     return (
         <div className="video-browser">

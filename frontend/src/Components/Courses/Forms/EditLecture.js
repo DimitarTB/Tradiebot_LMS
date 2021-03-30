@@ -144,8 +144,22 @@ export default props => {
                         fieldType: input,
                     }
                 ]}
+                overloadedFields={[
+                    (
+                        <div class="files">
+                            <h3 id="title-files">Files:</h3>
+                            {currentLecture?.files?.map(fl =>
+                                <Fragment>
+                                    <h4>{getFileName(fl)}</h4>
+                                    <div class="icon">
+                                        <FcCancel onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />4
+                                    </div>
+                                </Fragment>
+                            )}
+                        </div>
+                    )
+                ]}
             />
-            <div class="lectures">{currentLecture?.files?.map(fl => <Fragment><h2>{getFileName(fl)}</h2><div class="icon"><FcCancel onClick={() => dispatch(deleteFile({"id": currentLecture?._id, "file": fl}))} /></div></Fragment>)}</div>
         </div>
     ) : <Redirect to="/" />
 }

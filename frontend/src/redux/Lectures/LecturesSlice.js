@@ -88,7 +88,8 @@ export const LecturesSlice = createSlice({
             const idx = state.allLectures.findIndex(lecture => lecture._id = action.payload.id)
             if (idx === -1) return
             console.log(action.payload.files)
-            action.payload.files.forEach(file => state.allLectures[idx].files.push(file))
+            // action.payload.files.forEach(file => state.allLectures[idx].files.push(file))
+            state.allLectures[idx].files = state.allLectures[idx].files.concat(action.payload.files)
             state.filesStatus = statuses.fulfilled
             // lecture.files.push(...action.payload.files)
             // console.log(lecture.files)
@@ -105,11 +106,10 @@ export const LecturesSlice = createSlice({
             state.filesStatus = statuses.pending
         },
         [deleteFile.fulfilled]: (state, action) => {
-            const lectIdx = state.allLectures.find(lect => lect._id === action.payload.id)
+            const lectIdx = state.allLectures.findIndex(lect => lect._id === action.payload.id)
             if (lectIdx === -1) return
-            console.log("PL", action.payload)
-            console.log(lectIdx)
-            state.allLectures[lectIdx].files = [action.payload?.files]
+            console.log(action.payload.id)
+            state.allLectures[lectIdx].files = action.payload.files
         },
 
 

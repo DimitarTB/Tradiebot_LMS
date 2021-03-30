@@ -173,6 +173,7 @@ export const uploadFile = createAsyncThunk(
                 }
             })
             const data2 = await response.data
+            if (response.status === 200) ext.dispatch(getOneLecture({ "id": data.lecture_id }))
             return data2
         }
         catch (error) {

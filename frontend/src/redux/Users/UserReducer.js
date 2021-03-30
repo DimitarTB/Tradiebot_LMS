@@ -73,7 +73,11 @@ export const UserSlice = createSlice({
                 state.allUsers.push(action.payload.user)
             }
             else state.allUsers[find_user] = action.payload.user
-            if (action.payload.user._id === state.currentUserData._id) state.currentUserData = action.payload.user
+            if (action.payload.user._id === state.currentUserData._id) {
+                const token_exp = state.currentUserData.token_exp
+                state.currentUserData = action.payload.user
+                state.currentUserData.token_exp = token_exp
+            }
         },
 
 
@@ -129,7 +133,7 @@ export const UserSlice = createSlice({
             const new_user = state.allUsers[upd_user]
             new_user.profile_picture = action.payload.picture
             state.allUsers[upd_user] = new_user
-            state.currentUserData = new_user
+            state.currentUserData.profile_picture = new_user.profile_picture
             state.profilePictureStatus = statuses.fulfilled
         },
         [profilePicture.pending]: (state, action) => {

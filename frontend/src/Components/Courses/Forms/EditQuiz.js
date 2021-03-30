@@ -126,22 +126,9 @@ export default props => {
                 <form
                     onChange={
                         (e) => { setSelectedQuestion(JSON.parse(e.target.value)) }
-                    }
-                    onSubmit={
-                        (e) => {
-                            e.preventDefault()
-                            dispatch(addQuestion({
-                                question: e.target.quest_name.value,
-                                type: e.target.question_types.value,
-                                index: currentQuiz.questions.length,
-                                quiz_id: currentQuiz._id
-                            }))
-                            alert("Question added successfully!")
-                            e.target.quest_name.value = ""
-                            setFulfilled(true)
-                        }
                     }>
                     <label for="cars">Choose a question:</label>
+                    <br />
                     <select name="questions">
                         {currentQuiz.questions.map(qt => {
                             return (
@@ -151,14 +138,30 @@ export default props => {
                             )
                         })}
                     </select>
+                    <br />
+                </form><br />
+                <form onSubmit={
+                    (e) => {
+                        e.preventDefault()
+                        dispatch(addQuestion({
+                            question: e.target.quest_name.value,
+                            type: e.target.question_types.value,
+                            index: currentQuiz.questions.length,
+                            quiz_id: currentQuiz._id
+                        }))
+                        alert("Question added successfully!")
+                        e.target.quest_name.value = ""
+                        setFulfilled(true)
+                    }
+                }>
+                    <label>Add a new question</label>
                     <input name="quest_name" placeholder="New Question"></input>
                     <select name="question_types">
                         <option value="Multiple Choice">Multiple Choice</option>
                         <option value="Single Choice">Single Choice</option>
                         <option value="input">Input</option>
-                    </select>
-                    <button type="submit">Add</button>
-                    <br />
+                    </select><br />
+                    <button>Add</button>
                 </form>
             </div>
             <div className="rest smaller">
@@ -167,7 +170,7 @@ export default props => {
                     dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
                 }}>
                     <label for="question">Question</label>
-                    <input name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br />
+                    <input name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br /><br />
                     <label for="type">Type</label><br />
                     <select name="question_types">
                         <option value="Multiple Choice">Multiple Choice</option>

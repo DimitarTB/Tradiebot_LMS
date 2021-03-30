@@ -29,7 +29,7 @@ export default props => {
             </NavLink>
             <p>Teachers : {teachers}</p>
 
-            {props.enroll === true ?
+            {props.enroll === true && (props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin")) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id)) ?
                 <button id="enroll" onClick={e => {
 
                     const data = {

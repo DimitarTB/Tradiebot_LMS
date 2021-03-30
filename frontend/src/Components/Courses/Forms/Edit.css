@@ -11,7 +11,7 @@
     margin-left: 10px;
 }
 .icon {
-    display:inline-flex;
+    display:flex;
     margin-left:10px;
 }
 :root {
@@ -49,6 +49,9 @@
     --purple: #6900c7;
 }
 
+svg {
+    cursor: pointer;
+}
 #questions {
     display: flex;
     margin: 10px;
@@ -96,7 +99,7 @@
     margin: 30px 0px;
 }
 
-#edit-quiz-container > .rest > form {
+#edit-quiz-container > .rest {
     width: 950px;
     margin: 0px auto;
     background: #FFF;
@@ -106,29 +109,170 @@
     border-radius: .42rem;
     display: flex;
     flex-direction: column;
+    margin-top:20px;
 }
 
-#edit-quiz-container > .rest > form > * {
+
+#edit-quiz-container > .rest > * {
     margin: 8px 0px;
 }
 
-#edit-quiz-container > .rest > form > p:hover {
+#edit-quiz-container > .rest > p:hover {
     cursor: pointer;
 }
 
 #edit-quiz-container > .rest > form > button {
     border: none;
-    max-width: 300px;
+    width: 8%;
     background: var(--primary);
     color: #FFF;
     border-radius: .42rem;
     padding: 8px 0px;
+    margin:10px 5px;
 }
 
-#edit-quiz-container >.rest > form > button#delete {
+#edit-quiz-container >.rest > button#delete {
     background: var(--danger);
 }
 
-#edit-quiz-container > .rest.smaller > form {
+#edit-quiz-container > .rest > form > label {
+    box-shadow: 0 1px 0 0 #fff inset;
+}
+
+
+
+#edit-quiz-container > .rest.smaller {
     width: 750px;
 }
+
+#edit-quiz-container > .rest > form > input, select {
+    /* border:1px solid var(--gray);
+    border-radius:20px;
+    padding:10px;
+    margin: 7px auto; */
+    /* width: 100%;
+    height: 20px;
+    padding: 10px 12px;
+    font-size: 16px;
+    line-height: 1.43;
+    color: #29303b;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #8a92a3;
+    border-radius: 2px;
+    box-shadow: none; */
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 6px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--gray-dark);
+    border: 2px solid var(--gray);
+    border-radius: .42rem;
+    box-sizing: border-box;
+}
+
+#edit-quiz-container > .rest > form > select {
+    margin-top: 20px;
+    padding:5px;
+    width:100%;
+}
+
+.border {
+    margin:2px;
+    margin-left: 10px;
+    display: inline;
+}
+
+.topic {
+    border-bottom: 1px solid var(--primary);
+    padding:20px;
+}
+.topic > * input {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 6px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--gray-dark);
+    border: 2px solid var(--gray);
+    border-radius: .42rem;
+    box-sizing: border-box;
+}
+.topic > * button {
+    border: none;
+    width: 8%;
+    background: var(--primary);
+    color: #FFF;
+    border-radius: .42rem;
+    padding: 8px 0px;
+    margin:10px 5px;
+}
+.topic > label {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dark-gray);
+    line-height: 1.5;
+    margin-bottom: 7px;
+}
+
+#topic_name {
+    color: var(--primary);
+    display: inline;
+    font-family: "Metropolis", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 2rem;
+}
+
+#add {
+    background-color: var(--green);
+    border: none;
+    color: var(--light);
+    max-width: 100px;
+    min-width: 100px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 150ms;
+    border-radius: .42rem;
+}
+
+
+
+.form_nav > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* background-color: var(--gray); */
+    border-radius: .42rem;
+    width:102%;
+    
+}
+.form_nav > ul > #active {
+    border-bottom: 1px solid var(--primary);
+}
+
+.form_nav > ul > li {
+    float: left;
+    display: block;
+    /* color: white; */
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.5s;
+    color: var(--dark);
+    cursor: pointer;
+}
+
+.files > #title-files {
+    color: var(--primary)
+}
+/* .form_nav > ul > li:hover {
+    background-color: var(--dark);
+    cursor: pointer
+} */

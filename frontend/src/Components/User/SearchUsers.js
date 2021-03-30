@@ -17,7 +17,7 @@ function SearchUsers() {
     const showUsers = allUsers.filter(usr => usr.username.includes(search))
     return (
         <div>
-            <input placeholder="Search.."
+            <input id="ip" placeholder="Search.."
                 onChange={(e) => setSearch(e.target.value)}
             ></input>
             <div className="grid">

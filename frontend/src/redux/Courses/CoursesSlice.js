@@ -42,8 +42,8 @@ export const CoursesSlice = createSlice({
             state.loadingStatus = statuses.pending
         },
         [createCourse.fulfilled]: (state, action) => {
-            state.loadingStatus = statuses.fulfilled
             state.allCourses.push(action.payload.new_course)
+            state.loadingStatus = statuses.fulfilledw
         },
         [createCourse.rejected]: (state, action) => {
             state.loadingError = action.payload

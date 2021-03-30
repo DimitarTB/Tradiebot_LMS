@@ -79,6 +79,7 @@ function App() {
 
                     {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : (<>
                         <Route path="/home">
+                            {() => check_session()}
                             <Container
                                 details={"Default Container Details"}
                                 description="Description about default container details"
@@ -147,6 +148,7 @@ function App() {
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <CoursesTracking /> : <Redirect to="/" />}
                         </Route>
                         <Route exact path="/">
+                            {() => check_session()}
                             {user?.currentUser === null ? <Landing /> : <Redirect to="/home" />}
                         </Route>
                     </>)}

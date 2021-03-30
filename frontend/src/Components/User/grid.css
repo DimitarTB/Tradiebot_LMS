@@ -3,8 +3,7 @@
     grid-template-columns: auto auto auto;
 }
 
-.grid, input {
+.grid, #ip {
     margin-left:10%;
     margin-top:5.3%;
 }
-

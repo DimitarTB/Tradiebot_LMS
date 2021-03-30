@@ -12,8 +12,7 @@ function BrowseCourses() {
 
     const dispatch = useDispatch()
     const currentUser = useSelector(state => state.user)
-    const _showCourses = allCourses.filter(course => course.manualEnroll === true)
-    const showCourses = _showCourses.filter(course => !(currentUser.currentUserData.enrolledCourses.includes(course._id)))
+    const showCourses = allCourses
     const [search, setSearch] = useState("")
     // const [showingCourses, setShowCourses] = useState([])
     console.log(showCourses)
@@ -42,7 +41,7 @@ function BrowseCourses() {
                         //     </div>
                         // }
                     }}></input>
-                    {showCourses?.filter(course => course.name.toLowerCase().includes(search.toLowerCase())).map(course => <CourseCard course={course} enroll={true} />)}
+                    {showCourses?.filter(course => course?.name?.toLowerCase()?.includes(search?.toLowerCase())).map(course => <CourseCard course={course} enroll={true} />)}
                 </Fragment>
             )}
         />

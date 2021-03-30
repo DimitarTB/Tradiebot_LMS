@@ -16,9 +16,11 @@ export default props => {
 
     const dispatch = useDispatch()
 
+    const courseState = useSelector(state => state.courses.loadingStatus)
     const teachers = useSelector(state => state.user.allUsers.filter(user => user.types.includes("Teacher")))
     const currentUser = useSelector(state => state.user)
     const [info, setInfo] = useState({ type: null, message: null })
+    const [ff, setFF] = useState(false)
     const [course, setCourse] = useState({
         name: null,
         description: null,
@@ -51,6 +53,15 @@ export default props => {
         }
     }
 
+
+    useEffect(() => {
+        if (ff === true) {
+            if (courseState === "fulfilled") {
+                setInfo({ type: "success", message: "Course successfully created!" })
+                setFF(false)
+            }
+        }
+    }, [courseState])
     const validator = (data, tester) => {
         for (const field in data) {
             if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
@@ -72,6 +83,7 @@ export default props => {
                 username: currentUser.currentUserData.username
             }
             dispatch(createCourse(data))
+            setFF(true)
         }
         // if (info.type === "error") {
 
@@ -127,6 +139,13 @@ export default props => {
                     valueField: "name"
                 }
             ]}
+            // overloadedFields={[
+            //     (
+            //         <div>
+            //             <h1>Over</h1>
+            //         </div>
+            //     )
+            // ]}
         />
     )
 }
