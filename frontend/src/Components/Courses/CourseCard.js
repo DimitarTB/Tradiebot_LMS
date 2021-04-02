@@ -9,9 +9,11 @@ import "./CourseCard.css"
 
 export default props => {
 
+
     const currentUser = useSelector(state => state.user)
     const users = currentUser.allUsers
     const dispatch = useDispatch()
+
 
     const _users = users.length > 0 ? users.filter(user => props.course.teachers.includes(user._id)) : []
     let teachers = ""
@@ -26,7 +28,12 @@ export default props => {
             <NavLink to={"/course/" + props.course._id}>
                 <img src={FILES_URL + props.course.thumbnail} />
                 <h3>{props.course.name}</h3>
+                <h4>{"ID: " + props.course._id}</h4>
             </NavLink>
+            <h5 style={{ cursor: "pointer" }} onClick={(e) => {
+                navigator.clipboard.writeText(props.course._id)
+                alert("ID copied to clipboard!")
+            }}>Copy ID</h5>
             <p>Teachers : {teachers}</p>
 
             {props.enroll === true && (props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin")) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id)) ?
@@ -59,7 +66,7 @@ export default props => {
                 }
                 }>Unenroll</button> : ""
             }
-            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}><button>Edit Course</button></NavLink> : ""}
+            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}><button id="edit">Edit Course</button></NavLink> : ""}
         </div>
     )
 }

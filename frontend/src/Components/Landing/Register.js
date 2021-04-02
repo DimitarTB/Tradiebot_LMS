@@ -29,6 +29,7 @@ export default props => {
                 if (currentUser.registerStatus === "fulfilled") {
                     alert("A message with an activation link has been sent to your e-mail address!")
                     console.log("register fulfilled")
+                    props.setLoginShowing(true)
                 }
                 else if (currentUser.registerStatus === "rejected") {
                     console.log("register rejected")

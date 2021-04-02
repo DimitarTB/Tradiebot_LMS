@@ -115,16 +115,6 @@ export default props => {
                     placeholder: "Please Enter Course Name",
                     type: "text",
                     fieldType: input
-                },
-                {
-                    name: "lectures",
-                    label: "Select Lectures",
-                    placeholder: "Please Select Lectures for this topic",
-                    fieldType: multipleSelect,
-                    options: lectures,
-                    displayField: "name",
-                    valueField: "_id",
-                    special: true
                 }
             ]}
         />

@@ -13,15 +13,12 @@ const EnrolledCourses = props => {
 
     const dispatch = useDispatch()
     const currentUser = useSelector(state => state.user)
-    const allCourses = useSelector(state => state.courses.allCourses?.filter(course => (currentUser.currentUserData.createdCourses.includes(course?._id))))
+    const allCourses = useSelector(state => state.courses.allCourses.filter(crs => currentUser.currentUserData.createdCourses.includes(crs._id)))
 
-    
+
     useEffect(() => {
-        console.log(currentUser.currentUser)
-        if (currentUser.currentUser !== null) {
-            dispatch(getAllCourses(currentUser.currentUser))
-            dispatch(fetchAll(currentUser.currentUser))
-        }
+        dispatch(getAllCourses(currentUser.currentUser))
+        dispatch(fetchAll(currentUser.currentUser))
     }, [])
 
 

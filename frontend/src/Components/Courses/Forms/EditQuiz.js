@@ -12,7 +12,7 @@ import Form, {
 import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
-import { addCorrectAnswer, addPublicAnswer, addQuestion, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, editQuestion, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import { addCorrectAnswer, addPublicAnswer, addQuestion, changeQuizName, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, editQuestion, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 
 export default props => {
     const quiz_id = useParams().id
@@ -26,6 +26,7 @@ export default props => {
         name: currentQuiz.name,
         questions: currentQuiz?.quizQuestions?.map(q => q.question)
     })
+
 
     useEffect(() => {
         setQuiz({
@@ -92,6 +93,16 @@ export default props => {
         return true
     }
 
+    useEffect(() => {
+        if (ff === true && quizzes.changeNameStatus === "fulfilled") {
+            setFulfilled(false)
+            setInfo({ "type": "success", "message": "Name successfully changed!" })
+        }
+        else if (quizzes.changeNameStatus === "pending") {
+            setInfo({ "type": "warning", "message": "Pending..." })
+        }
+    }, [quizzes.changeNameStatus])
+
     return (
         <div id="edit-quiz-container">
             <div className="form">
@@ -108,7 +119,8 @@ export default props => {
                     }}
                     handleSubmit={e => {
                         e.preventDefault()
-                        // if (validator(course, courseValidator) !== true) return
+                        dispatch(changeQuizName({ "name": quiz.name, "quiz_id": quiz_id }))
+                        setFulfilled(true)
                     }
                     }
                     fields={[

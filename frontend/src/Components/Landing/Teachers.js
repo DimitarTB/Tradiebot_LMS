@@ -21,32 +21,38 @@ function Teachers() {
             description="Assign and remove teachers."
             component={(
                 <Fragment>
-                    <form onSubmit={(e) => {
-                        e.preventDefault()
-                        dispatch(addTeacher({ "username": e.target.username.value }))
-                    }}>
-                        <label for="teach">Username</label>
-                        <input name="username"></input>
-                        <button>Add teacher</button>
-                    </form>
-                    {teachers.map(tc =>
-                        <div className="course-card">
-                            <NavLink to={"/user/" + tc._id}>
-                                <img src={FILES_URL + tc.profile_picture} />
-                                <h3>{tc.username}</h3>
-                            </NavLink><hr />
-                            <p>{tc.email}</p>
-                            <p>{"Registered on: " + tc.dateJoined}</p>
-                            <button id="enroll" onClick={e => {
-                                const data = {
-                                    "user_id": tc._id,
-                                }
-                                dispatch(removeTeacher(data))
-                                alert("Teacher removed!")
-                            }
-                            }>Remove</button>
+                    <div className="search-users-container">
+                        <div className="topic">
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                dispatch(addTeacher({ "username": e.target.username.value }))
+                            }}>
+                                <label for="teach">Username</label>
+                                <input name="username"></input>
+                                <button>Add teacher</button>
+                            </form>
                         </div>
-                    )}
+                        <div className="grid">
+                            {teachers.map(tc =>
+                                <div className="course-card">
+                                    <NavLink to={"/user/" + tc._id}>
+                                        <img src={FILES_URL + tc.profile_picture} />
+                                        <h3>{tc.username}</h3>
+                                    </NavLink><hr />
+                                    <p>{tc.email}</p>
+                                    <p>{"Registered on: " + tc.dateJoined}</p>
+                                    <button id="enroll" onClick={e => {
+                                        const data = {
+                                            "user_id": tc._id,
+                                        }
+                                        dispatch(removeTeacher(data))
+                                        alert("Teacher removed!")
+                                    }
+                                    }>Remove</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </Fragment>
             )}
         />

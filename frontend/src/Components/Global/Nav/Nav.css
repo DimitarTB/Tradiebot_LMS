@@ -15,7 +15,7 @@
     width: 0px;
     background: #24344b;
     height: 100vh;
-    transition: 300ms;
+    transition: 300ms !important;
 }
 
 
@@ -88,7 +88,7 @@
     margin: 20px;
     font-size: 2em;
     cursor: pointer;
-    transition: 300ms;
+    transition: 300ms !important;
     color: #24344b;
 }
 

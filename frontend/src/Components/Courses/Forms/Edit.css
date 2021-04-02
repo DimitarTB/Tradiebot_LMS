@@ -276,3 +276,18 @@ svg {
     background-color: var(--dark);
     cursor: pointer
 } */
+
+.radio > input {
+    border:1px solid black;
+    margin-top:auto;
+}
+
+.profile-picture{
+    margin: 65px ;
+    padding: 50px 47.5px;
+    background: #FFF;
+    box-sizing: border-box;
+    background: #FFF;
+    border-radius: .42rem;
+    box-shadow: 0 10px 30px 0 rgb(82 63 105 / 10%);
+}

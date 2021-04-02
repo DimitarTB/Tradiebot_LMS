@@ -1,16 +1,20 @@
-import React from "react"
+import React, { useState } from "react"
 import { GiHamburgerMenu } from "react-icons/gi"
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { FaUserAlt } from "react-icons/fa"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { withRouter } from 'react-router-dom'
 
-import { NavLink } from "react-router-dom"
+import { NavLink, Redirect } from "react-router-dom"
 
 import "./Nav.css"
 
-export default props => {
+const Nav = props => {
+
+    const dispatch = useDispatch()
 
     const user = useSelector(state => state.user.currentUserData)
+    const [redirect, setRedirect] = useState(false)
 
     const toggleNavItem = e => {
         let element = e.target
@@ -29,6 +33,7 @@ export default props => {
 
     return (
         <div className="nav-container">
+            {redirect !== false ? <Redirect to={redirect} /> : null}
             <div className="nav-body">
                 <h1>Tradiebot LMS</h1>
 
@@ -57,8 +62,13 @@ export default props => {
                     </span>
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
-                        <li><NavLink to="/logout"> Logout</NavLink></li>
                         <li><NavLink to="/search_users"> Browse Users</NavLink></li>
+                        <li><p onClick={e => {
+                            dispatch({ type: 'user/logout' })
+                            // setRedirect("/logout")
+                            props.history.push("/")
+                            toggleNav(e)
+                        }} style={{ cursor: "pointer" }}> Logout</p></li>
                     </ul>
                 </div>
 
@@ -74,6 +84,7 @@ export default props => {
                         <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
                         <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
                         {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
+                        {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
                     </ul>
                 </div>
             </div>
@@ -81,3 +92,5 @@ export default props => {
         </div>
     )
 }
+
+export default withRouter(Nav)

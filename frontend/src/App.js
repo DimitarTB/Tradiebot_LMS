@@ -32,6 +32,7 @@ import QuizContainer from "./Components/Quiz/QuizContainer"
 import Teachers from './Components/Landing/Teachers'
 import CoursesTracking from './Components/Courses/CoursesTracking'
 import SearchUsers from './Components/User/SearchUsers'
+import PlastfixForm2 from './Components/Courses/Forms/PlastfixForm2'
 
 function App() {
 
@@ -68,7 +69,7 @@ function App() {
                     </Route>
                 </> : <Nav />}
                 {check_session()}
-                {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : <Nav />}
+                {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : null}
                 <Switch>
                     <Route path="/not_activated">
                         <NotActivated user={user.currentUserData?.username} activated={user.currentUserData?.activated} />
@@ -102,6 +103,9 @@ function App() {
                         </Route>
                         <Route path="/pf">
                             <PlastfixForm regions={["Plastfix Australia", "Plastfix New Zealand", "Plastfix USA"]} states={["7500", "2400"]} />
+                        </Route>
+                        <Route path="/pf2">
+                            <PlastfixForm2 />
                         </Route>
                         <Route path="/topics/edit/:id">
                             <EditTopic />

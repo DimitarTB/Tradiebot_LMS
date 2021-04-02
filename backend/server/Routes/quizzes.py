@@ -60,3 +60,8 @@ class Quiz:
             quizzes = db.quizzes
             quizzes.update({"_id": ObjectId(quiz_id)}, {"$set": {"name": data["name"]}})
             return jsonify({"id": quiz_id, "name": data["name"]})
+    def delete(request):
+        quiz_id = request.args.get("id")
+        quizzes = db.quizzes
+        quizzes.find_one_and_delete({"_id": ObjectId(quiz_id)})
+        return jsonify({"id": quiz_id})

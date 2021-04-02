@@ -68,12 +68,12 @@ export const UserSlice = createSlice({
         },
 
         [getOneUser.fulfilled]: (state, action) => {
-            const find_user = state.allUsers.indexOf(usr => usr._id === action.payload.user._id)
+            const find_user = state.allUsers?.indexOf(usr => usr._id === action.payload.user._id)
             if (find_user === -1) {
                 state.allUsers.push(action.payload.user)
             }
             else state.allUsers[find_user] = action.payload.user
-            if (action.payload.user._id === state.currentUserData._id) {
+            if (action.payload.user?._id === state.currentUserData?._id) {
                 const token_exp = state.currentUserData.token_exp
                 state.currentUserData = action.payload.user
                 state.currentUserData.token_exp = token_exp

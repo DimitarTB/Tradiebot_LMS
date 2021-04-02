@@ -296,3 +296,52 @@ export const editQuestion = createAsyncThunk(
         }
     }
 )
+
+export const changeQuizName = createAsyncThunk(
+    'quizzes/changeQuizName',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "name": data.name });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/quiz?id=" + data.quiz_id), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const deleteQuiz = createAsyncThunk(
+    'quizzes/deleteQuiz',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+
+            var requestOptions = {
+                method: 'DELETE',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            const response = await fetch((API_URL + "api/quiz?id=" + data.quiz_id), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

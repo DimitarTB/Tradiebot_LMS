@@ -106,6 +106,21 @@ function Profile() {
         <Container details="Profile" description=""
             component={currentUser.currentUserData?._id === propUser ?
                 <div id="edit-quiz-container">
+                    <div className="profile-picture">
+                        {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" />}
+                        <div className="topic">
+                            <form
+                                onSubmit={e => {
+                                    e.preventDefault()
+                                    dispatch(profilePicture({ "file": e.target.pp.files[0], "username": currentUser.currentUserData.username }))
+                                }}>
+                                {/* {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" height="200" />} */}
+                                <br /><input name="pp" type="file"></input>
+                                <br /><button>Submit</button><br /><br />
+                                {currentUser.profilePictureStatus === "pending" ? <h5>Uploading picture...</h5> : ""}
+                            </form>
+                        </div>
+                    </div>
                     <div class="rest">
                         <div className="form_nav">
                             <ul>
@@ -117,7 +132,7 @@ function Profile() {
                         {selected === "Profile Info" ?
                             <Fragment>
                                 <form onChange={e => usernameHandleChange(e)} onSubmit={e => usernameHandleSubmit(e)}>
-                                    <h3>Change your username/email</h3>
+                                    <h3>Change your profile info</h3>
                                     <label for="username">Username</label><br />
                                     <input name="username" type="username" value={username.username}></input><br />
                                     <label for="email">E-mail</label><br />
@@ -125,25 +140,15 @@ function Profile() {
                                     {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                     <button type="submit">Submit</button>
                                 </form>
-                                <form
-                                    onSubmit={e => {
-                                        e.preventDefault()
-                                        dispatch(profilePicture({ "file": e.target.pp.files[0], "username": currentUser.currentUserData.username }))
-                                    }}>
-                                    {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" height="200" />}
-                                    <br /><input name="pp" type="file"></input>
-                                    <br /><button>Submit</button><br /><br />
-                                    {currentUser.profilePictureStatus === "pending" ? <h5>Uploading picture...</h5> : ""}
-                                </form>
                             </Fragment>
                             : null}
                         {selected === "Security" ?
                             <form onChange={e => passwordHandleChange(e)} onSubmit={e => passwordHandleSubmit(e)}>
                                 <h3>Change your password</h3>
                                 <label for="currentPassword">Current Password</label>
-                                <input name="currentPassword" type="password" placeholder="Current password:"></input>
+                                <input name="currentPassword" type="password" placeholder="Current password:"></input><br></br>
                                 <label for="newPassword">New Password</label>
-                                <input name="newPassword" type="password" placeholder="New Password"></input>
+                                <input name="newPassword" type="password" placeholder="New Password"></input><br />
                                 {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                 <button type="submit">Submit</button>
                             </form>
@@ -151,40 +156,48 @@ function Profile() {
                     </div>
                 </ div>
 
-            : <div>
-                <h1>Public info</h1>
-                {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
-                <h3>{selectedProfile?.username}</h3>
-                <h3>{selectedProfile?.email}</h3>
-                {currentUser.currentUserData.types.includes("SuperAdmin") ?
-                    <div>
-                        <hr />
-                        <h3>Change this user's password</h3>
-                        <form onSubmit={(e) => {
-                            e.preventDefault()
-                            dispatch(changeUserPassword({ "password": e.target.pw.value, "id": propUser }))
-                            alert("Password changed successfully!")
-                            e.target.pw.value = ""
-                        }}>
-                            <input placeholder="Password" type="password" name="pw"></input>
-                            <button type="submit">Change</button>
-                        </form>
-                        <form onSubmit={(e) => {
-                            e.preventDefault()
-                            dispatch(enrollUserCourse({ "user_id": selectedProfile._id, "course_id": e.target.id.value }))
-                            e.target.id.value = ""
-                        }
-                        }>
-                            <h2>Add user course</h2>
-                            <input name="id" placeholder="Course ID"></input>
-                            <button type="Submit">Add</button>
-                        </form>
-                        {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
+                : <Container description="" details=""
+                    component={(
+                        <Fragment>
+                            <div className="profile-picture">
+                                <h1>Public info</h1>
+                                {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
+                                <h3>{selectedProfile?.username}</h3>
+                                <h3>{selectedProfile?.email}</h3>
+                            </div>
+                            {currentUser.currentUserData.types.includes("SuperAdmin") ?
+                                <div id="edit-quiz-container">
+                                    <div className="topic">
+                                        <hr />
+                                        <h3>Change this user's password</h3>
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault()
+                                            dispatch(changeUserPassword({ "password": e.target.pw.value, "id": propUser }))
+                                            alert("Password changed successfully!")
+                                            e.target.pw.value = ""
+                                        }}>
+                                            <input placeholder="Password" type="password" name="pw"></input>
+                                            <button type="submit">Change</button>
+                                        </form>
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault()
+                                            dispatch(enrollUserCourse({ "user_id": selectedProfile._id, "course_id": e.target.id.value }))
+                                            e.target.id.value = ""
+                                        }
+                                        }>
+                                            <h2>Add user course</h2>
+                                            <input name="id" placeholder="Course ID"></input>
+                                            <button type="Submit">Add</button>
+                                        </form></div>
+                                    {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
 
-                    </div>
-                    : null}
-            </div>}>
-        </Container>
+                                </div>
+                                : null}
+                        </Fragment>
+                    )}>
+
+                </Container >}>
+        </Container >
     ) : <Redirect to="/" />
 }
 

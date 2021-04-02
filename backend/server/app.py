@@ -208,7 +208,10 @@ def submit_quiz():
         passed = True
     insert_q = {"user": data["user_id"], "quiz_id": data["quiz_id"], "time": datetime.datetime.utcnow(), "answers": data["answers"], "passed": passed, "points": points}
     quiz_records.insert(insert_q)
+    get_date = quiz_records.find_one({"_id": insert_q["_id"]})
     insert_q["_id"] = str(insert_q["_id"])
+    print(get_date["time"])
+    insert_q["time"] = get_date["time"]
     return jsonify({"message": "Record inserted!", "record": insert_q})
 
 

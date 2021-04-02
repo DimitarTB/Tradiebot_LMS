@@ -18,7 +18,7 @@ import "./Edit.css"
 import { TiDelete } from "react-icons/ti";
 import { BsFillCaretUpFill, BsFillCaretDownFill } from "react-icons/bs";
 import { addTopic, deleteTopic, getAllTopics, lectureDown, lectureUp, topicDown, topicUp } from "../../../redux/Topics/TopicsActions"
-import { createQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import { createQuiz, deleteQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 
 export default props => {
     const dispatch = useDispatch()
@@ -31,7 +31,6 @@ export default props => {
     const topics = useSelector(state => state.topics?.allTopics.filter(topic => topic?.course_id === course_id))
     console.log(course_id)
     const quizzes = useSelector(state => state.quizzes?.allQuizzes?.filter(quiz => quiz?.course_id === course_id))
-    console.log("QZ", quizzes)
 
     topics.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0)
 
@@ -46,6 +45,10 @@ export default props => {
     const [topicName, setTopicName] = useState("")
     const [ff, setFulfilled] = useState(false)
     const [addTopicData, setTopicData] = useState({
+        "name": ""
+    })
+
+    const [newQuiz, setQuiz] = useState({
         "name": ""
     })
     const courseValidator = {
@@ -146,7 +149,6 @@ export default props => {
     }, [courses.thumbnailStatus, courses.updateStatus])
 
     let display = []
-    console.log(quizzes)
 
     topics.map((topic) => {
         if (topic.lectures.length === 0) {
@@ -171,12 +173,19 @@ export default props => {
                                 handleSubmit(e, topic)
                             }}>Add</button></form>
                         </div>
-                        {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 ?
+                        {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 && topic?.lectures.length !== 0 ?
                             <Fragment>
                                 <label>Add quiz</label>
-                                <form onSubmit={(e) => { e.preventDefault(); dispatch(createQuiz({ "name": e.target.name.value, "topic_id": topic?._id, "course_id": course_id })) }}>
-                                    <input name="name"></input>
-                                    <button>Add</button>
+                                <form
+                                    onChange={e => setQuiz({
+                                        ...newQuiz,
+                                        [e.target.name]: e.target.value
+                                    })}>
+                                    <input name="name" value={newQuiz.name} placeholder="Quiz Name"></input>
+                                    <button onClick={e => {
+                                        e.preventDefault()
+                                        dispatch(createQuiz({ "name": newQuiz.name, "topic_id": topic?._id, "course_id": course_id }))
+                                    }}>Add</button>
                                 </form>
                             </Fragment> : ""}
                     </div>
@@ -200,14 +209,19 @@ export default props => {
 
                                                 <div>
                                                     <br />
-                                                    {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 ?
+                                                    {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 && topic?.lectures.length !== 0 ?
                                                         <Fragment>
-                                                            <label>Add quiz</label><form onSubmit={
-                                                                (e) => {
-                                                                    e.preventDefault(); dispatch(createQuiz({ "name": e.target.name.value, "topic_id": topic?._id, "course_id": course_id }))
-                                                                }}>
-                                                                <input name="name"></input>
-                                                                <button>Add</button>
+                                                            <label>Add quiz</label>
+                                                            <form
+                                                                onChange={e => setQuiz({
+                                                                    ...newQuiz,
+                                                                    [e.target.name]: e.target.value
+                                                                })}>
+                                                                <input name="name" value={newQuiz.name}></input>
+                                                                <button onClick={e => {
+                                                                    e.preventDefault()
+                                                                    dispatch(createQuiz({ "name": newQuiz.name, "topic_id": topic?._id, "course_id": course_id }))
+                                                                }}>Add</button>
                                                             </form>
                                                         </Fragment>
                                                         : ""}
@@ -242,8 +256,17 @@ export default props => {
                                                     handleSubmit(e, topic)
                                                 }}>Add</button></form>
                                             </div>
-                                            <h2>Quiz: <NavLink to={"/quizzes/edit/" + quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}>{quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}</NavLink>
-                                            </h2>
+                                            <Fragment>
+                                                {quizzes?.find(quiz => quiz?.topic_id === topic?._id) ?
+                                                    <Fragment>
+                                                        <h2 style={{ display: "inline" }}>Quiz: <NavLink
+                                                            to={"/quizzes/edit/" + quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}>
+                                                            {quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}
+                                                        </NavLink>
+                                                        </h2>
+                                                        <TiDelete style={{ color: "red" }} onClick={e => dispatch(deleteQuiz({ "quiz_id": quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id }))} />
+                                                    </Fragment> : null}
+                                            </Fragment>
                                         </Fragment> : ""}
                                 </Fragment>)
                             })

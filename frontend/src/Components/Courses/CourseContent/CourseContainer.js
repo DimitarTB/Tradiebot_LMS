@@ -101,7 +101,7 @@ const CourseContainer = props => {
     ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
         details={currentCourse?.name}
         description={currentCourse?.description}
-        component={<div><h2>Lectures:</h2>{currentLectures.map(lect => <h4>{lect.name}</h4>)}</div>}
+        component={<div><h2>Topics:</h2>{topics.map(topic => <h4>{topic.name}</h4>)}</div>}
     />
 
 }

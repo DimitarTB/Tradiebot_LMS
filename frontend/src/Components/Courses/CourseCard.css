@@ -9,6 +9,8 @@
     box-shadow: 0 0.15rem 0.75rem 0 rgba(40, 60, 80, 0.15);
     color: var(--gray);
     min-height: 280px;
+    transition: 0.3s;
+    border-radius:5px;
 }
 
 .course-card > a > img {
@@ -18,11 +20,33 @@
     height: 120px;
 }
 
+.course-card:hover {
+    padding-left:20px;
+    padding-bottom:30px;
+    padding-right:20px;
+    padding-top:20px;
+    transition: 0.4s;
+}
 .course-card > a > h3 {
     color: var(--gray);
 }
 
+button {
+    cursor: pointer;
+}
 #enroll {
     margin: 20px;
+    background-color: var(--primary);
+    border: none;
+    border-radius:20px;
+    color:white;
+}
 
+#edit {
+    margin: 20px;
+    padding:5px;
+    background-color: var(--gray-dark);
+    border: none;
+    color:white;
+    margin-left: 63px;
 }

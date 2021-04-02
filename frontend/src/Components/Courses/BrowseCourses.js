@@ -31,17 +31,21 @@ function BrowseCourses() {
             description="Discover courses"
             component={(
                 <Fragment>
-                    <input placeholder="Search" onChange={e => {
-                        // setShowCourses([])
-                        setSearch(e.target.value)
-                        // console.log(showingCourses)
-                        // {
-                        //     <div id="enrolled">
-                        //         {showCourses.map(course => course.name.includes(e.target.value) ? setShowCourses([...showingCourses, course]) : "")}
-                        //     </div>
-                        // }
-                    }}></input>
-                    {showCourses?.filter(course => course?.name?.toLowerCase()?.includes(search?.toLowerCase())).map(course => <CourseCard course={course} enroll={true} />)}
+                    <div className="search-users-container">
+                        <input placeholder="Search" onChange={e => {
+                            // setShowCourses([])
+                            setSearch(e.target.value)
+                            // console.log(showingCourses)
+                            // {
+                            //     <div id="enrolled">
+                            //         {showCourses.map(course => course.name.includes(e.target.value) ? setShowCourses([...showingCourses, course]) : "")}
+                            //     </div>
+                            // }
+                        }}></input>
+                        <div className="grid">
+                            {showCourses?.filter(course => course?.name?.toLowerCase()?.includes(search?.toLowerCase())).map(course => <CourseCard course={course} enroll={true} />)}
+                        </div>
+                    </div>
                 </Fragment>
             )}
         />
