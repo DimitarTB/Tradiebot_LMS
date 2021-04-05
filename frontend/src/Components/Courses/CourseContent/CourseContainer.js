@@ -18,6 +18,7 @@ import { getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 const CourseContainer = props => {
 
     const [redirect, setRedirect] = useState(false)
+    const [showVideo, setShowVideo] = useState(false)
     function idleTimer() {
         var t;
         //window.onload = resetTimer;
@@ -74,6 +75,7 @@ const CourseContainer = props => {
                 dispatch(watchedLecture(data))
             }
         }
+        setShowVideo(false)
     }, [selectedLecture])
 
 
@@ -91,13 +93,21 @@ const CourseContainer = props => {
     }, [])
 
     return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (currentLectures.length > 0 ? (
-        <div className="course-container">
-            <div className="left">
-                <VideoPlayer url={selectedLecture?.video_file} />
-                <CourseInfoSection lecture={selectedLecture} course={currentCourse} />
+        <Container details={currentCourse?.name} description={currentCourse?.description} component={
+            <div className="course-container">
+                <div className="left">
+                    <div style={{ padding: "20px", paddingTop: "50px" }}>
+                        <h1>{selectedLecture.name}</h1>
+                        <p>{selectedLecture.content}</p><br />
+                        {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
+                    </div>
+                    <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
+                </div>
+                <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} />
             </div>
-            <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} />
-        </div>
+        }>
+
+        </Container>
     ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
         details={currentCourse?.name}
         description={currentCourse?.description}

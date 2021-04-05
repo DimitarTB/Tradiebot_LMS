@@ -35,6 +35,7 @@
     width: calc(100% - 280px);
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 .course-container > .left > .video-player {

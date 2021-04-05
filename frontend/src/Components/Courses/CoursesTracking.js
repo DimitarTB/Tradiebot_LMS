@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink } from "react-router-dom"
 import { coursesTracking, getAllCourses } from '../../redux/Courses/CoursesActions'
 
 import { DataGrid } from '@material-ui/data-grid';
-import { useDemoData } from '@material-ui/x-grid-data-generator';
 import "./table.css"
+import Container from '../Global/Container';
 
 function CoursesTracking() {
     const dispatch = useDispatch()
@@ -53,11 +52,12 @@ function CoursesTracking() {
         rows.push(ob)
     })
     return (
-        <div>
+        <Container details="Courses Tracking" description="Track users watched courses" component={
             <div class="table">
                 <DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[5, 10, 25, 50, 100]} pagination sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
             </div>
-        </div>
+        }>
+        </Container>
     )
 }
 

@@ -140,7 +140,7 @@ export const updateLecture = createAsyncThunk(
             myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
             myHeaders.append("Content-Type", "application/json");
             console.log("Files:", data.files.length)
-            var raw = JSON.stringify({ "name": data.name, "files": data.files, "dateCreated": data.dateCreated, "video_file": data.video_file, "course_id": data.course_id, "watchedBy": data.watchedBy });
+            var raw = JSON.stringify({ "name": data.name, "files": data.files, "dateCreated": data.dateCreated, "video_file": data.video_file, "course_id": data.course_id, "watchedBy": data.watchedBy, "content": data.content });
 
             var requestOptions = {
                 method: 'PUT',

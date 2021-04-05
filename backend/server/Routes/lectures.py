@@ -3,7 +3,7 @@ from config import db
 import datetime
 from bson.objectid import ObjectId
 class Lecture:
-    def __init__(self, name, course_id, dateCreated, files = [], video_file="", watchedBy=[]):
+    def __init__(self, name, course_id, dateCreated, files = [], video_file="", watchedBy=[], content=""):
         self.name = name
         self.files = files
         self.comments = []
@@ -11,6 +11,7 @@ class Lecture:
         self.dateCreated = dateCreated
         self.video_file = video_file
         self.watchedBy = watchedBy
+        self.content = content
     def create(request):
         data = request.get_json()
         lectures = db.lectures
@@ -30,7 +31,7 @@ class Lecture:
         lectures = db.lectures
         if lecture_id is not None:
             data = lectures.find_one({"_id": ObjectId(lecture_id)})
-            ret_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"]}
+            ret_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"], "content": data["content"]}
             return jsonify({"lecture": ret_lecture})
         else:
             course_id = request.args.get("course_id")
@@ -39,13 +40,13 @@ class Lecture:
                 data = lectures.find({"course_id": course_id})
                 ret_lectures = []
                 for lecture in data:
-                    ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"], "watchedBy": lecture["watchedBy"]})
+                    ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"], "watchedBy": lecture["watchedBy"], "content": lecture["content"]})
                 return jsonify({"lectures": ret_lectures, "course_id": course_id})
 
             data = lectures.find({})
             ret_lectures = []
             for lecture in data:
-                ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"], "watchedBy": lecture["watchedBy"]})
+                ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"], "watchedBy": lecture["watchedBy"], "content": lecture["content"]})
             return jsonify(ret_lectures)
 
     def update(request):
@@ -60,13 +61,13 @@ class Lecture:
                 lectures.update({"_id": ObjectId(lecture_id)}, { "$push": {"files": file}})
                 new_files.append(file)
             print("new_files2", new_files)
-            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"]}
+            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"], "content": data["content"]}
             return jsonify({"message": "Updated f!","lecture": new_lecture, "lecture_id": lecture_id})
         else:
             data = request.get_json()
-            new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], data["files"], data["video_file"], data["watchedBy"])
+            new_lecture = Lecture(data["name"], data["course_id"], data["dateCreated"], data["files"], data["video_file"], data["watchedBy"], data["content"])
             lectures.update({"_id": ObjectId(lecture_id)}, (new_lecture.__dict__))
-            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"]}
+            new_lecture = {"_id": lecture_id, "name": data["name"], "course_id": data["course_id"], "dateCreated": data["dateCreated"], "files": data["files"], "video_file": data["video_file"], "watchedBy": data["watchedBy"], "content": data["content"]}
             return jsonify({"message": "Updated!","lecture": new_lecture, "lecture_id": lecture_id})
         
     def delete(request):

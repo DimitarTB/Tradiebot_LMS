@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { usew } from "react-redux"
 import { Redirect } from "react-router-dom"
 import "./Container.css"
-
 const Container = props => {
     const [redirect, setRedirect] = useState(false)
     function idleTimer() {
@@ -31,7 +30,8 @@ const Container = props => {
         <div className="container">
             <div className="details">
                 <h1>{props.details}</h1>
-                <h3>{props.description}</h3>
+                <h3 id="desc">{props.description}</h3>
+                <div id="icon"><img src={process.env.PUBLIC_URL + "/Assets/icons/" + (props.icon ? props.icon : "book.png")} /></div>
             </div>
 
             {props.component}

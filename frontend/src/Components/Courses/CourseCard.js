@@ -50,7 +50,7 @@ export default props => {
                 }>Enroll</button> : ""
             }
             {props.admin === true ?
-                <button onClick={() => dispatch(unenrollUserCourse({ "user_id": props.user_id, "course_id": props.course._id }))}>Unenroll User's Course</button>
+                <button id="enroll" onClick={() => dispatch(unenrollUserCourse({ "user_id": props.user_id, "course_id": props.course._id }))}>Unenroll User's Course</button>
                 : null
             }
             {props.unenroll === true ?

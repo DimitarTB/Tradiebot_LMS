@@ -9,5 +9,17 @@
     padding: 50px;
     padding-bottom: 100px;
     color: #FFF;
-    background-color: var(--green);
+    background-image: linear-gradient(135deg, var(--green) 0%, rgba(15, 162, 139, 0.8) 100%);
+}
+
+.container > .details > #desc {
+    width:80%;
+}
+
+#icon > img {
+    width:200px;
+    height:200px;
+    position: absolute;
+    right: 5%;
+    top: 1.5%;
 }

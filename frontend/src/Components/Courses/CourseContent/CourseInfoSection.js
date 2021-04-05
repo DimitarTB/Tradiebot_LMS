@@ -9,11 +9,16 @@ import axios from 'axios'
 import DownloadLink from "react-download-link"
 import FileSaver from 'file-saver';
 import { MdInsertDriveFile } from 'react-icons/md'
-import { FcCancel } from "react-icons/fc";
+import { FcCancel, FcVideoFile } from "react-icons/fc";
+import { BsCardImage } from "react-icons/bs"
+import { ImFileVideo } from "react-icons/im"
+import { FaFileAlt } from "react-icons/fa"
+import { FaRegFilePdf } from "react-icons/fa"
+
 
 const CourseInfoSection = props => {
 
-    const [selectedTab, setSelectedTab] = useState(0)
+    const [selectedTab, setSelectedTab] = useState(2)
     const dispatch = useDispatch()
     var selectComments = useSelector(state => state.comments.allComments)
     const allUsers = useSelector(state => state.user)
@@ -62,13 +67,20 @@ const CourseInfoSection = props => {
     function filterComments(comment) {
         return (comment.lecture_id === props.lecture?._id)
     }
+
+
+    const fileType = (file) => {
+        if (file.includes("pdf")) return (<FaRegFilePdf />)
+        if (file.includes("jpg") || file.includes("png") || file.includes("gif") || file.includes("jpeg")) return (<BsCardImage />)
+        return (<FaFileAlt />)
+    }
+
     const displayComments = selectComments?.filter(filterComments)
     const tabs = [
         (
             <div className="course-details">
-                <h2>{props.course?.name}</h2>
-                <p>{props.course?.description}</p>
-                <p>{props.course?.dateCreated}</p>
+                <h2>{props.lecture.video_file !== "" ? props.lecture?.name : null}</h2>
+                <p>{props.lecture.video_file !== "" ? props.lecture?.content : null}</p>
             </div>
         ),
         (
@@ -104,7 +116,8 @@ const CourseInfoSection = props => {
         ),
         (
             <div className="course-files">
-                {props.lecture?.files?.map(file => <Fragment><h2><a href={FILES_URL + file} target="_blank" download>{getFileName(file)}</a></h2></Fragment>)}
+                {props.lecture.video_file !== "" ? <Fragment><ImFileVideo /><h2 style={{ cursor: "pointer", display: "inline" }} onClick={() => props.setShowVideo(true)}> Lecture Video</h2></Fragment> : null}<br />
+                {props.lecture?.files?.map(file => <Fragment style={{ display: "inline" }}>{<div style={{ display: "inline" }}>{fileType(getFileName(file))}</div>}<h2 style={{ display: "inline" }}><a href={FILES_URL + file} target="_blank" download>{" " + getFileName(file)}</a></h2><br /></Fragment>)}
             </div >
         )
     ]
@@ -112,9 +125,8 @@ const CourseInfoSection = props => {
     return (
         <div className="course-info">
             <div className="info-nav">
-                <h3 onClick={e => setSelectedTab(0)}>Details</h3>
+                <h3 onClick={e => setSelectedTab(2)}>Resources</h3>
                 <h3 onClick={e => setSelectedTab(1)}>Comments</h3>
-                <h3 onClick={e => setSelectedTab(2)}>Files</h3>
             </div>
             <div className="tab">
                 {tabs[selectedTab]}

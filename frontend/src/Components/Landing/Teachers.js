@@ -17,6 +17,7 @@ function Teachers() {
     }, [])
     return (
         <Container
+            icon="teacher.png"
             details="Teachers"
             description="Assign and remove teachers."
             component={(

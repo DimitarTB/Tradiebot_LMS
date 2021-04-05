@@ -102,8 +102,26 @@ function Profile() {
         dispatch(getOneUser(selectedProfile?.username))
     }, [])
 
+
+    const check_roles = (types) => {
+        if (types?.includes("SuperAdmin")) {
+            if (types?.includes("Teacher")) {
+                return (<Fragment><h3>SuperAdmin</h3><h3>Teacher</h3></Fragment>)
+            }
+            else {
+                return (<h3>SuperAdmin</h3>)
+            }
+        }
+        else if (types?.includes("Teacher")) {
+            return (<h3>Teacher</h3>)
+        }
+        else {
+            return (<h3>Student</h3>)
+        }
+    }
+
     return currentUser.currentUserData ? (
-        <Container details="Profile" description=""
+        <Container details="Profile" description="" icon={selectedProfile?.types.includes("Teacher") && currentUser.currentUserData?._id !== propUser ? "teacher.png" : "user.png"}
             component={currentUser.currentUserData?._id === propUser ?
                 <div id="edit-quiz-container">
                     <div className="profile-picture">
@@ -160,10 +178,14 @@ function Profile() {
                     component={(
                         <Fragment>
                             <div className="profile-picture">
+                                {/* Public info */}
                                 <h1>Public info</h1>
                                 {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
-                                <h3>{selectedProfile?.username}</h3>
-                                <h3>{selectedProfile?.email}</h3>
+                                <h4>{selectedProfile?.username}</h4>
+                                <h4>{selectedProfile?.email}</h4>
+                                <br />
+                                {check_roles(selectedProfile?.types)}
+
                             </div>
                             {currentUser.currentUserData.types.includes("SuperAdmin") ?
                                 <div id="edit-quiz-container">
@@ -189,8 +211,9 @@ function Profile() {
                                             <input name="id" placeholder="Course ID"></input>
                                             <button type="Submit">Add</button>
                                         </form></div>
-                                    {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
-
+                                    <div className="grid">
+                                        {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
+                                    </div>
                                 </div>
                                 : null}
                         </Fragment>

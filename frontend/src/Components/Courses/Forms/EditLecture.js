@@ -32,7 +32,8 @@ export default props => {
     const [lecture, setLecture] = useState({
         name: currentLecture?.name,
         files: [],
-        video_file: currentLecture?.video_file
+        video_file: currentLecture?.video_file,
+        content: currentLecture?.content
     })
     const [ff, setFulfilled] = useState(false)
 
@@ -100,7 +101,7 @@ export default props => {
                 }}
                 handleSubmit={e => {
                     e.preventDefault()
-                    if (validator(lecture, lectureValidator) !== true) return
+                    // if (validator(lecture, lectureValidator) !== true) return
                     const data = {
                         name: lecture.name,
                         files: currentLecture?.files ? currentLecture.files : [],
@@ -108,7 +109,8 @@ export default props => {
                         dateCreated: currentLecture.dateCreated,
                         course_id: currentLecture.course_id,
                         id: lecture_id,
-                        watchedBy: currentLecture.watchedBy
+                        watchedBy: currentLecture.watchedBy,
+                        content: lecture.content
                     }
                     if (lecture.files.length > 0) data.file = true
                     console.log("dispatch")
@@ -142,6 +144,12 @@ export default props => {
                         label: "Video for the lecture",
                         type: "text",
                         fieldType: input,
+                    },
+                    {
+                        name: "content",
+                        label: "Lecture content",
+                        type: "textarea",
+                        fieldType: input
                     }
                 ]}
                 overloadedFields={[

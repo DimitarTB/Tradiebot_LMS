@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Container from "../Global/Container"
@@ -163,16 +163,26 @@ export default props => {
         )
     }
     else {
-        return (<div class="ready">
-            {attempts > 0 ?
-                <Fragment>
-                    {completed === true ? <h1>{lastCompleted?.passed === true ? ("Congratulations, you completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (passed)!") : "You completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (failed)!"}</h1> : null}
-                    <h1>Are you ready?</h1>
-                    <h2>{"(" + attempts + " attempts left!)"}</h2><br />
-                    <button onClick={() => setSelectedPage(1)}>Start</button>
-                </Fragment> : <h1>We are sorry, but you have no attempts left for this quiz.</h1>}
-            <h3>{attempts < 3 ? "The best result you got on this quiz is " + highest?.points + "/" + quiz?.questions.length + " (" + (highest?.passed ? "passed" : "failed") + ")" : null}</h3>
-        </div>)
+        return (
+            <Container
+                details={quiz.name}
+                component={
+                    <center>
+                        <div class="ready">
+                            {attempts > 0 ?
+                                <Fragment>
+                                    {completed === true ? <h1>{lastCompleted?.passed === true ? ("Congratulations, you completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (passed)!") : "You completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (failed)!"}</h1> : null}
+                                    <h1>Are you ready?</h1>
+                                    <h2>{"(" + attempts + " attempts left!)"}</h2><br />
+                                    <button onClick={() => setSelectedPage(1)}>Start</button>
+                                </Fragment> : <h1>We are sorry, but you have no attempts left for this quiz.</h1>}
+                            <h3>{attempts < 3 ? "The best result you got on this quiz is " + highest?.points + "/" + quiz?.questions.length + " (" + (highest?.passed ? "passed" : "failed") + ")" : null}</h3>
+                            <NavLink to={"/course/" + quiz.course_id}><button id="back">Back to the course</button></NavLink>
+                        </div>
+                    </center>
+                } />
+        )
+
     }
     // }
     // else {

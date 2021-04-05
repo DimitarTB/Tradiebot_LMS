@@ -1,4 +1,8 @@
 .ready {
+    margin: auto;
+}
+
+#back {
     margin-left: auto;
     margin-right: auto;
 }

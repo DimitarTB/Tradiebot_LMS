@@ -33,6 +33,7 @@ import Teachers from './Components/Landing/Teachers'
 import CoursesTracking from './Components/Courses/CoursesTracking'
 import SearchUsers from './Components/User/SearchUsers'
 import PlastfixForm2 from './Components/Courses/Forms/PlastfixForm2'
+import QuizTracking from './Components/Quiz/QuizTracking'
 
 function App() {
 
@@ -43,7 +44,6 @@ function App() {
 
     const check_session = () => {
         if (user.currentUserData !== null) {
-            console.log(typeof (user.currentUserData.token_exp), typeof (new Date()))
             if (Date.parse(user.currentUserData.token_exp) <= (new Date())) {
                 setRedirect(true)
                 dispatch({ type: 'user/logout' })
@@ -92,6 +92,7 @@ function App() {
                                         <h3>Hello again</h3>
                                     </Fragment>
                                 )}
+                                icon="book.png"
                             >
                             </Container>
                         </Route>
@@ -150,6 +151,9 @@ function App() {
                         </Route>
                         <Route path="/courses_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <CoursesTracking /> : <Redirect to="/" />}
+                        </Route>
+                        <Route path="/quizzes_tracking">
+                            {user?.currentUserData?.types?.includes("SuperAdmin") ? <QuizTracking /> : <Redirect to="/" />}
                         </Route>
                         <Route exact path="/">
                             {() => check_session()}
