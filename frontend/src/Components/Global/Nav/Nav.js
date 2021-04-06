@@ -50,6 +50,7 @@ const Nav = props => {
                         {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
                         {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
                         {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses_tracking"}> Courses Tracking</NavLink></li> : ""}
+                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/quizzes_tracking"}> Quiz Records</NavLink></li> : ""}
                     </ul>
                 </div> : null}
                 <div className="nav-item" onClick={e => toggleNavItem(e)} >
@@ -84,7 +85,6 @@ const Nav = props => {
                         <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
                         <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
                         {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
-                        {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
                     </ul>
                 </div>
             </div>

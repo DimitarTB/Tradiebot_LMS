@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { API_URL, statuses } from '../constants'
-import { addTeacher, changePassword, changeUsername, enrollCourse, enrollUserCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse, unenrollUserCourse } from "./UserActions"
+import { activateUser, addTeacher, changePassword, changeUsername, enrollCourse, enrollUserCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse, unenrollUserCourse } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from './UserActions'
 
@@ -18,7 +18,9 @@ export const UserSlice = createSlice({
         changePasswordStatus: statuses.idle,
         changeUsernameStatus: statuses.idle,
         usernameError: null,
-        startedWatching: null
+        startedWatching: null,
+        activateStatus: statuses.idle,
+        activateMessage: ""
     },
     reducers: {
         logout: (state) => {
@@ -178,6 +180,15 @@ export const UserSlice = createSlice({
         },
         [changeUsername.pending]: (state) => {
             state.changeUsernameStatus = statuses.pending
+        },
+
+        [activateUser.fulfilled]: (state, action) => {
+            state.activateMessage = action.payload.message
+            state.activateStatus = statuses.fulfilled
+        },
+        [activateUser.pending]: (state) => {
+            state.activateMessage = ""
+            state.activateStatus = statuses.pending
         },
 
         [addTeacher.fulfilled]: (state, action) => {

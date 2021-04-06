@@ -78,7 +78,7 @@ export default props => {
         setAttempts(3 - idx.length)
         var highest_p = 0
         idx.map(id => {
-            if (id.points > highest_p) {
+            if (id.points >= highest_p) {
                 highest_p = id.points
                 setHighest(id)
             }

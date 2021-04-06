@@ -369,3 +369,25 @@ export const enrollUserCourse = createAsyncThunk(
         }
     }
 )
+
+export const activateUser = createAsyncThunk(
+    'user/activateUser',
+    async (username, ext) => {
+        try {
+            var myHeaders = new Headers();
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "activate?user=" + data.user + "&token=" + data.token), requestOptions)
+            const data = await response.json()
+            return data
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

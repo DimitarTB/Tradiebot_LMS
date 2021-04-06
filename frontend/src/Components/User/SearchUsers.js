@@ -9,7 +9,8 @@ import "./grid.css"
 import { Fragment } from 'react'
 
 function SearchUsers() {
-    const allUsers = useSelector(state => state.user.allUsers)
+    const userSelector = useSelector(state => state.user)
+    const allUsers = userSelector.allUsers
     const dispatch = useDispatch()
     const [search, setSearch] = useState("")
     useEffect(() => {
@@ -57,6 +58,7 @@ function SearchUsers() {
                                 }}>Copy ID</h6>
                                 <h4>{user.email}</h4>
                                 {check_roles(user?.types)}
+                                {userSelector.currentUserData.types.includes("SuperAdmin") ? <h5>{"Activated: " + (user?.activated === true ? "True" : "False")}</h5> : null}
                             </div>)
                     })}
                 </div>

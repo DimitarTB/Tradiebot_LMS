@@ -209,7 +209,7 @@ export default props => {
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     console.log("ovde")
-                    dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addPublic.value }))
+                    dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion?.index, answer: e.target.addPublic.value }))
                 }}>
                     <h2>Public answers:</h2>
                     {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => {

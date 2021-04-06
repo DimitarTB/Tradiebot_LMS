@@ -16,12 +16,13 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect
+    Redirect,
+    useParams
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
 import CourseContainer from "./Components/Courses/CourseContent/CourseContainer"
-import NotActivated from './Components/Landing/NotActivated'
+import NotActivated from './Components/User/NotActivated'
 import ChangePassword from './Components/Landing/ChangePassword'
 import SubmitToken from './Components/Landing/SubmitToken'
 import TopicsTest from './Components/TopicsTest'
@@ -34,6 +35,9 @@ import CoursesTracking from './Components/Courses/CoursesTracking'
 import SearchUsers from './Components/User/SearchUsers'
 import PlastfixForm2 from './Components/Courses/Forms/PlastfixForm2'
 import QuizTracking from './Components/Quiz/QuizTracking'
+import Home from './Components/Landing/Home'
+import Activate from './Components/User/Activate'
+import Certificate from './Components/Courses/CourseContent/Certificate'
 
 function App() {
 
@@ -79,22 +83,9 @@ function App() {
                     </Route>
 
                     {user?.currentUserData?.activated === false ? <Redirect to="/not_activated" /> : (<>
-                        <Route path="/home">
+                        <Route exact path="/home">
                             {() => check_session()}
-                            <Container
-                                details={"Default Container Details"}
-                                description="Description about default container details"
-
-                                component={(
-                                    <Fragment>
-                                        <h1>Hello World</h1>
-                                        <h2>H2 tag</h2>
-                                        <h3>Hello again</h3>
-                                    </Fragment>
-                                )}
-                                icon="book.png"
-                            >
-                            </Container>
+                            <Home />
                         </Route>
                         <Route path="/quizzes/edit/:id">
                             <EditQuiz />
@@ -102,12 +93,15 @@ function App() {
                         <Route path="/quiz/:id">
                             <QuizContainer />
                         </Route>
-                        <Route path="/pf">
+                        <Route path="/activate/:token/:user">
+                            <Activate />
+                        </Route>
+                        {/* <Route path="/pf">
                             <PlastfixForm regions={["Plastfix Australia", "Plastfix New Zealand", "Plastfix USA"]} states={["7500", "2400"]} />
                         </Route>
                         <Route path="/pf2">
                             <PlastfixForm2 />
-                        </Route>
+                        </Route> */}
                         <Route path="/topics/edit/:id">
                             <EditTopic />
                         </Route>
@@ -138,7 +132,7 @@ function App() {
                             <BrowseCourses />
                         </Route>
                         <Route path="/courses/create">
-                            <CreateCourse />
+                            {user?.currentUserData?.types?.includes("SuperAdmin") ? <CreateCourse /> : <Redirect to="/" />}
                         </Route>
                         <Route path="/lectures/edit/:id">
                             <EditLecture></EditLecture>
@@ -151,6 +145,9 @@ function App() {
                         </Route>
                         <Route path="/courses_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <CoursesTracking /> : <Redirect to="/" />}
+                        </Route>
+                        <Route path="/certificate">
+                            <Certificate />
                         </Route>
                         <Route path="/quizzes_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <QuizTracking /> : <Redirect to="/" />}

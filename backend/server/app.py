@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, abort, jsonify, send_file
+from flask import Flask, request, make_response, abort, jsonify, send_file, redirect, flash, render_template
 from config import app, db, mail, get_random
 from Routes.users import User
 from Routes.courses import Course
@@ -61,7 +61,7 @@ def register():
     print(request)
     return methodExec(request, User)
 
-@app.route('/activate')
+@app.route('/activate', methods=["GET"])
 def sendMail():
     tok = request.args.get("token")
     usr = request.args.get("user")
@@ -74,9 +74,10 @@ def sendMail():
 
     if data["rnd"] == tok:
         users.update({"username": usr}, {"$set": {"activated": True}})
-        return jsonify({"message": "Your account is successfully activated, you can now log in!"})
+        flash("Your account is successfully activated!")
+        return render_template("activate_success.html")
     else:
-        return jsonify({"message": "Invalid token!"})
+        return render_template("activate_error.html")
 
 @app.route('/api/change_password', methods=["POST"])
 @jwt_required
