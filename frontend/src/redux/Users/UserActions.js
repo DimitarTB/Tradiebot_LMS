@@ -391,3 +391,52 @@ export const activateUser = createAsyncThunk(
         }
     }
 )
+
+export const getAllCertificates = createAsyncThunk(
+    'user/getAllCertificates',
+    async (username, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch((API_URL + "api/certificate"), requestOptions)
+            const data = await response.json()
+            return data
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)
+
+
+export const addCertificate = createAsyncThunk(
+    'user/addCertificate',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({ "course_id": data.course_id, "user_id": data.user_id, "data": data.data });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            const response = await fetch((API_URL + "api/certificate"), requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            console.log("fetch3", error.message)
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

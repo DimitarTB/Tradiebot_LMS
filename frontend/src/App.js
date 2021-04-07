@@ -37,7 +37,10 @@ import PlastfixForm2 from './Components/Courses/Forms/PlastfixForm2'
 import QuizTracking from './Components/Quiz/QuizTracking'
 import Home from './Components/Landing/Home'
 import Activate from './Components/User/Activate'
+import Certificates from './Components/User/Certificates'
 import Certificate from './Components/Courses/CourseContent/Certificate'
+import RequestCertificate from './Components/User/RequestCertificate'
+import ValidCertificate from './Components/User/ValidCertificate'
 
 function App() {
 
@@ -152,6 +155,15 @@ function App() {
                         <Route path="/quizzes_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <QuizTracking /> : <Redirect to="/" />}
                         </Route>
+                        <Route path="/my_certificates">
+                            <Certificates />
+                        </Route>
+                        <Route path="/request_certificate/:course_id">
+                            <RequestCertificate />
+                        </Route>
+                        <Route path="/valid_certificate/:course_id/:user_id">
+                            <ValidCertificate />
+                        </Route>
                         <Route exact path="/">
                             {() => check_session()}
                             {user?.currentUser === null ? <Landing /> : <Redirect to="/home" />}
@@ -160,7 +172,7 @@ function App() {
 
                 </Switch>
             </Router>
-        </div>
+        </div >
     )
 }
 

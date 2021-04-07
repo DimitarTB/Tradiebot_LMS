@@ -14,6 +14,7 @@ import { BsCardImage } from "react-icons/bs"
 import { ImFileVideo } from "react-icons/im"
 import { FaFileAlt } from "react-icons/fa"
 import { FaRegFilePdf } from "react-icons/fa"
+import { getQuizRecords } from '../../../redux/Quizzes/QuizzesActions'
 
 
 const CourseInfoSection = props => {

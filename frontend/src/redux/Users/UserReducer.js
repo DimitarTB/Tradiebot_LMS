@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { API_URL, statuses } from '../constants'
-import { activateUser, addTeacher, changePassword, changeUsername, enrollCourse, enrollUserCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse, unenrollUserCourse } from "./UserActions"
+import { activateUser, addTeacher, changePassword, changeUsername, enrollCourse, enrollUserCourse, fetchAll, getOneUser, loginUser, profilePicture, removeTeacher, unEnrollCourse, unenrollUserCourse, getAllCertificates, addCertificate } from "./UserActions"
 import jwt_decode from "jwt-decode"
 import { register } from './UserActions'
 
@@ -20,7 +20,8 @@ export const UserSlice = createSlice({
         usernameError: null,
         startedWatching: null,
         activateStatus: statuses.idle,
-        activateMessage: ""
+        activateMessage: "",
+        allCertificates: []
     },
     reducers: {
         logout: (state) => {
@@ -213,6 +214,14 @@ export const UserSlice = createSlice({
         [enrollUserCourse.fulfilled]: (state, action) => {
             const usr = state.allUsers.findIndex(usr => usr._id === action.payload.user_id)
             state.allUsers[usr].enrolledCourses.push(action.payload.course_id)
+        },
+
+        [getAllCertificates.fulfilled]: (state, action) => {
+            state.allCertificates = action.payload
+        },
+
+        [addCertificate.fulfilled]: (state, action) => {
+            state.allCertificates.push(action.payload)
         }
     },
 })

@@ -64,6 +64,7 @@ const Nav = props => {
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
                         <li><NavLink to="/search_users"> Browse Users</NavLink></li>
+                        <li><NavLink to="/my_certificates"> My Certificates</NavLink></li>
                         <li><p onClick={e => {
                             dispatch({ type: 'user/logout' })
                             // setRedirect("/logout")

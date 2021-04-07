@@ -66,11 +66,9 @@ const VideoBrowser = props => {
     // })
     props.topics.map((topic, tidx, sz) => {
         var lectureCount = 0
+        props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
         display.push(<button><h2>{topic.name}</h2></button>)
         props.lectures.map((lecture, idx, arr) => {
-            if (idx === 0 && tidx !== 0) {
-                props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]._id ? display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
-            }
             if (checkValue(topic.lectures, lecture._id)) {
                 display.push(
                     <Fragment>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import { getAllCourses, getOneCourse } from "../../../redux/Courses/CoursesActions"
 import { getAllLectures, getCourseLectures, getOneLecture, watchedLecture } from "../../../redux/Lectures/LecturesActions"
 
@@ -13,10 +13,10 @@ import "./CourseContainer.css"
 import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 import Container from "../../Global/Container"
 import { getAllTopics } from "../../../redux/Topics/TopicsActions"
-import { getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import { getAllQuizzes, getQuizRecords } from "../../../redux/Quizzes/QuizzesActions"
+import { addCertificate } from "../../../redux/Users/UserActions"
 
 const CourseContainer = props => {
-
     const [redirect, setRedirect] = useState(false)
     const [showVideo, setShowVideo] = useState(false)
     function idleTimer() {
@@ -55,6 +55,11 @@ const CourseContainer = props => {
     const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse._id))
     const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
     const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0])
+    const quizRecordsUser = useSelector(state => state.quizzes.quizRecords.filter(qzr => (qzr.user === currentUser.currentUserData._id && (quizzes.filter(qz => qz._id === qzr.quiz_id).length !== 0))))
+
+    const showQuizzes = quizzes.filter(qz => (topics.filter(tp => tp._id === qz.topic_id).length !== 0))
+
+    const [dataURL, setDataURL] = useState("")
 
     window.addEventListener('locationchange', stopWatching, false)
     window.addEventListener("beforeunload", stopWatching, false);
@@ -63,6 +68,7 @@ const CourseContainer = props => {
     useEffect(() => {
         dispatch(getAllTopics())
         dispatch(getAllQuizzes())
+        dispatch(getQuizRecords())
     }, [])
     useEffect(() => {
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
@@ -96,6 +102,9 @@ const CourseContainer = props => {
         <Container details={currentCourse?.name} description={currentCourse?.description} component={
             <div className="course-container">
                 <div className="left">
+                    {showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length ?
+                        <NavLink to={"/request_certificate/" + currentCourse._id}><button>Get Certificate</button></NavLink>
+                        : null}
                     <div style={{ padding: "20px", paddingTop: "50px" }}>
                         <h1>{selectedLecture.name}</h1>
                         <p>{selectedLecture.content}</p><br />
