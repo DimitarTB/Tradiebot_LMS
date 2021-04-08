@@ -14,7 +14,9 @@ import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 import Container from "../../Global/Container"
 import { getAllTopics } from "../../../redux/Topics/TopicsActions"
 import { getAllQuizzes, getQuizRecords } from "../../../redux/Quizzes/QuizzesActions"
-import { addCertificate } from "../../../redux/Users/UserActions"
+import { addCertificate, getAllCertificates } from "../../../redux/Users/UserActions"
+import Certificate from "./Certificate"
+import Certificates from "../../User/Certificates"
 
 const CourseContainer = props => {
     const [redirect, setRedirect] = useState(false)
@@ -40,6 +42,7 @@ const CourseContainer = props => {
 
     useEffect(() => {
         idleTimer()
+        dispatch(getAllCertificates())
     }, [])
 
 
@@ -56,7 +59,9 @@ const CourseContainer = props => {
     const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
     const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0])
     const quizRecordsUser = useSelector(state => state.quizzes.quizRecords.filter(qzr => (qzr.user === currentUser.currentUserData._id && (quizzes.filter(qz => qz._id === qzr.quiz_id).length !== 0))))
+    const certificates = currentUser.allCertificates.filter(cert => (cert.course_id === currentCourse._id && cert.user_id === currentUser.currentUserData._id))
 
+    console.log(certificates)
     const showQuizzes = quizzes.filter(qz => (topics.filter(tp => tp._id === qz.topic_id).length !== 0))
 
     const [dataURL, setDataURL] = useState("")
@@ -102,8 +107,13 @@ const CourseContainer = props => {
         <Container details={currentCourse?.name} description={currentCourse?.description} component={
             <div className="course-container">
                 <div className="left">
-                    {showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length ?
-                        <NavLink to={"/request_certificate/" + currentCourse._id}><button>Get Certificate</button></NavLink>
+                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && certificates.length === 0 ?
+                        <Fragment>
+                            <h3>Congratulations, you have finished the course!</h3>
+                            <NavLink to={"/request_certificate/" + currentCourse._id}>
+                                <button>Get Certificate</button>
+                            </NavLink>
+                        </Fragment>
                         : null}
                     <div style={{ padding: "20px", paddingTop: "50px" }}>
                         <h1>{selectedLecture.name}</h1>

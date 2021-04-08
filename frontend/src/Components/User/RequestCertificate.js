@@ -8,6 +8,7 @@ import { addCertificate } from '../../redux/Users/UserActions'
 function RequestCertificate() {
     const dispatch = useDispatch()
     const course_id = useParams().course_id
+    const course = useSelector(state => state.courses.allCourses.find(crs => crs._id === course_id))
     const [data, setData] = useState({
         "name": ""
     })
@@ -43,7 +44,7 @@ function RequestCertificate() {
                 qrIMG.setAttribute('crossorigin', 'anonymous');
                 qrIMG.addEventListener("load", function () {
                     layout.drawImage(qrIMG, 410, 190)
-                    dispatch(addCertificate({ "user_id": currentUser.currentUserData._id, "course_id": course_id, "data": canvas.toDataURL() }))
+                    dispatch(addCertificate({ "user_id": currentUser.currentUserData._id, "course_id": course_id, "data": canvas.toDataURL(), "name": data.name }))
                     alert("Certificate successfully added to your certificates!")
                     setRedirect(true)
                 }, false)
@@ -56,7 +57,7 @@ function RequestCertificate() {
     }
 
     return redirect === true ? <Redirect to="/my_certificates" /> : (
-        <Container component={
+        <Container details="Request Certificate" description={'Request a certificate for completing the course "' + course?.name + '"'} component={
             <div id="edit-quiz-container">
                 <div className="topic">
                     <form onChange={(e) => {

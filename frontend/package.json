@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "downloadify": "^1.0.2",
     "file-saver": "^2.0.5",
+    "jspdf": "^2.3.1",
     "jwt-decode": "^3.1.2",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.1",

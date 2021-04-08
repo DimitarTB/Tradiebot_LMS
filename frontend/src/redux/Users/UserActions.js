@@ -397,7 +397,6 @@ export const getAllCertificates = createAsyncThunk(
     async (username, ext) => {
         try {
             var myHeaders = new Headers();
-            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             var requestOptions = {
                 method: 'GET',
                 headers: myHeaders,
@@ -422,7 +421,8 @@ export const addCertificate = createAsyncThunk(
             var myHeaders = new Headers();
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({ "course_id": data.course_id, "user_id": data.user_id, "data": data.data });
+
+            var raw = JSON.stringify({ "course_id": data.course_id, "user_id": data.user_id, "data": data.data, "name": data.name, "course_name": ext.getState().courses.allCourses.find(crs => crs._id === data.course_id).name });
 
             var requestOptions = {
                 method: 'POST',
