@@ -16,12 +16,15 @@ function Certificates() {
     return (
         <Container details="My Certificates" description="Certificates you have earned by completing courses." component={
             <ul>
-                {userCertificates.map(cert => <li style={{ cursor: "pointer", margin:"20px" }} onClick={() => {
+                {userCertificates.map(cert => <li style={{ padding: "10px", color: "black", cursor: "pointer", margin: "20px", width: "10%", background: "rgba(0, 0, 0, 0.1" }} onClick={() => {
                     var imgData = cert.data
-                    var doc = new jsPDF({ "orientation": "l" })
-                    doc.addImage(imgData, 'JPEG', 15, 40, 300, 300)
+                    var doc = new jsPDF({
+                        orientation: "landscape",
+                        format: [100, 180]
+                    })
+                    doc.addImage(imgData, 'JPEG', 0, 0, 300, 300)
                     doc.save(cert.name)
-                }}>{courses.find(cr => cert.course_id === cr._id).name}</li>
+                }}>{cert.course_name}</li>
                 )}
             </ul>
         }></Container>

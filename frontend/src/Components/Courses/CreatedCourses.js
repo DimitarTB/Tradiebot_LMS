@@ -3,7 +3,7 @@ import React, { useEffect, Fragment } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllCourses } from "../../redux/Courses/CoursesActions"
 import { fetchAll } from "../../redux/Users/UserActions"
-import { NavLink } from "react-router-dom"
+import { NavLink, Redirect } from "react-router-dom"
 
 import Container from "../Global/Container"
 import CourseCard from "./CourseCard"
@@ -13,7 +13,9 @@ const EnrolledCourses = props => {
 
     const dispatch = useDispatch()
     const currentUser = useSelector(state => state.user)
-    const allCourses = useSelector(state => state.courses.allCourses.filter(crs => currentUser.currentUserData.createdCourses.includes(crs._id)))
+
+    const coursesSelector = useSelector(state => state.courses)
+    const allCourses = coursesSelector?.allCourses?.filter(crs => currentUser?.currentUserData?.createdCourses?.includes(crs?._id))
 
 
     useEffect(() => {
@@ -21,8 +23,7 @@ const EnrolledCourses = props => {
         dispatch(fetchAll(currentUser.currentUser))
     }, [])
 
-
-    return (
+    return currentUser.currentUser !== null ? (
         <Container
             details="Created Courses"
             description="View your created courses."
@@ -32,7 +33,7 @@ const EnrolledCourses = props => {
                 </div>
             )}
         />
-    )
+    ) : <Redirect to="/" />
 }
 
 

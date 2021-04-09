@@ -3,9 +3,10 @@ import { coursesTracking, getAllCourses } from '../../redux/Courses/CoursesActio
 import { DataGrid } from '@material-ui/data-grid';
 import { XGrid } from '@material-ui/x-grid';
 import { useDispatch, useSelector } from 'react-redux'
-import { getQuizRecords } from '../../redux/Quizzes/QuizzesActions'
+import { getAllQuizzes, getQuizRecords } from '../../redux/Quizzes/QuizzesActions'
 import Container from '../Global/Container';
 import "./quiz.css"
+import { fetchAll } from '../../redux/Users/UserActions';
 
 function QuizTracking() {
     const dispatch = useDispatch()
@@ -15,6 +16,9 @@ function QuizTracking() {
     const courses = useSelector(state => state.courses)
     useEffect(() => {
         dispatch(getQuizRecords())
+        dispatch(getAllCourses())
+        dispatch(fetchAll())
+        dispatch(getAllQuizzes())
     }, [])
 
 
@@ -47,12 +51,13 @@ function QuizTracking() {
     var id = 0
     quiz_records.map(qzr => {
         var ob = {}
+        console.log(quiz?.allQuizzes)
         ob.id = id
         id++
         ob.username = user?.allUsers.find(usr => usr._id === qzr.user)?.username
         const cQuiz = quiz?.allQuizzes.find(qz => qz._id === qzr.quiz_id)
         ob.quiz = cQuiz?.name
-        ob.course = courses?.allCourses?.find(crs => crs._id === cQuiz.course_id).name
+        ob.course = courses?.allCourses?.find(crs => crs._id === cQuiz?.course_id)?.name
         ob.time = qzr.time.$date
         var date = new Date(ob.time)
         ob.time = date.toString()

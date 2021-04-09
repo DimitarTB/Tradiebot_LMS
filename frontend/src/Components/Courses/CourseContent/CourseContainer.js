@@ -103,7 +103,7 @@ const CourseContainer = props => {
         }
     }, [])
 
-    return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (currentLectures.length > 0 ? (
+    return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (topics.length > 0 && currentLectures.length > 0 ? (
         <Container details={currentCourse?.name} description={currentCourse?.description} component={
             <div className="course-container">
                 <div className="left">
@@ -127,7 +127,7 @@ const CourseContainer = props => {
         }>
 
         </Container>
-    ) : <div><center><h3>This course has no lectures in it !</h3></center></div>) : <Container
+    ) : <Container details={currentCourse?.name} description="This course has no lectures to show!"></Container >) : <Container
         details={currentCourse?.name}
         description={currentCourse?.description}
         component={<div><h2>Topics:</h2>{topics.map(topic => <h4>{topic.name}</h4>)}</div>}

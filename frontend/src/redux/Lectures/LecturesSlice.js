@@ -115,6 +115,7 @@ export const LecturesSlice = createSlice({
 
         [watchedLecture.fulfilled]: (state, action) => {
             const lectIdx = state.allLectures.findIndex(lect => lect._id === action.payload.lecture_id)
+            console.log(lectIdx)
             state.allLectures[lectIdx].watchedBy.push(action.payload.user_id)
         }
 

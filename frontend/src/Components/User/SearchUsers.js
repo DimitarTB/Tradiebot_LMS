@@ -40,7 +40,14 @@ function SearchUsers() {
             details="Browse Users"
             component={(
                 <div id="enrolled">
-                    <input id="ip" placeholder="Search.."
+                    <input style={{
+                        padding: "10px",
+                        marginBottom: "20px",
+                        fontSize: "1.1em",
+                        border: "2px solid var(--gray)",
+                        borderRadius: ".25rem",
+                        color: "var(--gray)",
+                    }} id="ip" placeholder="Search.."
                         onChange={(e) => setSearch(e.target.value)}
                     ></input>
                     {showUsers.map(user => {

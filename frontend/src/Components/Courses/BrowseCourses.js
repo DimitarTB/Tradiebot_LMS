@@ -32,7 +32,14 @@ function BrowseCourses() {
             component={(
 
                 <div id="enrolled">
-                    <input placeholder="Search" onChange={e => {
+                    <input style={{
+                        padding: "10px",
+                        marginBottom: "20px",
+                        fontSize: "1.1em",
+                        border: "2px solid var(--gray)",
+                        borderRadius: ".25rem",
+                        color: "var(--gray)",
+                    }} placeholder="Search" onChange={e => {
                         // setShowCourses([])
                         setSearch(e.target.value)
                         // console.log(showingCourses)
