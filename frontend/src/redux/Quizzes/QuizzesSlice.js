@@ -26,10 +26,11 @@ export const QuizzesSlice = createSlice({
         [addQuestion.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
             if (idx === -1) return
-            console.log(idx)
-            console.log(state.allQuizzes[idx])
-            state?.allQuizzes[idx]?.questions.push(action.payload.question)
+            state.allQuizzes[idx].questions.push(action.payload.question)
             state.addStatus = statuses.fulfilled
+            console.log("payload", action.payload)
+            console.log(idx)
+            console.log(current(state.allQuizzes[idx]))
         },
 
         [deleteQuestion.fulfilled]: (state, action) => {

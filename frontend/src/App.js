@@ -41,6 +41,7 @@ import Certificates from './Components/User/Certificates'
 import Certificate from './Components/Courses/CourseContent/Certificate'
 import RequestCertificate from './Components/User/RequestCertificate'
 import ValidCertificate from './Components/User/ValidCertificate'
+import PdfComponent from './Components/Courses/PdfComponent'
 
 function App() {
 
@@ -111,7 +112,9 @@ function App() {
                         <Route exact path="/course/:course_id">
                             <CourseContainer />
                         </Route>
-
+                        <Route exact path="/pdf">
+                            <PdfComponent />
+                        </Route>
                         <Route exact path="/test_quizzes">
                             <TopicsTest />
                         </Route>

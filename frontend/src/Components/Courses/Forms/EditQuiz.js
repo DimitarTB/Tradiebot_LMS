@@ -13,12 +13,13 @@ import "./Edit.css"
 
 import { FcCancel } from "react-icons/fc";
 import { addCorrectAnswer, addPublicAnswer, addQuestion, changeQuizName, deleteCorrectAnswer, deletePublicAnswer, deleteQuestion, editQuestion, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import { AiOutlineConsoleSql } from "react-icons/ai"
 
 export default props => {
     const quiz_id = useParams().id
     const dispatch = useDispatch()
     const quizzes = useSelector(state => state.quizzes)
-    const currentQuiz = quizzes?.allQuizzes?.find(quiz => quiz?._id === quiz_id)
+    const currentQuiz = useSelector(state => state.quizzes?.allQuizzes?.find(quiz => quiz?._id === quiz_id))
     console.log(currentQuiz)
     const [selectedQuestion, setSelectedQuestion] = useState(currentQuiz.questions[0])
     const [info, setInfo] = useState({ type: null, message: null })
@@ -28,6 +29,9 @@ export default props => {
     })
 
 
+    useEffect(() => {
+        console.log("selected", selectedQuestion)
+    }, [selectedQuestion])
     useEffect(() => {
         setQuiz({
             name: currentQuiz.name,
@@ -75,13 +79,18 @@ export default props => {
     }
 
     useEffect(() => {
-        if (ff) {
+        console.log(quiz)
+        console.log(ff)
+        if (ff === true) {
+            console.log(quiz)
             if (quizzes.addStatus === "fulfilled") {
                 setFulfilled(false)
                 alert("Question successfully added!")
+                setSelectedQuestion(currentQuiz.questions[currentQuiz.questions.length - 1])
+                console.log("quiz", currentQuiz)
             }
         }
-    }, [quizzes.addStatus])
+    }, [quizzes.addStatus, ff])
 
     const validator = (data, tester) => {
         for (const field in data) {
@@ -155,13 +164,13 @@ export default props => {
                 <form onSubmit={
                     (e) => {
                         e.preventDefault()
+                        setFulfilled(false)
                         dispatch(addQuestion({
                             question: e.target.quest_name.value,
                             type: e.target.question_types.value,
                             index: currentQuiz.questions.length,
                             quiz_id: currentQuiz._id
                         }))
-                        alert("Question added successfully!")
                         e.target.quest_name.value = ""
                         setFulfilled(true)
                     }
@@ -208,13 +217,12 @@ export default props => {
                 <br /><br />
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    console.log("ovde")
-                    dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion?.index, answer: e.target.addPublic.value }))
+                    dispatch(addPublicAnswer({ quiz_id: currentQuiz._id, index: (selectedQuestion === undefined || selectedQuestion === null ? 0 : selectedQuestion.index), answer: e.target.addPublic.value }))
                 }}>
                     <h2>Public answers:</h2>
                     {selectedQuestion?.public_answers?.map(answer => <Fragment><h4>{answer}</h4><p style={{ color: "red" }} onClick={() => {
                         dispatch(deletePublicAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: answer }));
-                        let new_ob = selectedQuestion
+                        let new_ob = { ...selectedQuestion }
                         new_ob.public_answers = selectedQuestion?.public_answers?.filter(pa => pa.answer !== answer)
                         setSelectedQuestion(new_ob)
                     }

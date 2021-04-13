@@ -1,0 +1,202 @@
+.table-container {
+    margin: -50px auto 50px auto;
+    /* max-width: calc(100% - 220px); */
+    overflow-x: scroll;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(31, 45, 65, 0.15);
+}
+
+.table-pages {
+    margin: 20px auto 50px auto;
+    /* width: calc(100% - 220px); */
+    max-width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    background: #FFF;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(31, 45, 65, 0.15);
+}
+
+.table-pages > svg {
+    background: #0061f2;
+    color: #FFF;
+    padding: 18px;
+    cursor: pointer;
+}
+
+.table-pages > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px;
+    width: 150px;
+}
+
+.table-pages > div > span:nth-child(1),
+.table-pages > div > span:nth-child(1) > input {
+    width: 30px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 19px;
+    height: 18px;
+    border: none;
+    font-family: sans-serif;
+}
+
+.table-pages > div > span:nth-child(2),
+.table-pages > div > span:nth-child(3) {
+    font-size: 18px;
+    line-height: 18px;
+    height: 18px;
+}
+
+/* .table-pages > p {
+    background: #FFF;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+
+/* .table-pages > span {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    background: #FFF;
+    color: #0061f2;
+    cursor: pointer;
+} */
+
+.table-pages > span.selected {
+    background: #0061f2;
+    color: #FFF;
+}
+
+
+
+.table-container::-webkit-scrollbar {
+    height: 6px;
+    border: none;
+    background: rgba(0, 100, 210, 0.2);
+  }
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 100, 210, 0.2);
+    cursor: pointer;
+}
+
+.table-container > .tableC {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-container > .tableC > .columns {
+    display: flex;
+}
+
+.table-container > .tableC > .columns > span {
+    background-color: #0061f2;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+.table-container > .tableC > .columns > span > p {
+    color: #FFF;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    display: block;
+}
+
+.table-container > .tableC > .columns > span > input {
+    margin: 5px 10px;
+    padding: 5px;
+    background: #FFF;
+    border-radius: .25rem;
+    border: none;
+}
+
+.table-container > .tableC > .empty {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #FFF;
+    text-align: center;
+    color: #333;
+}
+
+.table-container > .tableC > .rows {
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    /* background-image: url("../Global/Progress/wave3.png"); */
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 100% 80%;
+}
+
+.table-container > .tableC > .rows > div,
+.table-container > .tableC > .rows > a {
+    display: flex;
+}
+
+.table-container > .tableC > .rows > a:hover > span {
+    box-shadow: inset 0 0 2px rgba(0, 100, 255, 1.0);
+}
+
+.table-container > .tableC > .rows > div > span,
+.table-container > .tableC > .rows > a > span {
+    padding: 10px;
+    min-width: 200px;
+    max-width: 200px;
+    /* background: #FFF; */
+    color: #777;
+    word-wrap: break-word;
+    -moz-box-shadow:    inset 0 0 1px rgba(0, 100, 210, 0.8);
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 100, 210, 0.8);
+    box-shadow:         inset 0 0 1px rgba(0, 100, 210, 0.8);
+}
+
+
+.table-container > .tableC > .rows > a > span.status > p,
+.table-container > .tableC > .rows > div > span.status > p {
+    margin: 0px auto !important;
+    min-width: 50%;
+}
+
+@media only screen and (max-width : 950px) {
+    .table-container {
+        min-width: 98%;
+        width: 98% !important;
+        margin: inherit auto;
+    }
+
+    .table-container > .tableC > .rows > div > span,
+    .table-container > .tableC > .rows > a > span,
+    .table-container > .tableC > .columns > span {
+        padding: 3px;
+        min-width: 110px;
+        max-width: 110px;
+    }
+
+    .table-container > .tableC > .columns > span > input {
+        width: 80%;
+    }
+
+    .table-container > .tableC > .columns > span {
+        padding: 0px inherit;
+    }
+
+    .table-container > .tableC > .columns > span > p {
+        height: 50px;
+        line-height: 50px;
+    }
+}
