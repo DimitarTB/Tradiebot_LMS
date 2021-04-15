@@ -326,7 +326,7 @@ export default props => {
                     type: "textarea",
                     fieldType: input
                 },
-                {
+                currentUser.currentUserData.types.includes("SuperAdmin") ? {
                     name: "teachers",
                     label: "Select Teachers",
                     placeholder: "Please Select Teachers for this course",
@@ -334,11 +334,11 @@ export default props => {
                     options: teachers,
                     displayField: "username",
                     valueField: "_id"
-                },
+                } : {},
                 {
                     name: "manualEnroll",
                     label: "Select Course Type",
-                    placeholder: "Please Select Teachers for this course",
+                    placeholder: "Please Select The Course Type",
                     fieldType: select,
                     options: [{ name: "Manual Enroll" }, { name: "Self Enroll" }],
                     displayField: "name",

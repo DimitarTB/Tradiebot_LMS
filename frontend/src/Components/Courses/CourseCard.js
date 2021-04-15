@@ -1,4 +1,5 @@
 import React from 'react'
+import { Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom'
 import { FILES_URL } from '../../redux/constants'
@@ -16,12 +17,19 @@ export default props => {
 
 
     const _users = users.length > 0 ? users.filter(user => props.course.teachers.includes(user._id)) : []
-    let teachers = ""
-
-    for (const _user of _users) {
-        if (_user !== _users[0]) teachers += ", " + _user.username
-        else teachers += _user.username
+    let teachers = () => {
+        return (
+            <Fragment>
+                {
+                    _users.map(usr => <NavLink to={"/user/" + usr._id}>{usr.username + " "}</NavLink>)
+                }
+            </Fragment>)
     }
+
+    // for (const _user of _users) {
+    //     if (_user !== _users[0]) teachers += ", " + _user.username
+    //     else teachers += _user.username
+    // }
 
     return (
         <div className="course-card">
@@ -34,7 +42,7 @@ export default props => {
                 navigator.clipboard.writeText(props.course._id)
                 alert("ID copied to clipboard!")
             }}>Copy ID</h5>
-            <p>Teachers : {teachers}</p>
+            <p>Teachers : {teachers()}</p>
 
             {props.enroll === true && (props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin")) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id)) ?
                 <button id="enroll" onClick={e => {

@@ -210,7 +210,7 @@ export const changeUsername = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "username": data.username, "email": data.email });
+            var raw = JSON.stringify({ "username": data.username, "email": data.email, "bio": data.bio });
 
             var requestOptions = {
                 method: 'PUT',

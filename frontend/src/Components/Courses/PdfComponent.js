@@ -4,6 +4,8 @@ import { html2canvas } from "html2canvas"
 import PrintButton from './PrintButton';
 import Table from '../Table/Table';
 import { Fragment } from 'react';
+import logo from "./static/worx.jpg"
+
 
 
 function PdfComponent() {
@@ -54,7 +56,23 @@ function PdfComponent() {
         { name: "Name" },
         { name: "ID" },
         { name: "Category" },
-        { name: "Serial Number" }
+        { name: "Serial Number" },
+        { name: "Name" },
+        { name: "ID" },
+        { name: "Category" },
+        { name: "Serial Number" },
+        { name: "Name" },
+        { name: "ID" },
+        { name: "Category" },
+        { name: "Serial Number" },
+        { name: "Name" },
+        { name: "ID" },
+        { name: "Category" },
+        { name: "Serial Number" },
+        { name: "Name" },
+        { name: "ID" },
+        { name: "Category" },
+        { name: "Serial Number" },
 
     ]
     useEffect(() => {
@@ -94,7 +112,7 @@ function PdfComponent() {
                 />
 
             </div>
-            <PrintButton table={table} width={dimensions.width} height={dimensions.height} id={"divIdToPrint"} label="Export" />
+            <PrintButton text="Text" text2="Text2" table={table} width={500} height={1080} id={"divIdToPrint"} label="Export" />
         </Fragment>
     )
 }

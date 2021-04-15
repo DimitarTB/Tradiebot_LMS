@@ -42,6 +42,7 @@ import Certificate from './Components/Courses/CourseContent/Certificate'
 import RequestCertificate from './Components/User/RequestCertificate'
 import ValidCertificate from './Components/User/ValidCertificate'
 import PdfComponent from './Components/Courses/PdfComponent'
+import PrintFile from './Components/Courses/PrintFile'
 
 function App() {
 
@@ -99,6 +100,9 @@ function App() {
                         </Route>
                         <Route path="/activate/:token/:user">
                             <Activate />
+                        </Route>
+                        <Route exact path="/print">
+                            <PrintFile />
                         </Route>
                         {/* <Route path="/pf">
                             <PlastfixForm regions={["Plastfix Australia", "Plastfix New Zealand", "Plastfix USA"]} states={["7500", "2400"]} />

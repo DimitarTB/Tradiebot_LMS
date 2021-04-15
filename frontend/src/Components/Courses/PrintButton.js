@@ -3,13 +3,32 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import "path"
 import 'jspdf-autotable'
+import logo from "./static/worx.jpg"
 
 const path = require('path');
-
 const pxToMm = (px) => {
     return Math.floor(px / document.getElementById('myMm').offsetHeight);
 };
+function getBase64Image(img) {
+    // Create an empty canvas element
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
 
+    // Copy the image contents to the canvas
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    // Get the data-URL formatted image
+    // Firefox supports PNG and JPEG. You could check img.src to
+    // guess the original format, but be aware the using "image/jpg"
+    // will re-encode the image.
+
+    var dataURL = canvas.toDataURL("image/png");
+    console.log(dataURL)
+
+    return dataURL;
+}
 const mmToPx = (mm) => {
     return document.getElementById('myMm').offsetHeight * mm;
 };
@@ -19,26 +38,7 @@ const range = (start, end) => {
 };
 
 
-function getDataUri(url, callback) {
-    var image = new Image();
-    image.setAttribute('crossorigin', 'anonymous')
-    console.log("Funct")
-    image.onload = function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = "400"; // or 'width' if you want a special/scaled size
-        canvas.height = "100"; // or 'height' if you want a special/scaled size
-        console.log("Funct2")
-        canvas.getContext('2d').drawImage(this, 0, 0);
-
-        // Get raw image data
-
-        // ... or get as Data URI
-        callback(canvas.toDataURL('image/jpg'));
-    };
-    image.src = url;
-}
-
-const PrintButton = ({ id, label, width, height, table }) => (<div className="tc mb4 mt2">
+const PrintButton = ({ id, label, width, height, table, text, text2 }) => (<div className="tc mb4 mt2">
     {/*
     Getting pixel height in milimeters:
     https://stackoverflow.com/questions/7650413/pixel-to-mm-equation/27111621#27111621
@@ -66,25 +66,29 @@ const PrintButton = ({ id, label, width, height, table }) => (<div className="tc
                     const pdf = new jsPDF({
                         orientation: "landscape",
                         unit: "px",
-                        format: [2000, width]
+                        format: [height, width]
                     });
+                    console.log(height, width)
                     const imgData = canvas.toDataURL('image/png');
                     pdf.setFontSize(50)
-                    pdf.text(10, 55, 'Text');
-                    pdf.text(10, 105, 'Text2');
+                    pdf.text(30, 40, text);
+                    pdf.text(30, 70, text2);
                     // pdf.addImage(imgData, 'PNG', 10, 200, width, height);
+                    pdf.text(800, 40, "WorxManager")
                     pdf.autoTable({
                         head: [table.columns],
                         body: table.rows,
+                        margin: { top: 100 },
+                        didDrawPage: function (data) {
+                            data.settings.margin.top = 20;
+                        }
                     })
 
-                    getDataUri("https://images.template.net/wp-content/uploads/2015/02/28065819/Certificate-Templates.jpg", function (dataUri) {
-                        console.log("ins")
-                        pdf.addImage(dataUri, 'JPG', 200, 10)
-                        pdf.save("asd.pdf");
-                    })
+                    pdf.save("asd.pdf");
+
+
+
                 });
-            // html2canvas()
 
         }}
     >

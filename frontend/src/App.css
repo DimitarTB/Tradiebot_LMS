@@ -34,7 +34,7 @@
 }
 
 .App {
-    display: flex;
+    display: block;
     transition: 300ms;
 }
 

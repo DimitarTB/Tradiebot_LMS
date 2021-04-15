@@ -15,7 +15,7 @@ import Form, {
 import { editCourse } from "../../../redux/Courses/CoursesActions"
 import { getOneLecture, updateLecture, uploadFile, deleteFile } from "../../../redux/Lectures/LecturesActions"
 import "./Edit.css"
-import { FcCancel } from "react-icons/fc";
+import { TiDelete } from "react-icons/ti";
 
 
 export default props => {
@@ -160,7 +160,7 @@ export default props => {
                                 <Fragment>
                                     <h4>{getFileName(fl)}</h4>
                                     <div class="icon">
-                                        <FcCancel onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />4
+                                        <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />
                                     </div>
                                 </Fragment>
                             )}

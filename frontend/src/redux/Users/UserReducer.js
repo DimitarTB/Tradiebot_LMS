@@ -96,7 +96,7 @@ export const UserSlice = createSlice({
             const decoded = decodedPl.identity
             const expDate = (new Date(decodedPl.exp * 1000)).toString()
             console.log(decoded)
-            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "types": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated, "profile_picture": decoded.profile_picture, "token_exp": expDate }
+            const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "types": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated, "profile_picture": decoded.profile_picture, "token_exp": expDate, "bio": decoded.bio }
             state.currentUserData = new_user
 
             console.log(state.currentUserData)
@@ -163,6 +163,7 @@ export const UserSlice = createSlice({
             if (upd_user === -1) {
                 state.currentUserData.username = action.payload.username
                 state.currentUserData.email = action.payload.email
+                state.currentUserData.bio = action.payload.bio
                 console.log(state.currentUser, action.payload.token)
                 state.currentUser = action.payload.token
                 console.log(state.currentUser)
@@ -170,9 +171,11 @@ export const UserSlice = createSlice({
             }
             state.allUsers[upd_user].username = action.payload.username
             state.allUsers[upd_user].email = action.payload.email
+            state.allUsers[upd_user].bio = action.payload.bio
 
             state.currentUserData.username = action.payload.username
             state.currentUserData.email = action.payload.email
+            state.currentUserData.bio = action.payload.bio
             state.currentUser = action.payload.token
         },
         [changeUsername.rejected]: (state, action) => {

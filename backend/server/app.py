@@ -41,7 +41,7 @@ def login():
 
     print(userJ)
 
-    user = ({"username": userJ["username"], "email": userJ["email"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "profile_picture": userJ["profile_picture"]})
+    user = ({"username": userJ["username"], "email": userJ["email"], "types": userJ["types"], "dateJoined": userJ["dateJoined"], "_id": str(userJ["_id"]), "enrolledCourses": userJ["enrolledCourses"], "createdCourses": userJ["createdCourses"], "activated": userJ["activated"], "profile_picture": userJ["profile_picture"], "bio": userJ["bio"]})
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
     if check_password_hash(userJ["password"], auth["password"]):
@@ -112,13 +112,14 @@ def changeUsername():
     
     users.update({"username": usern}, {"$set": {"username": data["username"]}})
     users.update({"username": usern}, {"$set": {"email": data["email"]}})
+    users.update({"username": usern}, {"$set": {"bio": data["bio"]}})
 
     new_user_token = users.find_one({"username": data["username"]})
     new_user_token["_id"] = str(new_user_token["_id"])
     new_user_token.pop("password")
     new_user_token.pop("rnd")
     token = create_access_token(identity=new_user_token)
-    return jsonify({"message": "Data updated successfully!", "username": data["username"], "email": data["email"], "token": token})
+    return jsonify({"message": "Data updated successfully!", "username": data["username"], "email": data["email"], "token": token, "bio": data["bio"]})
 
 @app.route('/api/change_password_token', methods=["POST"])
 def changePasswordToken():

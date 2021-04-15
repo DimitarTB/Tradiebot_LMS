@@ -27,7 +27,8 @@ function Profile() {
 
     const [username, setUsername] = useState({
         "username": currentUser.currentUserData?.username,
-        "email": currentUser.currentUserData?.email
+        "email": currentUser.currentUserData?.email,
+        "bio": currentUser.currentUserData?.bio
     })
 
     const [showState, setShowState] = useState(false)
@@ -106,17 +107,17 @@ function Profile() {
     const check_roles = (types) => {
         if (types?.includes("SuperAdmin")) {
             if (types?.includes("Teacher")) {
-                return (<Fragment><h3>SuperAdmin</h3><h3>Teacher</h3></Fragment>)
+                return (<Fragment><h4>SuperAdmin</h4><h4>Teacher</h4></Fragment>)
             }
             else {
-                return (<h3>SuperAdmin</h3>)
+                return (<h4>SuperAdmin</h4>)
             }
         }
         else if (types?.includes("Teacher")) {
-            return (<h3>Teacher</h3>)
+            return (<h4>Teacher</h4>)
         }
         else {
-            return (<h3>Student</h3>)
+            return (<h4>Student</h4>)
         }
     }
 
@@ -150,11 +151,13 @@ function Profile() {
                         {selected === "Profile Info" ?
                             <Fragment>
                                 <form onChange={e => usernameHandleChange(e)} onSubmit={e => usernameHandleSubmit(e)}>
-                                    <h3>Change your profile info</h3>
+                                    <h3>Change your profile info</h3><br />
                                     <label for="username">Username</label><br />
                                     <input name="username" type="username" value={username.username}></input><br />
                                     <label for="email">E-mail</label><br />
                                     <input name="email" type="email" value={username.email}></input><br />
+                                    <label for="bio">Biography</label><br />
+                                    <textarea name="bio" value={username.bio} /><br />
                                     {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                     <button type="submit">Submit</button>
                                 </form>
@@ -162,7 +165,7 @@ function Profile() {
                             : null}
                         {selected === "Security" ?
                             <form onChange={e => passwordHandleChange(e)} onSubmit={e => passwordHandleSubmit(e)}>
-                                <h3>Change your password</h3>
+                                <h3>Change your password</h3><br />
                                 <label for="currentPassword">Current Password</label>
                                 <input name="currentPassword" type="password" placeholder="Current password:"></input><br></br>
                                 <label for="newPassword">New Password</label>
@@ -183,8 +186,14 @@ function Profile() {
                                 {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
                                 <h4>{selectedProfile?.username}</h4>
                                 <h4>{selectedProfile?.email}</h4>
-                                <br />
                                 {check_roles(selectedProfile?.types)}
+                                <br /><br />
+                                {selectedProfile?.bio !== "" ? <Fragment>
+                                    <h4>Biography</h4>
+                                    <p>{selectedProfile?.bio}</p>
+                                </Fragment> : null}
+                                <br />
+
 
                             </div>
                             {currentUser.currentUserData.types.includes("SuperAdmin") ?

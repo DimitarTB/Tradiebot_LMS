@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 from flask_mail import Message
 
 class User:
-    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None, enrolledCourses = [], profile_picture="lms/public/profile_pictures/default.jpg"):
+    def __init__(self, username, email, password, types, dateJoined, id = None, rnd = None, enrolledCourses = [], profile_picture="lms/public/profile_pictures/default.jpg", bio=""):
         self.username = username
         self.email = email
         self.password = password
@@ -18,6 +18,7 @@ class User:
         self.activated = False
         self.rnd = rnd
         self.profile_picture = profile_picture
+        self.bio = bio
         if id != None:
             self._id = id
 
@@ -34,7 +35,7 @@ class User:
         hashed_password = generate_password_hash(data['password'], method='sha256')
         tNow = datetime.datetime.utcnow()
         rnd = str(uuid.uuid4())
-        new_user = User(data["username"], data["email"], hashed_password, ["Student"], tNow, rnd=rnd)
+        new_user = User(data["username"], data["email"], hashed_password, ["Student"], tNow, rnd=rnd, bio="")
         users.insert(new_user.__dict__)
 
         msg = Message( 
@@ -53,7 +54,7 @@ class User:
         users = db.users
         if usern is not None:
             data = users.find_one({"username": usern})
-            ret_user = {"_id": str(data["_id"]), "username": data["username"], "email": data["email"], "types": data["types"], "dateJoined": data["dateJoined"], "enrolledCourses": data["enrolledCourses"], "profile_picture": data["profile_picture"], "activated": data["activated"], "createdCourses": data["createdCourses"]}
+            ret_user = {"_id": str(data["_id"]), "username": data["username"], "email": data["email"], "types": data["types"], "dateJoined": data["dateJoined"], "enrolledCourses": data["enrolledCourses"], "profile_picture": data["profile_picture"], "activated": data["activated"], "createdCourses": data["createdCourses"], "bio": data["bio"]}
             return jsonify({"user": ret_user})
         else:
             users = users.find({})
