@@ -92,7 +92,7 @@ svg {
     display: flex;
     flex-direction: column;
     width: 1080px;
-    margin: 30px auto;
+    margin: 20px auto;
 }
 
 #edit-quiz-container > .rest {
@@ -192,7 +192,6 @@ svg {
 }
 
 .topic {
-    border-bottom: 1px solid var(--primary);
     padding:20px;
 }
 .topic > * input, textarea {
@@ -260,7 +259,6 @@ svg {
 }
 .form_nav > ul > #active {
     border-bottom: 1px solid var(--primary);
-    display:inline block;
 }
 
 .form_nav > ul > li {
@@ -298,7 +296,10 @@ svg {
     box-shadow: 0 10px 30px 0 rgb(82 63 105 / 10%);
 }
 
-
+#pp {
+    margin: 25px                                        ;
+    border-radius: 5px;
+}
 #edit-quiz-container > .rest > form > input:focus, select:focus, textarea:focus {
     outline: none !important;
     border: 2px solid var(--green) !important;
@@ -308,4 +309,8 @@ svg {
 * > input:focus, select:focus, textarea:focus {
     outline: none !important;
     border: 2px solid var(--green) !important;
+}
+
+.global {
+    margin-top: 20px;
 }

@@ -32,6 +32,9 @@ export const QuizzesSlice = createSlice({
             console.log(idx)
             console.log(current(state.allQuizzes[idx]))
         },
+        [addQuestion.pending]: (state, action) => {
+            state.addStatus = statuses.pending
+        },
 
         [deleteQuestion.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)

@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 0.15rem 0.75rem 0 rgba(40, 60, 80, 0.15);
+    overflow-x: hidden;
 }
 
 .course-container > .video-browser > button {
@@ -23,6 +24,21 @@
     cursor: pointer;
     transition: 300ms;
 }
+.course-container > .video-browser > #navbutton > button {
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 300ms;
+    width:100%;
+}
+.course-container > .video-browser > #navbutton > button:hover {
+    background: var(--white);
+}
+
 .course-container > .video-browser > #watched {
     color:green;
 }

@@ -16,6 +16,7 @@ import { editCourse } from "../../../redux/Courses/CoursesActions"
 import { getOneLecture, updateLecture, uploadFile, deleteFile } from "../../../redux/Lectures/LecturesActions"
 import "./Edit.css"
 import { TiDelete } from "react-icons/ti";
+import Container from "../../Global/Container"
 
 
 export default props => {
@@ -85,89 +86,91 @@ export default props => {
         }
     }, [lectures.updateStatus, lectures.filesStatus])
     return (lectureCourse?.teachers?.includes(currentUser?.currentUserData?._id) || currentUser?.currentUserData?.types?.includes("SuperAdmin")) ? (
-        <div style={{ "width": "100%" }}>
-            <Form
-                name="Edit Lecture"
-                info={info}
-                buttonText="Proceed"
-                data={lecture}
-                handleChange={e => {
-                    setFulfilled(false)
-                    setInfo({ type: null, message: null })
-                    setLecture({
-                        ...lecture,
-                        [e.target.name]: e.target.value
-                    })
-                }}
-                handleSubmit={e => {
-                    e.preventDefault()
-                    // if (validator(lecture, lectureValidator) !== true) return
-                    const data = {
-                        name: lecture.name,
-                        files: currentLecture?.files ? currentLecture.files : [],
-                        video_file: lecture.video_file,
-                        dateCreated: currentLecture.dateCreated,
-                        course_id: currentLecture.course_id,
-                        id: lecture_id,
-                        watchedBy: currentLecture.watchedBy,
-                        content: lecture.content
-                    }
-                    if (lecture.files.length > 0) data.file = true
-                    console.log("dispatch")
-                    dispatch(updateLecture(data))
-
-                    if (lecture.files.length > 0) {
+        <Container details="Edit Lecture" component={
+            <div id="edit-quiz-container">
+                <Form
+                    name={currentLecture?.name}
+                    info={info}
+                    buttonText="Proceed"
+                    data={lecture}
+                    handleChange={e => {
+                        setFulfilled(false)
+                        setInfo({ type: null, message: null })
+                        setLecture({
+                            ...lecture,
+                            [e.target.name]: e.target.value
+                        })
+                    }}
+                    handleSubmit={e => {
+                        e.preventDefault()
+                        // if (validator(lecture, lectureValidator) !== true) return
                         const data = {
-                            lecture: lecture,
-                            lecture_id: lecture_id
+                            name: lecture.name,
+                            files: currentLecture?.files ? currentLecture.files : [],
+                            video_file: lecture.video_file,
+                            dateCreated: currentLecture.dateCreated,
+                            course_id: currentLecture.course_id,
+                            id: lecture_id,
+                            watchedBy: currentLecture.watchedBy,
+                            content: lecture.content
                         }
-                        dispatch(uploadFile(data))
-                    }
-                    setFulfilled(true)
-                }}
-                fields={[
-                    {
-                        name: "name",
-                        label: "Lecture Name",
-                        placeholder: "Please Enter Lecture Name",
-                        type: "text",
-                        fieldType: input
-                    },
-                    {
-                        name: "files",
-                        label: "Select Files",
-                        fieldType: file,
-                        multiple: true
-                    },
-                    {
-                        name: "video_file",
-                        label: "Video for the lecture",
-                        type: "text",
-                        fieldType: input,
-                    },
-                    {
-                        name: "content",
-                        label: "Lecture content",
-                        type: "textarea",
-                        fieldType: input
-                    }
-                ]}
-                overloadedFields={[
-                    (
-                        <div class="files">
-                            <h3 id="title-files">Files:</h3>
-                            {currentLecture?.files?.map(fl =>
-                                <Fragment>
-                                    <h4>{getFileName(fl)}</h4>
-                                    <div class="icon">
-                                        <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />
-                                    </div>
-                                </Fragment>
-                            )}
-                        </div>
-                    )
-                ]}
-            />
-        </div>
+                        if (lecture.files.length > 0) data.file = true
+                        console.log("dispatch")
+                        dispatch(updateLecture(data))
+
+                        if (lecture.files.length > 0) {
+                            const data = {
+                                lecture: lecture,
+                                lecture_id: lecture_id
+                            }
+                            dispatch(uploadFile(data))
+                        }
+                        setFulfilled(true)
+                    }}
+                    fields={[
+                        {
+                            name: "name",
+                            label: "Lecture Name",
+                            placeholder: "Please Enter Lecture Name",
+                            type: "text",
+                            fieldType: input
+                        },
+                        {
+                            name: "files",
+                            label: "Select Files",
+                            fieldType: file,
+                            multiple: true
+                        },
+                        {
+                            name: "video_file",
+                            label: "Video for the lecture",
+                            type: "text",
+                            fieldType: input,
+                        },
+                        {
+                            name: "content",
+                            label: "Lecture content",
+                            type: "textarea",
+                            fieldType: input
+                        }
+                    ]}
+                    overloadedFields={[
+                        (
+                            <div class="files">
+                                <h3 id="title-files">Files:</h3>
+                                {currentLecture?.files?.map(fl =>
+                                    <Fragment>
+                                        <h4>{getFileName(fl)}</h4>
+                                        <div class="icon">
+                                            <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />
+                                        </div>
+                                    </Fragment>
+                                )}
+                            </div>
+                        )
+                    ]}
+                />
+            </div>
+        } />
     ) : <Redirect to="/" />
 }

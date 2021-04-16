@@ -126,7 +126,7 @@ function Profile() {
             component={currentUser.currentUserData?._id === propUser ?
                 <div id="edit-quiz-container">
                     <div className="profile-picture">
-                        {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" />}
+                        {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img id="pp" src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" />}
                         <div className="topic">
                             <form
                                 onSubmit={e => {
@@ -177,59 +177,54 @@ function Profile() {
                     </div>
                 </ div>
 
-                : <Container description="" details=""
-                    component={(
-                        <Fragment>
-                            <div className="profile-picture">
-                                {/* Public info */}
-                                <h1>Public info</h1>
-                                {selectedProfile?.profile_picture === "" ? "No profile picture" : <img src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
-                                <h4>{selectedProfile?.username}</h4>
-                                <h4>{selectedProfile?.email}</h4>
-                                {check_roles(selectedProfile?.types)}
-                                <br /><br />
-                                {selectedProfile?.bio !== "" ? <Fragment>
-                                    <h4>Biography</h4>
-                                    <p>{selectedProfile?.bio}</p>
-                                </Fragment> : null}
-                                <br />
+                :
+                <Fragment>
+                    <div className="profile-picture">
+                        {/* Public info */}
+                        <h1>Public info</h1>
+                        {selectedProfile?.profile_picture === "" ? "No profile picture" : <img style={{ borderRadius: '5px' }} src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
+                        <h4>{selectedProfile?.username}</h4>
+                        <h4>{selectedProfile?.email}</h4>
+                        {check_roles(selectedProfile?.types)}
+                        <br /><br />
+                        {selectedProfile?.bio !== "" ? <Fragment>
+                            <h4>Biography</h4>
+                            <p>{selectedProfile?.bio}</p>
+                        </Fragment> : null}
+                        <br />
 
 
+                    </div>
+                    {currentUser.currentUserData.types.includes("SuperAdmin") ?
+                        <div id="edit-quiz-container">
+                            <div className="topic">
+                                <hr />
+                                <h3>Change this user's password</h3>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    dispatch(changeUserPassword({ "password": e.target.pw.value, "id": propUser }))
+                                    alert("Password changed successfully!")
+                                    e.target.pw.value = ""
+                                }}>
+                                    <input placeholder="Password" type="password" name="pw"></input>
+                                    <button type="submit">Change</button>
+                                </form>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    dispatch(enrollUserCourse({ "user_id": selectedProfile._id, "course_id": e.target.id.value }))
+                                    e.target.id.value = ""
+                                }
+                                }>
+                                    <h2>Add user course</h2>
+                                    <input name="id" placeholder="Course ID"></input>
+                                    <button type="Submit">Add</button>
+                                </form></div>
+                            <div className="grid">
+                                {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
                             </div>
-                            {currentUser.currentUserData.types.includes("SuperAdmin") ?
-                                <div id="edit-quiz-container">
-                                    <div className="topic">
-                                        <hr />
-                                        <h3>Change this user's password</h3>
-                                        <form onSubmit={(e) => {
-                                            e.preventDefault()
-                                            dispatch(changeUserPassword({ "password": e.target.pw.value, "id": propUser }))
-                                            alert("Password changed successfully!")
-                                            e.target.pw.value = ""
-                                        }}>
-                                            <input placeholder="Password" type="password" name="pw"></input>
-                                            <button type="submit">Change</button>
-                                        </form>
-                                        <form onSubmit={(e) => {
-                                            e.preventDefault()
-                                            dispatch(enrollUserCourse({ "user_id": selectedProfile._id, "course_id": e.target.id.value }))
-                                            e.target.id.value = ""
-                                        }
-                                        }>
-                                            <h2>Add user course</h2>
-                                            <input name="id" placeholder="Course ID"></input>
-                                            <button type="Submit">Add</button>
-                                        </form></div>
-                                    <div className="grid">
-                                        {courses.map(course => selectedProfile?.enrolledCourses.includes(course._id) ? <CourseCard course={course} admin={true} user_id={selectedProfile._id}></CourseCard> : null)}
-                                    </div>
-                                </div>
-                                : null}
-                        </Fragment>
-                    )}>
-
-                </Container >}>
-        </Container >
+                        </div>
+                        : null}
+                </Fragment>} />
     ) : <Redirect to="/" />
 }
 

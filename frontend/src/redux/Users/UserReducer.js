@@ -71,11 +71,20 @@ export const UserSlice = createSlice({
         },
 
         [getOneUser.fulfilled]: (state, action) => {
-            const find_user = state.allUsers?.indexOf(usr => usr._id === action.payload.user._id)
-            if (find_user === -1) {
-                state.allUsers.push(action.payload.user)
-            }
-            else state.allUsers[find_user] = action.payload.user
+            // const find_user = state.allUsers.indexOf(usr => {
+            //     console.log(usr._id)
+            //     console.log(action.payload._id)
+            //     return (usr._id === action.payload.user._id)
+            // })
+            // if (find_user === -1) {
+            //     state.allUsers.push(action.payload.user)
+            // }
+            // else state.allUsers[find_user] = action.payload.user
+            const all_users = [...state.allUsers]
+            const idx = all_users.findIndex(usr => usr._id === action.payload.user._id)
+            if(idx === -1) all_users.push(action.payload.user)
+            else all_users[idx] = action.payload.user
+            state.allUsers = all_users
             if (action.payload.user?._id === state.currentUserData?._id) {
                 const token_exp = state.currentUserData.token_exp
                 state.currentUserData = action.payload.user

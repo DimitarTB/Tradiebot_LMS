@@ -14,18 +14,24 @@ export default props => {
     const currentUser = useSelector(state => state.user)
     const users = currentUser.allUsers
     const dispatch = useDispatch()
-
+    // const currentTeachers = []
+    // if (currentTeachers.includes(usr.username)) return
+    // currentTeachers.push(usr.username)
 
     const _users = users.length > 0 ? users.filter(user => props.course.teachers.includes(user._id)) : []
     let teachers = () => {
         return (
             <Fragment>
                 {
-                    _users.map(usr => <NavLink to={"/user/" + usr._id}>{usr.username + " "}</NavLink>)
+                    _users.map((usr, idx) => {
+                        console.log(usr, idx)
+                        console.log(props.course.teachers)
+                        console.log(_users)
+                        return (<NavLink to={"/user/" + usr._id}>{usr.username + " "}</NavLink>)
+                    })
                 }
             </Fragment>)
     }
-
     // for (const _user of _users) {
     //     if (_user !== _users[0]) teachers += ", " + _user.username
     //     else teachers += _user.username

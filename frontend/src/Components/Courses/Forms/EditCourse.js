@@ -19,6 +19,7 @@ import { TiDelete } from "react-icons/ti";
 import { BsFillCaretUpFill, BsFillCaretDownFill } from "react-icons/bs";
 import { addTopic, deleteTopic, getAllTopics, lectureDown, lectureUp, topicDown, topicUp } from "../../../redux/Topics/TopicsActions"
 import { createQuiz, deleteQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
+import Container from "../../Global/Container"
 
 export default props => {
     const dispatch = useDispatch()
@@ -271,110 +272,113 @@ export default props => {
                                 </Fragment>)
                             })
                         }
+                        <hr />
                     </div>
                 )
         }
     })
 
     return (currentCourse?.teachers?.includes(currentUser.currentUserData?._id) || currentUser.currentUserData?.types?.includes("SuperAdmin")) ? (
-        <Fragment><Form
-            name="Edit Course"
-            info={info}
-            buttonText="Proceed"
-            data={course}
-            handleChange={e => {
-                setInfo({ type: null, message: null })
-                setCourse({
-                    ...course,
-                    [e.target.name]: e.target.value
-                })
-            }}
-            handleSubmit={e => {
-                e.preventDefault()
-                // if (validator(course, courseValidator) !== true) return
-                course.dateCreated = currentCourse.dateCreated
-                course._id = course_id
-                course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
-                let data = {
-                    course: course,
-                    token: currentUser.currentUser,
-                    thumbnail: course.thumbnail === null ? currentCourse.thumbnail : course.thumbnail
-                }
-                dispatch(editCourse(data))
-                if (course.thumbnail !== null) {
-                    const data = {
-                        id: course_id,
-                        file: course.thumbnail
+        <Container details="Edit Course" component={
+            <div className="global">
+                <Form
+                    name={currentCourse?.name}
+                    info={info}
+                    buttonText="Proceed"
+                    data={course}
+                    handleChange={e => {
+                        setInfo({ type: null, message: null })
+                        setCourse({
+                            ...course,
+                            [e.target.name]: e.target.value
+                        })
+                    }}
+                    handleSubmit={e => {
+                        e.preventDefault()
+                        // if (validator(course, courseValidator) !== true) return
+                        course.dateCreated = currentCourse.dateCreated
+                        course._id = course_id
+                        course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
+                        let data = {
+                            course: course,
+                            token: currentUser.currentUser,
+                            thumbnail: course.thumbnail === null ? currentCourse.thumbnail : course.thumbnail
+                        }
+                        dispatch(editCourse(data))
+                        if (course.thumbnail !== null) {
+                            const data = {
+                                id: course_id,
+                                file: course.thumbnail
+                            }
+                            dispatch(uploadThumbnail(data))
+                        }
+                        setFulfilled(true)
                     }
-                    dispatch(uploadThumbnail(data))
-                }
-                setFulfilled(true)
-            }
-            }
-            fields={[
-                {
-                    name: "name",
-                    label: "Course Name",
-                    placeholder: "Please Enter Course Name",
-                    type: "text",
-                    fieldType: input
-                },
-                {
-                    name: "description",
-                    label: "Course Description",
-                    placeholder: "Please Enter Course Description",
-                    type: "textarea",
-                    fieldType: input
-                },
-                currentUser.currentUserData.types.includes("SuperAdmin") ? {
-                    name: "teachers",
-                    label: "Select Teachers",
-                    placeholder: "Please Select Teachers for this course",
-                    fieldType: multipleSelect,
-                    options: teachers,
-                    displayField: "username",
-                    valueField: "_id"
-                } : {},
-                {
-                    name: "manualEnroll",
-                    label: "Select Course Type",
-                    placeholder: "Please Select The Course Type",
-                    fieldType: select,
-                    options: [{ name: "Manual Enroll" }, { name: "Self Enroll" }],
-                    displayField: "name",
-                    valueField: "name"
-                },
-                {
-                    name: "thumbnail",
-                    label: "Select Thumbnail",
-                    fieldType: file,
-                    multiple: false
-                }
-            ]}
-            overloadedFields={[
-                (
-                    <div>
-                        {display}
-                        < br /><br />
-                        <div className="topic">Add Topic
+                    }
+                    fields={[
+                        {
+                            name: "name",
+                            label: "Course Name",
+                            placeholder: "Please Enter Course Name",
+                            type: "text",
+                            fieldType: input
+                        },
+                        {
+                            name: "description",
+                            label: "Course Description",
+                            placeholder: "Please Enter Course Description",
+                            type: "textarea",
+                            fieldType: input
+                        },
+                        currentUser.currentUserData.types.includes("SuperAdmin") ? {
+                            name: "teachers",
+                            label: "Select Teachers",
+                            placeholder: "Please Select Teachers for this course",
+                            fieldType: multipleSelect,
+                            options: teachers,
+                            displayField: "username",
+                            valueField: "_id"
+                        } : {},
+                        {
+                            name: "manualEnroll",
+                            label: "Select Course Type",
+                            placeholder: "Please Select The Course Type",
+                            fieldType: select,
+                            options: [{ name: "Manual Enroll" }, { name: "Self Enroll" }],
+                            displayField: "name",
+                            valueField: "name"
+                        },
+                        {
+                            name: "thumbnail",
+                            label: "Select Thumbnail",
+                            fieldType: file,
+                            multiple: false
+                        }
+                    ]}
+                    overloadedFields={[
+                        (
+                            <div>
+                                {display}
+                                < br /><br />
+                                <div className="topic">Add Topic
                         <form
-                                onChange={e => setTopicData({
-                                    ...addTopicData,
-                                    [e.target.name]: e.target.value
-                                })}
-                                onSubmit={e => {
-                                    e.preventDefault()
-                                }}>
-                                <input name="name" value={addTopicData.name} placeholder="Lecture Name" />
-                                <button type="button" onClick={() => {
-                                    dispatch(addTopic({ "name": addTopicData.name, "course_id": currentCourse._id }))
-                                }}>Add</button>
-                            </form>
-                        </div>
-                    </div>
-                )
-            ]}
-        />
-        </Fragment>
+                                        onChange={e => setTopicData({
+                                            ...addTopicData,
+                                            [e.target.name]: e.target.value
+                                        })}
+                                        onSubmit={e => {
+                                            e.preventDefault()
+                                        }}>
+                                        <input name="name" value={addTopicData.name} placeholder="Lecture Name" />
+                                        <button type="button" onClick={() => {
+                                            dispatch(addTopic({ "name": addTopicData.name, "course_id": currentCourse._id }))
+                                        }}>Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        )
+                    ]}
+                />
+            </div>} />
     ) : <Redirect to="/" />
 }

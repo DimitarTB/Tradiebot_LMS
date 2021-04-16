@@ -1,0 +1,82 @@
+.card-component {
+    width:60%;
+    margin: auto;
+    margin-top: 20px;
+    height: 400px;
+    background-color: var(--white);
+    border-radius: 0.35rem;
+    border: 1px solid rgba(33, 40, 50, 0.125);
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+.left {
+    width: 30%;
+    height: 100px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    color:var(--gray-dark)
+}
+.right {
+    margin-left:40%;
+    min-width:90%;
+}
+#certificate {
+    width: 100%;
+    margin-top: 20px;
+}
+
+@media only screen and (max-width: 850px) {
+    .card-component {
+        height:500px;
+    }
+    .left {
+        width: 80%;
+        height: 200px;
+        float: left;
+        margin-top: 20px;
+        margin-left: 20px;   
+    }
+    .right {
+        margin-bottom: auto;
+        margin-left: 20px;
+        width: 140%;
+    }
+    #certificate {
+        width: 100%;
+    }
+  }
+
+:root {
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+    --pink: #e30059;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --white: #fff;
+    --gray: #69707a;
+    --gray-dark: #363d47;
+    --primary: #0061f2;
+    --secondary: #6900c7;
+    --success: #00ac69;
+    --info: #00cfd5;
+    --warning: #f4a100;
+    --danger: #e81500;
+    --light: #f2f6fc;
+    --dark: #212832;
+    --black: #000;
+    --white: #fff;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+  }
