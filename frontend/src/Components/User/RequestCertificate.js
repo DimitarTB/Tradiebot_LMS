@@ -76,7 +76,7 @@ function RequestCertificate() {
                 <div style={{ display: "none" }}>
 
                     <div style={{ display: "none" }}>
-                        <canvas id="canvas" width="1000px" height="1000px">
+                        <canvas id="canvas" width="600px" height="340px">
                         </canvas>
                         <QRCode value={"http://localhost:3000/valid_certificate/" + course_id + "/" + currentUser?.currentUserData?._id} id="qr" size="80" />
                     </div>

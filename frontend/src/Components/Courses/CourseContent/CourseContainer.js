@@ -14,7 +14,7 @@ import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 import Container from "../../Global/Container"
 import { getAllTopics } from "../../../redux/Topics/TopicsActions"
 import { getAllQuizzes, getQuizRecords } from "../../../redux/Quizzes/QuizzesActions"
-import { addCertificate, getAllCertificates } from "../../../redux/Users/UserActions"
+import { addCertificate, fetchAll, getAllCertificates } from "../../../redux/Users/UserActions"
 import Certificate from "./Certificate"
 import Certificates from "../../User/Certificates"
 
@@ -42,6 +42,11 @@ const CourseContainer = props => {
 
     useEffect(() => {
         idleTimer()
+        dispatch(getAllCourses())
+        dispatch(getAllTopics())
+        dispatch(getAllQuizzes())
+        dispatch(getQuizRecords())
+        dispatch(fetchAll())
         dispatch(getAllCertificates())
     }, [])
 
@@ -51,15 +56,15 @@ const CourseContainer = props => {
     }
     const params = useParams()
     const dispatch = useDispatch()
-
-    const currentCourse = useSelector(state => state.courses.allCourses.find(course => course._id === params.course_id))
+    const courseSelector = useSelector(state => state.courses)
+    const currentCourse = courseSelector?.allCourses?.find(course => course._id === params.course_id)
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
     const currentUser = useSelector(state => state.user)
-    const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse._id))
+    const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse?._id))
     const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
     const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0])
     const quizRecordsUser = useSelector(state => state.quizzes.quizRecords.filter(qzr => (qzr.user === currentUser.currentUserData._id && (quizzes.filter(qz => qz._id === qzr.quiz_id).length !== 0))))
-    const certificates = currentUser.allCertificates.filter(cert => (cert.course_id === currentCourse._id && cert.user_id === currentUser.currentUserData._id))
+    const certificates = currentUser.allCertificates.filter(cert => (cert.course_id === currentCourse?._id && cert.user_id === currentUser.currentUserData?._id))
 
     console.log(certificates)
     const showQuizzes = quizzes.filter(qz => (topics.filter(tp => tp._id === qz.topic_id).length !== 0))
@@ -70,11 +75,6 @@ const CourseContainer = props => {
     window.addEventListener("beforeunload", stopWatching, false);
     window.addEventListener("unload", stopWatching, false);
 
-    useEffect(() => {
-        dispatch(getAllTopics())
-        dispatch(getAllQuizzes())
-        dispatch(getQuizRecords())
-    }, [])
     useEffect(() => {
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
             dispatch(getOneLecture({ "id": selectedLecture?._id }))
@@ -103,21 +103,31 @@ const CourseContainer = props => {
         }
     }, [])
 
+    const topicCompleted = () => {
+        let watched = true
+        currentLectures.map(lect => {
+            if(lect.watchedBy)
+            if (!(lect.watchedBy.includes(currentUser.currentUserData._id))) watched = false
+        })
+        return watched
+    }
+
     return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (topics.length > 0 && currentLectures.length > 0 ? (
         <Container details={currentCourse?.name} description={currentCourse?.description} component={
             <div className="course-container">
                 <div className="left">
-                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && certificates.length === 0 ?
+                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && topicCompleted() === true ? <h3>Congratulations, you have finished this course!</h3> : null}
+                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && certificates.length === 0 && topicCompleted() === true ?
                         <Fragment>
-                            <h3>Congratulations, you have finished the course!</h3>
+
                             <NavLink to={"/request_certificate/" + currentCourse._id}>
-                                <button>Get Certificate</button>
+                                <button id="cert">Get Certificate</button>
                             </NavLink>
                         </Fragment>
                         : null}
                     <div style={{ padding: "20px", paddingTop: "50px" }}>
-                        <h1>{selectedLecture.name}</h1>
-                        <p>{selectedLecture.content}</p><br />
+                        <h1>{selectedLecture?.name}</h1>
+                        <p>{selectedLecture?.content}</p><br />
                         {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
                     </div>
                     <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />

@@ -24,9 +24,6 @@ export default props => {
             <Fragment>
                 {
                     _users.map((usr, idx) => {
-                        console.log(usr, idx)
-                        console.log(props.course.teachers)
-                        console.log(_users)
                         return (<NavLink to={"/user/" + usr._id}>{usr.username + " "}</NavLink>)
                     })
                 }
@@ -39,9 +36,9 @@ export default props => {
 
     return (
         <div className="course-card">
-            <NavLink to={"/course/" + props.course._id}>
+            <NavLink style={{ color: "var(--grey)" }} to={"/course/" + props.course._id}>
                 <img src={FILES_URL + props.course.thumbnail} />
-                <h3>{props.course.name}</h3>
+                <h3 style={{ color: "var(--dark)" }}>{props.course.name}</h3>
                 <h4>{"ID: " + props.course._id}</h4>
             </NavLink>
             <h5 style={{ cursor: "pointer" }} onClick={(e) => {
@@ -80,7 +77,9 @@ export default props => {
                 }
                 }>Unenroll</button> : ""
             }
-            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}><button id="edit">Edit Course</button></NavLink> : ""}
+            {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}>
+                <button id={"edit"} className={(props.enroll === true && ((props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin"))) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id))) || props.unenroll === true || props.admin === true ? "" : "edit_enr"}>Edit Course</button>
+            </NavLink> : ""}
         </div>
     )
 }

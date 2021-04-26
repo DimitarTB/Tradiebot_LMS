@@ -49,13 +49,19 @@ button {
     border-radius:20px;
     color:white;
     bottom:0;
+    height: 10% !important;
 }
 
 #edit {
-    margin: 20px;
+    margin: 0px;
     padding:5px;
+    position: sticky;
+    bottom: 10px !important;
     background-color: var(--gray-dark);
     border: none;
     color:white;
     margin-left: 37%;
+}
+.edit_enr {
+    margin-top: 40px !important;
 }

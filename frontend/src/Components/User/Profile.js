@@ -84,15 +84,13 @@ function Profile() {
     }, [currentUser.changePasswordStatus])
 
     useEffect(() => {
-        console.log("username true2")
         if (showUsernameState === true) {
-            console.log("username true3")
             if (currentUser.changeUsernameStatus === "fulfilled") {
                 alert("Data updated successfully!")
                 setShowState(false)
             }
             else if (currentUser.changeUsernameStatus === "rejected") {
-                alert("Error: Please try again!")
+                alert(currentUser.usernameError)
                 setShowState(false)
             }
         }
@@ -126,6 +124,7 @@ function Profile() {
             component={currentUser.currentUserData?._id === propUser ?
                 <div id="edit-quiz-container">
                     <div className="profile-picture">
+                        <h3>Change your profile picture</h3>
                         {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img id="pp" src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" />}
                         <div className="topic">
                             <form
@@ -182,7 +181,7 @@ function Profile() {
                     <div className="profile-picture">
                         {/* Public info */}
                         <h1>Public info</h1>
-                        {selectedProfile?.profile_picture === "" ? "No profile picture" : <img style={{ borderRadius: '5px' }} src={FILES_URL + selectedProfile?.profile_picture} width="200" height="200" />}
+                        {selectedProfile?.profile_picture === "" ? "No profile picture" : <img style={{ borderRadius: '5px' }} src={FILES_URL + selectedProfile?.profile_picture} width="20%" />}
                         <h4>{selectedProfile?.username}</h4>
                         <h4>{selectedProfile?.email}</h4>
                         {check_roles(selectedProfile?.types)}
@@ -215,7 +214,7 @@ function Profile() {
                                     e.target.id.value = ""
                                 }
                                 }>
-                                    <h2>Add user course</h2>
+                                    <h3>Add user course</h3>
                                     <input name="id" placeholder="Course ID"></input>
                                     <button type="Submit">Add</button>
                                 </form></div>

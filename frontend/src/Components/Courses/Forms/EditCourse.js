@@ -260,7 +260,7 @@ export default props => {
                                             <Fragment>
                                                 {quizzes?.find(quiz => quiz?.topic_id === topic?._id) ?
                                                     <Fragment>
-                                                        <h2 style={{ display: "inline" }}>Quiz: <NavLink
+                                                        <h2 style={{ display: "inline", color:"var(--gray-dark)" }}>Quiz: <NavLink style={{ color: "var(--green)" }}
                                                             to={"/quizzes/edit/" + quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}>
                                                             {quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}
                                                         </NavLink>

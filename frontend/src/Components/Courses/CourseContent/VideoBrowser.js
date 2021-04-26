@@ -76,8 +76,8 @@ const VideoBrowser = props => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
-                                    if (quizCompleted(props.topics[tidx - 1]?._id)) props.setSelectedLecture(lecture)
-                                    else alert("You haven't completed the quiz of the previous topic!")
+                                    if (quizCompleted(props.topics[tidx - 1]?._id) && topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
+                                    else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
                                 }
                                 else props.setSelectedLecture(lecture)
                             }
@@ -92,7 +92,10 @@ const VideoBrowser = props => {
 
         })
         if (tidx === sz.length - 1) {
-            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<button><NavLink to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
+            console.log(records)
+            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button id={records.find(rc => {
+                return (rc.quiz_id === qz._id)
+            }) ? "watched" : null}>{"Quiz: " + qz.name}</button></NavLink>) : null)
         }
     })
     return (

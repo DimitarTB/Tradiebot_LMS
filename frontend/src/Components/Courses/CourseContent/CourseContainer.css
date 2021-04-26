@@ -95,3 +95,37 @@
 #quiz {
     color:blue;
 }
+
+@media only screen and (max-width: 600px) {
+    .course-container > .left > .course-info > .info-nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        height: 10%;
+    }
+    .course-container > .left > .course-info > .info-nav > h3 {
+        margin: 10px;
+    }
+    .comment_input {
+        width:60%
+    }
+    #global {
+        margin-top: 20px;
+    }
+  }
+
+  #cert {
+      padding: 1%;
+      border: none;
+      border-radius: .42rem;
+      background-color: var(--primary);
+      color: white;
+      width: 10%;
+  }
+
+  @media only screen and (max-width: 800px) {
+    #cert {
+        width: 40%;
+    }
+  }

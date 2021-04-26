@@ -1,11 +1,69 @@
+:root {
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+    --pink: #e30059;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --white: #fff;
+    --gray: #69707a;
+    --gray-dark: #363d47;
+    --primary: #0061f2;
+    --secondary: #6900c7;
+    --success: #00ac69;
+    --info: #00cfd5;
+    --warning: #f4a100;
+    --danger: #e81500;
+    --light: #f2f6fc;
+    --dark: #212832;
+    --black: #000;
+    --white: #fff;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+}
+
 #comment {
-    border:1px solid black;
+    background: white;
+    border-radius: .42rem;
     min-width:fit-content;
-    max-width:50%;
+    max-width:100%;
     padding:5px;
     margin-top:10px;
 }
-button {
+.post_comment {
     margin-left:10px;
     padding:3px;
+    background-color: var(--primary);
+    border: none;
+    border-radius: .42rem;
+    color: white;
+    padding: 6px;
+    margin-top: 5px;
+}
+
+.comment_input {
+    padding: .375rem .75rem;
+    border-radius: .42rem;
+    border: none;
+    width: 89%;
+    border: 1px solid var(--gray)
+}
+
+.reply_comment {
+    margin-left: 14px;
+}
+
+#global {
+    margin-top: 20px;
 }

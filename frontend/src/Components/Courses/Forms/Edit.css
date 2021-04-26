@@ -210,11 +210,11 @@ svg {
 }
 .topic > * button {
     border: none;
-    width: 8%;
+    width: 20%;
     background: var(--primary);
     color: #FFF;
     border-radius: .42rem;
-    padding: 8px 0px;
+    padding: 10px 5px;
     margin:10px 5px;
 }
 .topic > label {
@@ -242,6 +242,7 @@ svg {
     cursor: pointer;
     transition: 150ms;
     border-radius: .42rem;
+    margin-left: 10px;
 }
 
 

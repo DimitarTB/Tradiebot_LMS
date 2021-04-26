@@ -27,6 +27,7 @@ class Lecture:
         return jsonify({"lecture": new_lecture, "topic_id": data["topic_id"], "index": idx})
 
     def read(request):
+        print("ovde1")
         lecture_id = request.args.get("id")
         lectures = db.lectures
         if lecture_id is not None:
@@ -42,7 +43,7 @@ class Lecture:
                 for lecture in data:
                     ret_lectures.append({"_id": str(lecture["_id"]),"name": lecture["name"], "course_id": lecture["course_id"], "dateCreated": lecture["dateCreated"],"files": lecture["files"], "video_file": lecture["video_file"], "watchedBy": lecture["watchedBy"], "content": lecture["content"]})
                 return jsonify({"lectures": ret_lectures, "course_id": course_id})
-
+            print("OVDE")
             data = lectures.find({})
             ret_lectures = []
             for lecture in data:

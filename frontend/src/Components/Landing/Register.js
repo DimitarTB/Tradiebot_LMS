@@ -62,7 +62,7 @@ export default props => {
 
                 <button> Register </button>
             </form>
-            <button onClick={e => props.setLoginShowing(true)}>Login</button>
+            <button style={{ border: "none", backgroundColor: "var(--green)", color: "white", padding: "10px"}}  onClick={e => props.setLoginShowing(true)}>Login</button>
         </div>
     ) : <Redirect to="/home" />
 }

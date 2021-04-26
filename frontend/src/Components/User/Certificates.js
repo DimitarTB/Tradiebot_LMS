@@ -4,6 +4,7 @@ import { getAllCertificates } from '../../redux/Users/UserActions'
 import Container from '../Global/Container'
 import { jsPDF } from "jspdf";
 import { lighten } from '@material-ui/core';
+import { Fragment } from 'react';
 
 function Certificates() {
     const dispatch = useDispatch()
@@ -15,18 +16,22 @@ function Certificates() {
     }, [])
     return (
         <Container details="My Certificates" description="Certificates you have earned by completing courses." component={
-            <ul>
-                {userCertificates.map(cert => <li style={{ padding: "10px", color: "black", cursor: "pointer", margin: "20px", width: "10%", background: "rgba(0, 0, 0, 0.1" }} onClick={() => {
-                    var imgData = cert.data
-                    var doc = new jsPDF({
-                        orientation: "landscape",
-                        format: [100, 180]
-                    })
-                    doc.addImage(imgData, 'JPEG', 0, 0, 300, 300)
-                    doc.save(cert.name)
-                }}>{cert.course_name}</li>
+            <Fragment>
+                {userCertificates.map(cert => <div className="course-card" style={{ height: "30%" }}>
+                    <img src={cert.data} style={{ width: "90%", marginLeft: "auto", marginRight: "auto" }} /><br />
+                    <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>{"Course: " + cert.course_name}</h3>
+                    <button id="enroll" style={{ padding: "6px"}} onClick={(e) => {
+                        e.preventDefault()
+                        var imgData = cert.data
+                        var doc = new jsPDF({
+                            orientation: "landscape",
+                            format: [300, 640]
+                        })
+                        doc.addImage(imgData, 'JPEG', 0, 0, 640, 300)
+                        doc.save(cert.name)
+                    }}>Export PDF</button></div>
                 )}
-            </ul>
+            </Fragment>
         }></Container>
     )
 }

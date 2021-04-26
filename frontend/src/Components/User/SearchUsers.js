@@ -53,13 +53,12 @@ function SearchUsers() {
                     {showUsers.map(user => {
                         return (
                             <div className="course-card">
-                                <NavLink to={"/user/" + user._id}>
+                                <NavLink style={{ color: "#69707a" }} to={"/user/" + user._id}>
                                     <img src={FILES_URL + user.profile_picture} />
-
-                                    <h3>{user.username}</h3>
-                                    <h5>{user._id}</h5>
+                                    <h3 style={{ color: "#212832" }}>{user.username}</h3>
+                                    <h5 style={{ color: "#363d47" }}>{"ID: " + user._id}</h5>
                                 </NavLink>
-                                <h6 style={{ cursor: "pointer" }} onClick={(e) => {
+                                <h6 style={{ cursor: "pointer", color: "--var(grey)" }} onClick={(e) => {
                                     navigator.clipboard.writeText(user._id)
                                     alert("ID copied to clipboard!")
                                 }}>Copy ID</h6>

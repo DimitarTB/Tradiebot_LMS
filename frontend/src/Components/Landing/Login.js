@@ -4,6 +4,10 @@ import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { fetchAll, loginUser } from "../../redux/Users/UserActions"
 import { NavLink, Redirect } from "react-router-dom"
+import { getAllLectures } from "../../redux/Lectures/LecturesActions"
+import { getAllCourses } from "../../redux/Courses/CoursesActions"
+import { getAllTopics } from "../../redux/Topics/TopicsActions"
+import { getAllQuizzes } from "../../redux/Quizzes/QuizzesActions"
 
 export default props => {
 
@@ -25,7 +29,6 @@ export default props => {
     const handleSubmit = e => {
         e.preventDefault();
         dispatch(loginUser(user))
-
     }
     return currentUser.currentUser === null ? (
         <div className="login form">
@@ -39,7 +42,7 @@ export default props => {
                 <NavLink to="/change_password">Forgot your password?</NavLink>
                 <button> Login </button>
             </form>
-            <button onClick={e => props.setLoginShowing(false)}>Register</button>
+            <button style={{ border: "none", backgroundColor: "var(--green)", color: "white", padding: "10px"}} onClick={e => props.setLoginShowing(false)}>Register</button>
         </div>
     ) : currentUser?.currentUserData?.activated === true ? <Redirect to="/home" /> : <Redirect to="/not_activated" />
 }

@@ -21,7 +21,9 @@ export const UserSlice = createSlice({
         startedWatching: null,
         activateStatus: statuses.idle,
         activateMessage: "",
-        allCertificates: []
+        allCertificates: [],
+        unenrollUserCourseStatus: statuses.idle,
+        enrollUserCourseStatus: statuses.idle
     },
     reducers: {
         logout: (state) => {
@@ -189,7 +191,8 @@ export const UserSlice = createSlice({
         },
         [changeUsername.rejected]: (state, action) => {
             state.changeUsernameStatus = statuses.rejected
-            state.usernameError = action.payload.message
+            console.log(action.payload.message)
+            state.usernameError = action.payload
         },
         [changeUsername.pending]: (state) => {
             state.changeUsernameStatus = statuses.pending
@@ -221,11 +224,20 @@ export const UserSlice = createSlice({
         [unenrollUserCourse.fulfilled]: (state, action) => {
             const usr = state.allUsers.findIndex(usr => usr._id === action.payload.user_id)
             state.allUsers[usr].enrolledCourses = state.allUsers[usr].enrolledCourses.filter(crs => crs !== action.payload.course_id)
+            state.unenrollUserCourseStatus = statuses.fulfilled
+        },
+
+        [unenrollUserCourse.pending]: (state) => {
+            state.unenrollUserCourseStatus = statuses.pending
         },
 
         [enrollUserCourse.fulfilled]: (state, action) => {
             const usr = state.allUsers.findIndex(usr => usr._id === action.payload.user_id)
             state.allUsers[usr].enrolledCourses.push(action.payload.course_id)
+            state.enrollUserCourseStatus = statuses.fulfilled
+        },
+        [enrollUserCourse.pending]: (state) => {
+            state.enrollUserCourseStatus = statuses.pending
         },
 
         [getAllCertificates.fulfilled]: (state, action) => {

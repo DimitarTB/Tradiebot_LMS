@@ -9,7 +9,7 @@ import axios from 'axios'
 import DownloadLink from "react-download-link"
 import FileSaver from 'file-saver';
 import { MdInsertDriveFile } from 'react-icons/md'
-import { FcCancel, FcVideoFile } from "react-icons/fc";
+import { TiDelete, FcVideoFile } from "react-icons/ti";
 import { BsCardImage } from "react-icons/bs"
 import { ImFileVideo } from "react-icons/im"
 import { FaFileAlt } from "react-icons/fa"
@@ -80,8 +80,8 @@ const CourseInfoSection = props => {
     const tabs = [
         (
             <div className="course-details">
-                <h2>{props.lecture.video_file !== "" ? props.lecture?.name : null}</h2>
-                <p>{props.lecture.video_file !== "" ? props.lecture?.content : null}</p>
+                <h2>{props.lecture?.video_file !== "" ? props.lecture?.name : null}</h2>
+                <p>{props.lecture?.video_file !== "" ? props.lecture?.content : null}</p>
             </div>
         ),
         (
@@ -93,17 +93,17 @@ const CourseInfoSection = props => {
                             if (props.course.teachers.includes(allUsers.currentUserData._id)) {
                                 return (
                                     <Fragment>
-                                        {comment.creator_id === allUsers.currentUserData._id ? <FcCancel onClick={() => dispatch(deleteComment({ "id": comment._id }))} /> : null}
+                                        {comment.creator_id === allUsers.currentUserData._id ? <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteComment({ "id": comment._id }))} /> : null}
                                         <h6>{user?.username}</h6>
-                                        {selectComments.map(comm => comm.replyTo === comment._id ? <div id="comment">{comm.comment}{comm.creator_id === allUsers.currentUserData._id ? <FcCancel onClick={() => dispatch(deleteComment({ "id": comm._id }))} /> : null}<h6>{allUsers.allUsers.find(usr => usr._id === comm.creator_id).username}</h6></div> : null)}
+                                        {selectComments.map(comm => comm.replyTo === comment._id ? <div id="comment">{comm.comment}{comm.creator_id === allUsers.currentUserData._id ? <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteComment({ "id": comm._id }))} /> : null}<h6>{allUsers.allUsers.find(usr => usr._id === comm.creator_id).username}</h6></div> : null)}
                                         <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e, comment._id)}>
-                                            <input id="comment" name="comment" placeholder="Reply..."></input><button>Post</button>
+                                            <input className="comment_input" name="comment" placeholder="Reply..." onClick={() => document.getElementById((comment._id + "_reply")).style.visibility = "visible"}></input><button className={"post_comment reply_comment"} id={comment._id + "_reply"} style={{ visibility: "hidden" }}>Post</button>
                                         </form>
                                     </Fragment>
                                 )
                             }
                             return (<Fragment>
-                                <FcCancel onClick={() => dispatch(deleteComment({ "id": comment._id }))} />
+                                <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteComment({ "id": comment._id }))} />
                                 <h6>{user?.username}</h6>
                                 {selectComments.map(comm => comm.replyTo === comment._id ? <div id="comment">{comm.comment}<h6>{allUsers.allUsers.find(usr => usr._id === comm.creator_id).username}</h6></div> : null)}
                             </Fragment>)
@@ -111,13 +111,13 @@ const CourseInfoSection = props => {
                     })}
                 </div> : null)}
                 <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
-                    <input id="comment" name="comment" placeholder="Message..."></input><button>Post</button>
+                    <input className="comment_input" name="comment" placeholder="Message..." onClick={() => document.getElementById("global").style.visibility = "visible"}></input><button id="global" className={"post_comment"} style={{ visibility: "hidden" }}>Post</button>
                 </form>
             </div>
         ),
         (
             <div className="course-files">
-                {props.lecture.video_file !== "" ? <Fragment><ImFileVideo /><h2 style={{ cursor: "pointer", display: "inline" }} onClick={() => props.setShowVideo(true)}> Lecture Video</h2></Fragment> : null}<br />
+                {props.lecture?.video_file !== "" ? <Fragment><ImFileVideo /><h2 style={{ cursor: "pointer", display: "inline" }} onClick={() => props.setShowVideo(true)}> Lecture Video</h2></Fragment> : null}<br />
                 {props.lecture?.files?.map(file => <Fragment style={{ display: "inline" }}>{<div style={{ display: "inline" }}>{fileType(getFileName(file))}</div>}<h2 style={{ display: "inline" }}><a href={FILES_URL + file} target="_blank" download>{" " + getFileName(file)}</a></h2><br /></Fragment>)}
             </div >
         )
