@@ -106,8 +106,8 @@ const CourseContainer = props => {
     const topicCompleted = () => {
         let watched = true
         currentLectures.map(lect => {
-            if(lect.watchedBy)
-            if (!(lect.watchedBy.includes(currentUser.currentUserData._id))) watched = false
+            if (lect.watchedBy)
+                if (!(lect.watchedBy.includes(currentUser.currentUserData._id))) watched = false
         })
         return watched
     }
@@ -132,7 +132,7 @@ const CourseContainer = props => {
                     </div>
                     <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
                 </div>
-                <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} />
+                <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />
             </div>
         }>
 

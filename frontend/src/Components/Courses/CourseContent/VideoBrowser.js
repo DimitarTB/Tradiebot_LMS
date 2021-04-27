@@ -8,6 +8,7 @@ import { NavLink, Redirect } from 'react-router-dom'
 const VideoBrowser = props => {
 
     const records = useSelector(state => state.quizzes.quizRecords.filter(rec => rec.user === props.user_id))
+    const assignments = useSelector(state => state.assignments.allAssignments.filter(asn => asn.course_id === props.course_id))
     // const lectures = props.lectures.map((lecture, index, arr) => {
     //     return (
     //         <Fragment>
@@ -66,6 +67,7 @@ const VideoBrowser = props => {
     // })
     props.topics.map((topic, tidx, sz) => {
         var lectureCount = 0
+        assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/assignment/" + asn._id}><button>{"Assignment: " + asn.title}</button></NavLink>) : null)
         props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button>{"Quiz: " + qz.name}</button></NavLink>) : null)
         display.push(<button style={{ cursor: "default" }}><h2>{topic.name}</h2></button>)
         props.lectures.map((lecture, idx, arr) => {
@@ -89,10 +91,9 @@ const VideoBrowser = props => {
                 )
                 lectureCount++
             }
-
         })
         if (tidx === sz.length - 1) {
-            console.log(records)
+            assignments.map(asn => asn.topic_id === topic._id ? display.push(<NavLink id="navbutton" to={"/assignment/" + asn._id}><button>{"Assignment: " + asn.title}</button></NavLink>) : null)
             props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button id={records.find(rc => {
                 return (rc.quiz_id === qz._id)
             }) ? "watched" : null}>{"Quiz: " + qz.name}</button></NavLink>) : null)

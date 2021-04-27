@@ -78,7 +78,7 @@ export default props => {
                 }>Unenroll</button> : ""
             }
             {props.edit === true || currentUser?.currentUserData?.types?.includes("SuperAdmin") || props.course.teachers.includes(currentUser.currentUserData._id) ? <NavLink to={"/courses/edit/" + props.course._id}>
-                <button id={"edit"} className={(props.enroll === true && ((props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin"))) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id))) || props.unenroll === true || props.admin === true ? "" : "edit_enr"}>Edit Course</button>
+                <button id="edit" className={(props.enroll === true && ((props.course.manualEnroll === true || currentUser?.currentUserData?.types?.includes("SuperAdmin"))) && !(currentUser.currentUserData.enrolledCourses.includes(props.course._id))) || props.unenroll === true || props.admin === true ? "" : "edit_enr"}>Edit Course</button>
             </NavLink> : ""}
         </div>
     )

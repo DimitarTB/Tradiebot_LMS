@@ -43,6 +43,10 @@ import RequestCertificate from './Components/User/RequestCertificate'
 import ValidCertificate from './Components/User/ValidCertificate'
 import PdfComponent from './Components/Courses/PdfComponent'
 import PrintFile from './Components/Courses/PrintFile'
+import AddAssignment from './Components/Courses/Forms/AddAssignment'
+import EditAssignment from './Components/Courses/Forms/EditAssignment'
+import SubmitAssignment from './Components/Courses/Assignments/SubmitAssignment'
+import RateAssignment from './Components/Courses/Assignments/RateAssignment'
 
 function App() {
 
@@ -121,6 +125,20 @@ function App() {
                         </Route>
                         <Route exact path="/test_quizzes">
                             <TopicsTest />
+                        </Route>
+
+                        <Route exact path="/add_assignment/:topic_id">
+                            <AddAssignment add={true} />
+                        </Route>
+                        <Route exact path="/rate_assignment/:record_id">
+                            <RateAssignment />
+                        </Route>
+                        <Route exact path="/assignment/edit/:id">
+                            <EditAssignment />
+                        </Route>
+
+                        <Route exact path="/assignment/:id">
+                            <SubmitAssignment />
                         </Route>
 
                         <Route path="/user/:username">

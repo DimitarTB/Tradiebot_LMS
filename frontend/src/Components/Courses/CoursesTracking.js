@@ -16,6 +16,17 @@ function CoursesTracking() {
         dispatch(getAllCourses("a"))
     }, [])
 
+    function msToTime(s) {
+        var ms = s % 1000;
+        s = (s - ms) / 1000;
+        var secs = s % 60;
+        s = (s - secs) / 60;
+        var mins = s % 60;
+        var hrs = (s - mins) / 60;
+
+        return hrs + ':' + mins + ':' + secs + '.' + ms;
+    }
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'username', headerName: 'Username', width: 130 },
@@ -33,6 +44,12 @@ function CoursesTracking() {
             width: 250,
             type: 'dateTime'
         },
+        {
+            field: 'time_watched_course',
+            headerName: 'Time Watched',
+            width: 250,
+            type: 'time'
+        }
     ];
 
     const rows = []
@@ -46,8 +63,11 @@ function CoursesTracking() {
         ob.started_watching = new Date(ob.started_watching)
 
         ob.time_watched = parseInt(ob.time_watched)
+        ob.time_watched_course = msToTime(ob.time_watched)
         ob.time_watched = ob.started_watching.getTime() + ob.time_watched
         ob.time_watched = new Date(ob.time_watched)
+
+
         // ob.time_watched = ((ob.time_watched % 60000) / 1000).toFixed(0)
         rows.push(ob)
     })

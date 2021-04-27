@@ -20,6 +20,7 @@ import { BsFillCaretUpFill, BsFillCaretDownFill } from "react-icons/bs";
 import { addTopic, deleteTopic, getAllTopics, lectureDown, lectureUp, topicDown, topicUp } from "../../../redux/Topics/TopicsActions"
 import { createQuiz, deleteQuiz, getAllQuizzes } from "../../../redux/Quizzes/QuizzesActions"
 import Container from "../../Global/Container"
+import { addAssignment, deleteAssignment, getAllAssignments } from "../../../redux/Assignments/AssignmentsActions"
 
 export default props => {
     const dispatch = useDispatch()
@@ -30,7 +31,8 @@ export default props => {
     const currentUser = useSelector(state => state.user)
     const courseLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === course_id))
     const topics = useSelector(state => state.topics?.allTopics.filter(topic => topic?.course_id === course_id))
-    console.log(course_id)
+    const assignments = useSelector(state => state.assignments)
+    const courseAssignments = assignments.allAssignments.filter(asn => asn.course_id === currentCourse._id)
     const quizzes = useSelector(state => state.quizzes?.allQuizzes?.filter(quiz => quiz?.course_id === course_id))
 
     topics.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0)
@@ -52,6 +54,7 @@ export default props => {
     const [newQuiz, setQuiz] = useState({
         "name": ""
     })
+
     const courseValidator = {
         name: {
             type: "string",
@@ -133,6 +136,7 @@ export default props => {
         dispatch(getAllLectures(currentUser.currentUser))
         dispatch(getAllTopics())
         dispatch(getAllQuizzes())
+        dispatch(getAllAssignments())
     }, [])
     useEffect(() => {
         if (ff === true) {
@@ -174,6 +178,7 @@ export default props => {
                                 handleSubmit(e, topic)
                             }}>Add</button></form>
                         </div>
+                        {courseAssignments?.filter(asn => asn.topic_id === topic._id).length === 0 ? <Fragment><NavLink to={"/add_assignment/" + topic._id}><button>Add Assignment</button></NavLink><br /></Fragment> : null}
                         {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 && topic?.lectures.length !== 0 ?
                             <Fragment>
                                 <label>Add quiz</label>
@@ -210,6 +215,7 @@ export default props => {
 
                                                 <div>
                                                     <br />
+                                                    {courseAssignments?.filter(asn => asn.topic_id === topic._id).length === 0 ? <Fragment><NavLink to={"/add_assignment/" + topic._id}><button>Add Assignment</button></NavLink><br /></Fragment> : null}
                                                     {quizzes?.findIndex(quiz => quiz?.topic_id === topic?._id) === -1 && topic?.lectures.length !== 0 ?
                                                         <Fragment>
                                                             <label>Add quiz</label>
@@ -260,13 +266,23 @@ export default props => {
                                             <Fragment>
                                                 {quizzes?.find(quiz => quiz?.topic_id === topic?._id) ?
                                                     <Fragment>
-                                                        <h2 style={{ display: "inline", color:"var(--gray-dark)" }}>Quiz: <NavLink style={{ color: "var(--green)" }}
+                                                        <h2 style={{ display: "inline", color: "var(--gray-dark)" }}>Quiz: <NavLink style={{ color: "var(--green)" }}
                                                             to={"/quizzes/edit/" + quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id}>
                                                             {quizzes?.find(quiz => quiz?.topic_id === topic?._id)?.name}
                                                         </NavLink>
                                                         </h2>
                                                         <TiDelete style={{ color: "red" }} onClick={e => dispatch(deleteQuiz({ "quiz_id": quizzes?.find(quiz => quiz?.topic_id === topic?._id)?._id }))} />
                                                     </Fragment> : null}
+                                                <br />
+                                                {courseAssignments?.filter(asn => asn.topic_id === topic._id).length !== 0 ? <Fragment><h2 style={{ display: "inline", color: "var(--gray-dark)" }}>
+                                                    Assignment:
+                                                    <NavLink style={{ color: "var(--green)" }}
+                                                        to={"/assignment/edit/" + courseAssignments?.find(asn => asn.topic_id === topic._id)._id}>
+                                                        {courseAssignments?.find(asn => asn.topic_id === topic._id).title}
+                                                    </NavLink>
+                                                </h2>
+                                                    <TiDelete style={{ color: "red" }} onClick={e => dispatch(deleteAssignment({ "id": courseAssignments?.find(asn => asn.topic_id === topic._id)._id }))} />
+                                                </Fragment> : null}
                                             </Fragment>
                                         </Fragment> : ""}
                                 </Fragment>)

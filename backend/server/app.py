@@ -17,6 +17,7 @@ from Routes.comments import Comment
 from Routes.topics import Topic
 from Routes.quizzes import Quiz
 from Routes.certificates import Certificate
+from Routes.assignments import Assignment
 from models import methodExec
 import datetime
 from flask_mail import Message
@@ -306,8 +307,42 @@ def submit_quiz():
     return jsonify({"message": "Record inserted!", "record": insert_q})
 
 
-# Teacher routes
+@app.route("/api/assignment_records", methods=["GET"])
+@jwt_required
+def assignment_records():
+    assignment_records = db.assignment_records
+    all_records = assignment_records.find({})
+    ret_records = []
+    for rec in all_records:
+        ret_records.append({"_id": str(rec["_id"]), "user_id": rec["user_id"], "assignment_id": rec["assignment_id"], "grade": rec["grade"], "files": rec["files"]})
+    return jsonify(ret_records)
+@app.route("/api/submit_assignment", methods=["POST"])
+@jwt_required
+def submit_assignment():
+    user = get_jwt_identity()
+    user_id = request.args.get("user")
+    assignment_id = request.args.get("assignment")
+    data = {}
+    assignment_records = db.assignment_records
+    data["user_id"] = user_id
+    data["assignment_id"] = assignment_id
+    data["grade"] = 0
+    files = request.files
 
+    files = []
+    for file in request.files.getlist("file"):
+        filename = "lms/public/assignments/" + get_random() + "_" + file.filename
+        file.save(("./static/" + filename))
+        files.append(filename)
+    data["files"] = files
+    assignment_records.insert(data)
+
+
+    return jsonify({"_id": str(data["_id"]), "assignment_id": data["assignment_id"], "user_id": data["user_id"], "grade": data["grade"], "files": data["files"]})
+
+
+
+# Teacher routes
 
 @app.route("/api/upload_thumbnail", methods=["POST"])
 @jwt_required
@@ -683,6 +718,11 @@ def certificate():
     print(request)
     return methodExec(request, Certificate)
 
+
+@app.route("/api/assignment", methods=["GET", "POST", "PUT", "DELETE"])
+def assignment():
+    print(request)
+    return methodExec(request, Assignment)
 
 @app.route("/api/watched_course", methods=["POST"])
 @jwt_required

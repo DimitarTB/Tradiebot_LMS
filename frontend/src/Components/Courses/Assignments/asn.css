@@ -1,0 +1,68 @@
+:root {
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+    --pink: #e30059;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --white: #fff;
+    --gray: #69707a;
+    --gray-dark: #363d47;
+    --primary: #0061f2;
+    --secondary: #6900c7;
+    --success: #00ac69;
+    --info: #00cfd5;
+    --warning: #f4a100;
+    --danger: #e81500;
+    --light: #f2f6fc;
+    --dark: #212832;
+    --black: #000;
+    --white: #fff;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+}
+
+.assignmentContainer {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    max-width: 60%;
+}
+
+.assignmentContainer>#file_form {
+    margin: auto;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.assignmentContainer>#file_form>form>button {
+    border: none;
+    border-radius: .42rem;
+    background-color: var(--primary);
+    padding: 10px;
+    color: white;
+}
+
+.assignmentContainer>#file_form>form>input {
+    width: 20%;
+    margin-bottom: 20px;
+}
+.assignmentContainer>#file_form>form>input:hover {
+    background-color: var(--light) !important;
+    border: none !important;
+}
+
+.assignmentContainer>#file_form>form>input:focus {
+    border: none !important;
+}
