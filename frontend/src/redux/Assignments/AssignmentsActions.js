@@ -153,3 +153,36 @@ export const getAssignmentRecords = createAsyncThunk(
         return data2
     }
 )
+
+export const rateAssignment = createAsyncThunk(
+    'assignments/rateAssignment',
+    async (data, ext) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
+            myHeaders.append("Content-Type", "application/json");
+
+            console.log(data)
+
+            var raw = JSON.stringify({
+                "id": data.id,
+                "grade": data.grade,
+                "notes": data.notes
+            });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            const response = await fetch(API_URL + "api/rate_assignment", requestOptions)
+            const data2 = await response.json()
+            return data2
+        }
+        catch (error) {
+            return ext.rejectWithValue(error.message)
+        }
+    }
+)

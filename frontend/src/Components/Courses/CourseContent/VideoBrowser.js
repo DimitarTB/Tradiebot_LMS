@@ -6,9 +6,18 @@ import { createLecture } from '../../../redux/Lectures/LecturesActions'
 import { NavLink, Redirect } from 'react-router-dom'
 
 const VideoBrowser = props => {
-
     const records = useSelector(state => state.quizzes.quizRecords.filter(rec => rec.user === props.user_id))
     const assignments = useSelector(state => state.assignments.allAssignments.filter(asn => asn.course_id === props.course_id))
+
+    function compare(a, b) {
+        if (a.index > b.index) {
+            return -1;
+        }
+        if (a.index < b.index) {
+            return 1;
+        }
+        return 0;
+    }
     // const lectures = props.lectures.map((lecture, index, arr) => {
     //     return (
     //         <Fragment>
@@ -20,6 +29,7 @@ const VideoBrowser = props => {
     //         </Fragment>
     //     )
     // })
+    props.topics.map(tp => tp.lectures.sort(compare))
     const checkValue = (lectures, id) => {
         for (var i = 0; i < lectures.length; i = i + 1) {
             if (lectures[i].id === id) return true;
@@ -27,8 +37,7 @@ const VideoBrowser = props => {
         return false;
     }
     useEffect(() => {
-        const firstLec = props.lectures.find(lect => lect._id === props.topics[0].lectures[0].id)
-        props.setSelectedLecture(firstLec)
+        props.setSelectedLecture(props.firstLec)
     }, [])
     const topicCompleted = (lectures) => {
         let watched = true
@@ -100,9 +109,14 @@ const VideoBrowser = props => {
         }
     })
     return (
-        <div className="video-browser">
-            {display}
-        </div>
+        <Fragment>
+            <div className="video-browser">
+                {display}
+            </div>
+            <div className="video-mobile">
+                {display}
+            </div>
+        </Fragment>
     )
 }
 

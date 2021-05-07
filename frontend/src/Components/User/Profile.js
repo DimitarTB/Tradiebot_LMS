@@ -166,9 +166,9 @@ function Profile() {
                             <form onChange={e => passwordHandleChange(e)} onSubmit={e => passwordHandleSubmit(e)}>
                                 <h3>Change your password</h3><br />
                                 <label for="currentPassword">Current Password</label>
-                                <input name="currentPassword" type="password" placeholder="Current password:"></input><br></br>
+                                <input name="currentPassword" type="password" placeholder="Current password"></input><br></br>
                                 <label for="newPassword">New Password</label>
-                                <input name="newPassword" type="password" placeholder="New Password"></input><br />
+                                <input name="newPassword" type="password" placeholder="New password"></input><br />
                                 {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                 <button type="submit">Submit</button>
                             </form>

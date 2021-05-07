@@ -1,19 +1,22 @@
 .lectures {
-    margin:0;
-    border:2px solid black;
-    width:20%;
+    margin: 0;
+    border: 2px solid black;
+    width: 20%;
 }
+
 .item {
     color: var(--green);
-    display:flex;
-    width:100%;
-    position:relative;
+    display: flex;
+    width: 100%;
+    position: relative;
     margin-left: 10px;
 }
+
 .icon {
-    display:flex;
-    margin-left:10px;
+    display: flex;
+    margin-left: 10px;
 }
+
 :root {
     --blue: #0061f2;
     --indigo: #5800e8;
@@ -52,6 +55,7 @@
 svg {
     cursor: pointer;
 }
+
 #questions {
     display: flex;
     margin: 10px;
@@ -62,7 +66,6 @@ svg {
     /* width:50%; */
 }
 
-
 /* .rest {
     display: inline-block;
     height: 100%;
@@ -70,37 +73,40 @@ svg {
 } */
 
 .pform {
-    display:center;
-    margin-left:50%;
+    display: center;
+    margin-left: 50%;
 }
-.pform > input, select, textarea {
-    width:100px;
+
+.pform>input, select, textarea {
+    width: 100px;
 }
 
 .question {
-    margin-top:50px;
-    margin-right:100px;
+    margin-top: 50px;
+    margin-right: 100px;
 }
-.question > select, input, textarea {
-    width:100%;
+
+.question>select, input, textarea {
+    width: 100%;
 }
+
 #delete {
-    background:red;
+    background: red;
 }
 
 #edit-quiz-container {
     display: flex;
     flex-direction: column;
-    width: 1080px;
+    width: 80%;
     margin: 20px auto;
 }
 
-#edit-quiz-container > .rest {
+#edit-quiz-container>.rest {
     margin: 30px 0px;
 }
 
-#edit-quiz-container > .rest {
-    width: 950px;
+#edit-quiz-container>.rest {
+    width: 80%;
     margin: 0px auto;
     background: #FFF;
     padding: 50px 47.5px;
@@ -109,43 +115,41 @@ svg {
     border-radius: .42rem;
     display: flex;
     flex-direction: column;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
-
-#edit-quiz-container > .rest > * {
+#edit-quiz-container>.rest>* {
     margin: 8px 0px;
 }
 
-#edit-quiz-container > .rest > p:hover {
+#edit-quiz-container>.rest>p:hover {
     cursor: pointer;
 }
 
-#edit-quiz-container > .rest > form > button {
+#edit-quiz-container>.rest>form>button {
     border: none;
     width: 8%;
     background: var(--primary);
     color: #FFF;
     border-radius: .42rem;
     padding: 8px 0px;
-    margin:10px 5px;
+    margin: 10px 5px;
 }
 
-#edit-quiz-container >.rest > button#delete {
+#edit-quiz-container>.rest>button#delete {
     background: var(--danger);
 }
 
-#edit-quiz-container > .rest > form > label {
+#edit-quiz-container>.rest>form>label {
     box-shadow: 0 1px 0 0 #fff inset;
 }
 
-
-
-#edit-quiz-container > .rest.smaller {
+#edit-quiz-container>.rest.smaller {
     width: 750px;
+    max-width: 100%;
 }
 
-#edit-quiz-container > .rest > form > input, select, textarea {
+#edit-quiz-container>.rest>form>input, select, textarea {
     /* border:1px solid var(--gray);
     border-radius:20px;
     padding:10px;
@@ -174,27 +178,29 @@ svg {
     border-radius: .42rem;
     box-sizing: border-box;
 }
-#edit-quiz-container > .rest > form > textarea {
+
+#edit-quiz-container>.rest>form>textarea {
     height: 200px;
     border: 2px solid var(--gray)
 }
 
-#edit-quiz-container > .rest > form > select {
+#edit-quiz-container>.rest>form>select {
     margin-top: 20px;
-    padding:5px;
-    width:100%;
+    padding: 5px;
+    width: 100%;
 }
 
 .border {
-    margin:2px;
+    margin: 2px;
     margin-left: 10px;
     display: inline;
 }
 
 .topic {
-    padding:20px;
+    padding: 20px;
 }
-.topic > * input, textarea {
+
+.topic>* input, textarea {
     display: block;
     width: 100%;
     height: calc(1.5em + .75rem + 6px);
@@ -208,16 +214,18 @@ svg {
     border-radius: .42rem;
     box-sizing: border-box;
 }
-.topic > * button {
+
+.topic>* button {
     border: none;
     width: 20%;
     background: var(--primary);
     color: #FFF;
     border-radius: .42rem;
     padding: 10px 5px;
-    margin:10px 5px;
+    margin: 10px 5px;
 }
-.topic > label {
+
+.topic>label {
     font-size: 13px;
     font-weight: 400;
     color: var(--dark-gray);
@@ -245,24 +253,22 @@ svg {
     margin-left: 10px;
 }
 
-
-
-.form_nav > ul {
+.form_nav>ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     /* background-color: var(--gray); */
     border-radius: .42rem;
-    width:102%;
+    width: 102%;
     display: inline-flex;
-    
 }
-.form_nav > ul > #active {
+
+.form_nav>ul>#active {
     border-bottom: 1px solid var(--primary);
 }
 
-.form_nav > ul > li {
+.form_nav>ul>li {
     float: left;
     display: inline block;
     /* color: white; */
@@ -274,21 +280,22 @@ svg {
     cursor: pointer;
 }
 
-.files > #title-files {
+.files>#title-files {
     color: var(--primary)
 }
+
 /* .form_nav > ul > li:hover {
     background-color: var(--dark);
     cursor: pointer
 } */
 
-.radio > input, textarea {
-    border:1px solid black;
-    margin-top:auto;
+.radio>input, textarea {
+    border: 1px solid black;
+    margin-top: auto;
 }
 
-.profile-picture{
-    margin: 65px ;
+.profile-picture {
+    margin: 65px;
     padding: 50px 47.5px;
     background: #FFF;
     box-sizing: border-box;
@@ -298,20 +305,45 @@ svg {
 }
 
 #pp {
-    margin: 25px                                        ;
+    margin: 25px;
     border-radius: 5px;
 }
-#edit-quiz-container > .rest > form > input:focus, select:focus, textarea:focus {
+
+#edit-quiz-container>.rest>form>input:focus, select:focus, textarea:focus {
     outline: none !important;
     border: 2px solid var(--green) !important;
 }
 
-
-* > input:focus, select:focus, textarea:focus {
+*>input:focus, select:focus, textarea:focus {
     outline: none !important;
     border: 2px solid var(--green) !important;
 }
 
 .global {
     margin-top: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+    #edit-quiz-container>div.profile-picture {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #edit-quiz-container>div.profile-picture>div>form>input[type=file] button {
+        margin: 0 !important;
+    }
+    #edit-quiz-container>div.profile-picture>#pp {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .topic>* button {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #edit-quiz-container>div.rest>form>button {
+        width: 30% !important;
+    }
+    .rest {
+        min-width: 100%;
+    }
 }

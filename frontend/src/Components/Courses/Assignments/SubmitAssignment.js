@@ -60,6 +60,7 @@ function SubmitAssignment() {
                         <div className="assignmentContainer" style={{ marginBottom: "30px" }}>
                             <h2>You have submitted this assignment!</h2>
                             <h3>{assignmentRecords[0].grade === 0 ? "Your assignment is not rated yet." : ("Grade: " + assignmentRecords[0].grade)}</h3>
+                            {assignmentRecords[0].notes !== "" ? ("Notes: " + assignmentRecords[0].notes) : null}
                         </div>}
                 </div>
             } />

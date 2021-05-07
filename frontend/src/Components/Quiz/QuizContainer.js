@@ -61,8 +61,7 @@ export default props => {
 
 
     useEffect(() => {
-        setLastCompleted(quizSelector.lastSubmitted)
-        if (quizSelector.submitQuizStatus === "fulfilled") console.log("LAST COMPLETED", quizSelector.lastSubmitted)
+        if (quizSelector.submitQuizStatus === "fulfilled") setLastCompleted(quizSelector.lastSubmitted)
     }, [quizSelector.submitQuizStatus])
     useEffect(() => {
         dispatch(getQuizRecords())

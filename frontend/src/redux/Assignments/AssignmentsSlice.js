@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { statuses } from "../constants"
-import { addAssignment, deleteAssignment, getAllAssignments, getAssignmentRecords, submitAssignment, updateAssignment } from './AssignmentsActions'
+import { addAssignment, deleteAssignment, getAllAssignments, getAssignmentRecords, rateAssignment, submitAssignment, updateAssignment } from './AssignmentsActions'
 
 export const AssignmentsSlice = createSlice({
     name: 'assignments',
@@ -10,6 +10,7 @@ export const AssignmentsSlice = createSlice({
         addAssignmentStatus: statuses.idle,
         updateAssignmentStatus: statuses.idle,
         submitAssignmentStatus: statuses.idle,
+        rateStatus: statuses.idle,
     },
     reducers: {
 
@@ -47,6 +48,15 @@ export const AssignmentsSlice = createSlice({
 
         [getAssignmentRecords.fulfilled]: (state, action) => {
             state.assignmentRecords = action.payload
+        },
+
+        [rateAssignment.fulfilled]: (state, action) => {
+            const idx = state.assignmentRecords.findIndex(rec => rec._id === action.payload.id)
+            state.assignmentRecords[idx].grade = action.payload.grade
+            state.rateStatus = statuses.fulfilled
+        },
+        [rateAssignment.pending]: (state, action) => {
+            state.rateStatus = statuses.pending
         }
     }
 })

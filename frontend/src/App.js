@@ -47,6 +47,12 @@ import AddAssignment from './Components/Courses/Forms/AddAssignment'
 import EditAssignment from './Components/Courses/Forms/EditAssignment'
 import SubmitAssignment from './Components/Courses/Assignments/SubmitAssignment'
 import RateAssignment from './Components/Courses/Assignments/RateAssignment'
+import AssignmentRecords from './Components/Courses/Assignments/AssignmentRecords'
+import TeacherQuizRecords from './Components/Courses/TeacherQuizRecords'
+import MobileNav from './Components/Global/Nav/MobileNav'
+import Paint from './Components/Courses/Paint'
+import CanvasPaint from './Components/Courses/CanvasPaint'
+import ResizeImage from './Components/Courses/ResizeImage'
 
 function App() {
 
@@ -120,6 +126,9 @@ function App() {
                         <Route exact path="/course/:course_id">
                             <CourseContainer />
                         </Route>
+                        <Route exact path="/resize">
+                            <ResizeImage />
+                        </Route>
                         <Route exact path="/pdf">
                             <PdfComponent />
                         </Route>
@@ -132,6 +141,9 @@ function App() {
                         </Route>
                         <Route exact path="/rate_assignment/:record_id">
                             <RateAssignment />
+                        </Route>
+                        <Route exact path="/assignment_records/:course_id">
+                            <AssignmentRecords />
                         </Route>
                         <Route exact path="/assignment/edit/:id">
                             <EditAssignment />
@@ -180,8 +192,18 @@ function App() {
                         <Route path="/quizzes_tracking">
                             {user?.currentUserData?.types?.includes("SuperAdmin") ? <QuizTracking /> : <Redirect to="/" />}
                         </Route>
+                        <Route path="/quizzes_tracking_teacher/:course_id">
+                            <TeacherQuizRecords />
+                        </Route>
                         <Route path="/my_certificates">
                             <Certificates />
+                        </Route>
+                        <Route path="/mobile_nav">
+                            <MobileNav />
+                        </Route>
+
+                        <Route path="/paint">
+                            <CanvasPaint />
                         </Route>
                         <Route path="/request_certificate/:course_id">
                             <RequestCertificate />

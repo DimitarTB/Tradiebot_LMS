@@ -37,6 +37,7 @@ mail = Mail(app)
 
 
 app.config["SECRET_KEY"] = "asd"
+# client = pymongo.MongoClient(host="46.101.200.138", port=27017)
 client = pymongo.MongoClient(host="localhost", port=27017)
 db = client['test-database']
 

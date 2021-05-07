@@ -52,7 +52,7 @@ export const UserSlice = createSlice({
                 redirect: 'follow'
             };
 
-            fetch(API_URL + "/api/watched_course", requestOptions)
+            fetch(API_URL + "api/watched_course", requestOptions)
         },
         addCreatedCourse: (state, action) => {
             state.currentUserData.createdCourses.push(action.payload._id)

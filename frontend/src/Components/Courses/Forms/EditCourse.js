@@ -385,7 +385,7 @@ export default props => {
                                         onSubmit={e => {
                                             e.preventDefault()
                                         }}>
-                                        <input name="name" value={addTopicData.name} placeholder="Lecture Name" />
+                                        <input name="name" value={addTopicData.name} placeholder="Topic Name" />
                                         <button type="button" onClick={() => {
                                             dispatch(addTopic({ "name": addTopicData.name, "course_id": currentCourse._id }))
                                         }}>Add</button>

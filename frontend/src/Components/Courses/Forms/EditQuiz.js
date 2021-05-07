@@ -189,7 +189,7 @@ export default props => {
                         <button>Add</button>
                     </form>
                 </div>
-                <div className="rest smaller">
+                <div className="rest smaller" style={selectedQuestion ? { visibility: "visible" } : { visibility: "hidden" }}>
                     <form class="question" onSubmit={(e) => {
                         e.preventDefault()
                         dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
@@ -198,9 +198,9 @@ export default props => {
                         <input id="quest_name" name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br /><br />
                         <label for="type">Type</label><br />
                         <select name="question_types">
-                            <option value="Multiple Choice">Multiple Choice</option>
-                            <option value="Input">Input</option>
-                            <option value="Single Choice">Single Choice</option>
+                            <option value="Multiple Choice" selected={selectedQuestion?.type === "Multiple Choice" ? true : false}>Multiple Choice</option>
+                            <option value="Input" selected={selectedQuestion?.type === "Input" ? true : false}>Input</option>
+                            <option value="Single Choice" selected={selectedQuestion?.type === "Single Choice" ? true : false}>Single Choice</option>
                         </select>
                         <button type="submit">Save</button>
                         <button type="button" id="delete" onClick={(e) => {
@@ -218,7 +218,7 @@ export default props => {
                         }}>Delete</button>
                     </form>
                 </div>
-                <div className="rest smaller">
+                <div className="rest smaller" style={selectedQuestion ? { visibility: "visible" } : { visibility: "hidden" }}>
                     <br /><br />
                     <form onSubmit={(e) => {
                         e.preventDefault();
@@ -236,7 +236,7 @@ export default props => {
                         <button type="submit" onClick={e => e.preventDefault}>Add</button>
                     </form>
                 </div>
-                <div className="rest smaller">
+                <div className="rest smaller" style={selectedQuestion ? { visibility: "visible" } : { visibility: "hidden" }}>
                     <form onSubmit={(e) => {
                         e.preventDefault()
                         dispatch(addCorrectAnswer({ quiz_id: currentQuiz._id, index: selectedQuestion.index, answer: e.target.addCorrect.value }))

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { API_URL } from '../../redux/constants'
 import "./Container.css"
 
 function ChangePassword() {
@@ -21,7 +22,7 @@ function ChangePassword() {
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:5000/api/temporary_password?user=" + info.username, requestOptions)
+        fetch(API_URL + "api/temporary_password?user=" + info.username, requestOptions)
             .then(response => response.status === 200 ? setRedirect(true) : alert('User not found!'))
     }
 
@@ -32,7 +33,18 @@ function ChangePassword() {
             <div className="landing-container">
                 <div className="image"></div>
                 <div className="login form">
-                    <h3> LOGIN </h3>
+                    <h3> CHANGE PASSWORD </h3>
+                    <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
+                        <label htmlFor="">Username or email</label>
+                        <input type="text" name="username" />
+                        <button> Submit </button>
+                    </form>
+                </div>
+            </div>
+            <div className="landing-container-mobile">
+                <div className="image"></div>
+                <div className="login form">
+                    <h3> CHANGE PASSWORD </h3>
                     <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
                         <label htmlFor="">Username or email</label>
                         <input type="text" name="username" />

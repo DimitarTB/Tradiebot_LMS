@@ -15,8 +15,11 @@ import Container from "../../Global/Container"
 import { getAllTopics } from "../../../redux/Topics/TopicsActions"
 import { getAllQuizzes, getQuizRecords } from "../../../redux/Quizzes/QuizzesActions"
 import { addCertificate, fetchAll, getAllCertificates } from "../../../redux/Users/UserActions"
+import { getAllAssignments, getAssignmentRecords } from "../../../redux/Assignments/AssignmentsActions"
 import Certificate from "./Certificate"
 import Certificates from "../../User/Certificates"
+import ReadMoreReact from 'read-more-react';
+import { MdMore } from "react-icons/md"
 
 const CourseContainer = props => {
     const [redirect, setRedirect] = useState(false)
@@ -35,8 +38,7 @@ const CourseContainer = props => {
         }
 
         function resetTimer() {
-            clearTimeout(t);
-            t = setTimeout(logout, 10000);  // time is in milliseconds (1000 is 1 second)
+            clearTimeout(t);  // time is in milliseconds (1000 is 1 second)
         }
     }
 
@@ -54,19 +56,43 @@ const CourseContainer = props => {
     function stopWatching() {
         dispatch({ type: 'user/stopWatching', payload: { "id": currentCourse._id } })
     }
+    function compare(a, b) {
+        if (a.index < b.index) {
+            return -1;
+        }
+        if (a.index > b.index) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function compare2(a, b) {
+        if (a.index > b.index) {
+            return -1;
+        }
+        if (a.index < b.index) {
+            return 1;
+        }
+        return 0;
+    }
+
     const params = useParams()
     const dispatch = useDispatch()
     const courseSelector = useSelector(state => state.courses)
     const currentCourse = courseSelector?.allCourses?.find(course => course._id === params.course_id)
     const currentLectures = useSelector(state => state.lectures.allLectures.filter(lecture => lecture.course_id === params.course_id))
     const currentUser = useSelector(state => state.user)
-    const topics = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse?._id))
+    const topicSel = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse?._id))
+    const topics = JSON.parse(JSON.stringify(topicSel))
+    topics.sort(compare)
+    topics.map(tp => tp.lectures.sort(compare2))
+    console.log(topics)
+    const [firstLec, setFirstLec] = useState(null)
     const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
-    const [selectedLecture, setSelectedLecture] = useState(topics[0]?.lectures[0])
+    console.log("topics", topics)
     const quizRecordsUser = useSelector(state => state.quizzes.quizRecords.filter(qzr => (qzr.user === currentUser.currentUserData._id && (quizzes.filter(qz => qz._id === qzr.quiz_id).length !== 0))))
     const certificates = currentUser.allCertificates.filter(cert => (cert.course_id === currentCourse?._id && cert.user_id === currentUser.currentUserData?._id))
-
-    console.log(certificates)
+    const [selectedLecture, setSelectedLecture] = useState(null)
     const showQuizzes = quizzes.filter(qz => (topics.filter(tp => tp._id === qz.topic_id).length !== 0))
 
     const [dataURL, setDataURL] = useState("")
@@ -89,8 +115,26 @@ const CourseContainer = props => {
         setShowVideo(false)
     }, [selectedLecture])
 
+    useEffect(() => {
+        if (selectedLecture === null && topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0) !== undefined) {
+
+            const lect_id = topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0).id
+            console.log("useef", lect_id, currentLectures)
+            setSelectedLecture(currentLectures.find(lect => lect._id === lect_id))
+            // setSelectedLecture(topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0))
+        }
+        else {
+            if (selectedLecture === null) {
+                setSelectedLecture(topics[0]?.lectures[0])
+            }
+        }
+        // topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0)
+    }, [topics])
+
 
     useEffect(() => {
+        dispatch(getAllAssignments())
+        dispatch(getAssignmentRecords())
         if (currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id)) {
             dispatch({ type: 'user/startWatching', payload: { id: currentCourse?._id } })
             dispatch(getCourseLectures({ "course_id": params.course_id }))
@@ -113,28 +157,48 @@ const CourseContainer = props => {
     }
 
     return currentUser.currentUserData.enrolledCourses.includes(currentCourse?._id) ? (topics.length > 0 && currentLectures.length > 0 ? (
-        <Container details={currentCourse?.name} description={currentCourse?.description} component={
-            <div className="course-container">
-                <div className="left">
-                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && topicCompleted() === true ? <h3>Congratulations, you have finished this course!</h3> : null}
-                    {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && certificates.length === 0 && topicCompleted() === true ?
-                        <Fragment>
+        <Container details={currentCourse?.name} description={<ReadMoreReact text={currentCourse.description ? currentCourse.description : ""}
+            min={20}
+            ideal={150}
+            max={2000}
+            readMoreText={<h5>Read More...</h5>} />}
+            component={
+                <div className="course-container">
+                    <div className="left">
 
-                            <NavLink to={"/request_certificate/" + currentCourse._id}>
-                                <button id="cert">Get Certificate</button>
+                        {currentCourse.teachers.includes(currentUser.currentUserData._id) || currentUser.currentUserData.types.includes("SuperAdmin") ? <Fragment>
+                            <NavLink className="nav_bt" style={{ marginBottom: "10px" }} to={"/quizzes_tracking_teacher/" + params.course_id}>
+                                <button style={{ width: "130px" }} id="rateAssignments">Quiz Records</button>
                             </NavLink>
-                        </Fragment>
-                        : null}
-                    <div style={{ padding: "20px", paddingTop: "50px" }}>
-                        <h1>{selectedLecture?.name}</h1>
-                        <p>{selectedLecture?.content}</p><br />
-                        {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
+                            <NavLink className="nav_bt" to={"/assignment_records/" + params.course_id}>
+                                <button style={{ width: "130px" }} id="rateAssignments">Rate Assignments</button>
+                            </NavLink>
+                        </Fragment> : null}
+                        {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && topicCompleted() === true ? <h3>Congratulations, you have finished this course!</h3> : null}
+                        {(showQuizzes.filter(qz => (quizRecordsUser.filter(qzr => qzr.quiz_id === qz._id).length !== 0)).length === showQuizzes.length) && certificates.length === 0 && topicCompleted() === true ?
+                            <Fragment>
+
+                                <NavLink to={"/request_certificate/" + currentCourse._id}>
+                                    <button id="cert">Get Certificate</button>
+                                </NavLink>
+                            </Fragment>
+                            : null}
+                        <div style={{ padding: "20px", paddingTop: "50px" }}>
+                            <h1>{selectedLecture?.name}</h1>
+                            {/* <p><ReadMoreReact text={selectedLecture !== undefined ? selectedLecture.content : ""}
+                                min={20}
+                                ideal={150}
+                                max={2000}
+                                readMoreText={<h5>Read More...</h5>} /></p><br /> */}
+                            <p>{selectedLecture?.content}</p><br />
+                            {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
+                        </div>
+                        <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
+                        {window.screen.width <= 1000 ? <VideoBrowser firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null}
                     </div>
-                    <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
+                    <VideoBrowser firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />
                 </div>
-                <VideoBrowser user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />
-            </div>
-        }>
+            }>
 
         </Container>
     ) : <Container details={currentCourse?.name} description="This course has no lectures to show!"></Container >) : <Container

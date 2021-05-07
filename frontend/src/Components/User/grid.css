@@ -63,5 +63,5 @@
 }
 
 .search-users-container > .grid {
-    display: flex;
+    display: block;
 }

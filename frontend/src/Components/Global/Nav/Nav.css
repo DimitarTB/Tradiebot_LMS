@@ -7,8 +7,7 @@
     z-index: 50;
 }
 
-
-.nav-container > .nav-body {
+.nav-container>.nav-body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -18,8 +17,7 @@
     transition: 300ms !important;
 }
 
-
-.nav-container > .nav-body > h1 {
+.nav-container>.nav-body>h1 {
     text-align: center;
     margin: 30px auto;
     color: var(--green);
@@ -27,7 +25,7 @@
     user-select: none;
 }
 
-.nav-container > .nav-body > div.nav-item {
+.nav-container>.nav-body>div.nav-item {
     display: block;
     padding: 20px;
     box-sizing: border-box;
@@ -36,13 +34,13 @@
     overflow: hidden;
 }
 
-.nav-container > .nav-body > div.nav-item.showing {
+.nav-container>.nav-body>div.nav-item.showing {
     max-height: unset;
     overflow: unset;
     padding-bottom: 0px;
 }
 
-.nav-container > .nav-body > div.nav-item > span {
+.nav-container>.nav-body>div.nav-item>span {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -51,40 +49,39 @@
     cursor: pointer;
 }
 
-.nav-container > .nav-body > div.nav-item > span > svg {
+.nav-container>.nav-body>div.nav-item>span>svg {
     transform: rotate(-90deg);
     font-size: 1.2em;
 }
 
-.nav-container > .nav-body > div.nav-item.showing > span > svg {
+.nav-container>.nav-body>div.nav-item.showing>span>svg {
     transform: rotate(0deg);
 }
 
-.nav-container > .nav-body > div.nav-item > span > span {
+.nav-container>.nav-body>div.nav-item>span>span {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.nav-container > .nav-body > div.nav-item > span > span > h3 {
+.nav-container>.nav-body>div.nav-item>span>span>h3 {
     margin-left: 10px;
 }
 
-.nav-container > .nav-body > div.nav-item  > ul {
+.nav-container>.nav-body>div.nav-item>ul {
     padding: 0px 20px;
     box-sizing: border-box;
 }
 
-.nav-container > .nav-body > div.nav-item  > ul > li {
+.nav-container>.nav-body>div.nav-item>ul>li {
     padding: 0px 0px 7px 0px;
-
 }
 
-.nav-container > .nav-body > div.nav-item  > ul > li > a {
+.nav-container>.nav-body>div.nav-item>ul>li>a {
     color: var(--light);
 }
 
-.nav-container > .toggler {
+.nav-container>.toggler {
     margin: 20px;
     font-size: 2em;
     cursor: pointer;
@@ -92,7 +89,7 @@
     color: #24344b;
 }
 
-.nav-container.showing > .toggler {
+.nav-container.showing>.toggler {
     margin-left: 20px;
 }
 
@@ -106,8 +103,54 @@
     width: 352px;
 }
 
-.nav-container.showing > .nav-body {
+.nav-container.showing>.nav-body {
     overflow: unset;
     overflow-y: unset;
     width: 100%;
+}
+
+@media only screen and (max-width: 800px) {
+    #gth {
+        visibility: hidden;
+    }
+    .mobile-nav-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: fixed;
+        z-index: 50;
+        margin-left: 10%;
+    }
+    
+    .mobile-nav-container>.mobile-nav-body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100vh;
+        transition: 300ms !important;
+    }
+    
+    .mobile-nav-container>.mobile-nav-body>h1 {
+        text-align: center;
+        margin: 30px auto;
+        text-align: center !important;
+        color: var(--green);
+        font-weight: 400;
+        user-select: none;
+    }
+    
+    .mobile-nav-container>.nav-body>div.mobile-nav-item {
+        display: block;
+        padding: 20px;
+        box-sizing: border-box;
+        color: var(--light);
+        max-height: 22px;
+        overflow: hidden;
+        background-color: black !important;
+    }
+    h3 {
+        display: inline-block;
+        margin: 7px;
+    }
 }

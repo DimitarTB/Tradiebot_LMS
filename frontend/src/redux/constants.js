@@ -1,7 +1,10 @@
 
-// export const API_URL = "http://192.168.0.114:5000/"
-export const API_URL = "http://127.0.0.1:5000/"
-export const FILES_URL = "http://localhost:88/"
+// export const API_URL = "http://46.101.200.138:90/"
+// export const FILES_URL = "http://46.101.200.138:90/"
+// export const API_URL = "http://localhost:5000/"
+// export const FILES_URL = "http://localhost:88/"
+export const API_URL = "http://192.168.0.114:5000/"
+export const FILES_URL = "http://192.168.0.114:88/"
 export const statuses = {
     pending: "pending",
     fulfilled: "fulfilled",

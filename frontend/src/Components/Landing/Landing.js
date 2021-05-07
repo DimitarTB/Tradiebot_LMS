@@ -19,6 +19,9 @@ export default props => {
                 </div>
                 {loginShowing === true ? <Login setLoginShowing={setLoginShowing} /> : <Register setLoginShowing={setLoginShowing} />}
             </div>
+            <div className="landing-container-mobile">
+                {loginShowing === true ? <Login setLoginShowing={setLoginShowing} /> : <Register setLoginShowing={setLoginShowing} />}
+            </div>
         </div>
     )
 }

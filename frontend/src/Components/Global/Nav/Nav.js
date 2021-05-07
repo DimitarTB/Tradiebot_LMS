@@ -14,6 +14,7 @@ const Nav = props => {
     const dispatch = useDispatch()
 
     const user = useSelector(state => state.user.currentUserData)
+    const [mobile, setMobile] = useState(false)
     const [redirect, setRedirect] = useState(false)
 
     const toggleNavItem = e => {
@@ -25,72 +26,77 @@ const Nav = props => {
 
     const toggleNav = e => {
         document.getElementsByClassName("nav-container")[0].classList.toggle("showing")
-        if (document.getElementsByClassName("nav-container")[0].classList.contains("showing"))
+        if (document.getElementsByClassName("nav-container")[0].classList.contains("showing")) {
             document.getElementsByClassName("App")[0].classList.add("showing")
-        else
+            if (window.innerWidth < 850) document.getElementById("icon").style.visibility = "hidden"
+        }
+        else {
             document.getElementsByClassName("App")[0].classList.remove("showing")
+            if (document.getElementById("icon")) document.getElementById("icon").style.visibility = "visible"
+        }
     }
 
     return (
-        <div className="nav-container">
-            {redirect !== false ? <Redirect to={redirect} /> : null}
-            <div className="nav-body">
-                <h1>Tradiebot LMS</h1>
+        mobile === true ? <Redirect to="/mobile_nav" /> :
+            <div className="nav-container">
+                {redirect !== false ? <Redirect to={redirect} /> : null}
+                <div className="nav-body">
+                    <h1>Tradiebot LMS</h1>
 
-                {user?.types?.includes("SuperAdmin") ? <div className="nav-item" onClick={e => toggleNavItem(e)} >
-                    <span>
+                    {user?.types?.includes("SuperAdmin") ? <div className="nav-item" onClick={e => toggleNavItem(e)} >
                         <span>
-                            <FaUserAlt />
-                            <h3>Admin Panel</h3>
+                            <span>
+                                <FaUserAlt />
+                                <h3>Admin Panel</h3>
+                            </span>
+                            <MdKeyboardArrowDown />
                         </span>
-                        <MdKeyboardArrowDown />
-                    </span>
-                    <ul>
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses_tracking"}> Courses Tracking</NavLink></li> : ""}
-                        {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/quizzes_tracking"}> Quiz Records</NavLink></li> : ""}
-                    </ul>
-                </div> : null}
-                <div className="nav-item" onClick={e => toggleNavItem(e)} >
-                    <span>
+                        <ul>
+                            {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
+                            {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/create"}> Create a Course</NavLink></li> : ""}
+                            {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/teachers"}> Teachers</NavLink></li> : ""}
+                            {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses_tracking"}> Courses Tracking</NavLink></li> : ""}
+                            {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/quizzes_tracking"}> Quiz Records</NavLink></li> : ""}
+                        </ul>
+                    </div> : null}
+                    <div className="nav-item" onClick={e => toggleNavItem(e)} >
                         <span>
-                            <FaUserAlt />
-                            <h3>User</h3>
+                            <span>
+                                <FaUserAlt />
+                                <h3>User</h3>
+                            </span>
+                            <MdKeyboardArrowDown />
                         </span>
-                        <MdKeyboardArrowDown />
-                    </span>
-                    <ul>
-                        <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
-                        <li><NavLink to="/search_users"> Browse Users</NavLink></li>
-                        <li><NavLink to="/my_certificates"> My Certificates</NavLink></li>
-                        <li><p onClick={e => {
-                            dispatch({ type: 'user/logout' })
-                            // setRedirect("/logout")
-                            props.history.push("/")
-                            toggleNav(e)
-                        }} style={{ cursor: "pointer" }}> Logout</p></li>
-                    </ul>
-                </div>
+                        <ul>
+                            <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
+                            <li><NavLink to="/search_users"> Browse Users</NavLink></li>
+                            <li><NavLink to="/my_certificates"> My Certificates</NavLink></li>
+                            <li><p onClick={e => {
+                                dispatch({ type: 'user/logout' })
+                                // setRedirect("/logout")
+                                props.history.push("/")
+                                toggleNav(e)
+                            }} style={{ cursor: "pointer" }}> Logout</p></li>
+                        </ul>
+                    </div>
 
-                <div className="nav-item" onClick={e => toggleNavItem(e)} >
-                    <span>
+                    <div className="nav-item" onClick={e => toggleNavItem(e)} >
                         <span>
-                            <FaUserAlt />
-                            <h3>Courses</h3>
+                            <span>
+                                <FaUserAlt />
+                                <h3>Courses</h3>
+                            </span>
+                            <MdKeyboardArrowDown />
                         </span>
-                        <MdKeyboardArrowDown />
-                    </span>
-                    <ul>
-                        <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
-                        <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
-                        {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
-                    </ul>
+                        <ul>
+                            <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
+                            <li><NavLink to={"/courses/browse"}> Browse Courses</NavLink></li>
+                            {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
+                        </ul>
+                    </div>
                 </div>
+                <div className="toggler" id="gth" onClick={e => toggleNav()}> <GiHamburgerMenu /> </div>
             </div>
-            <div className="toggler" onClick={e => toggleNav()}> <GiHamburgerMenu /> </div>
-        </div>
     )
 }
 

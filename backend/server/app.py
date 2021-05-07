@@ -29,6 +29,9 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 
 
+@app.route("/")
+def wel():
+    return "Asd"
 # User Routes
 @app.route("/api/login", methods=["GET", "POST"])
 def login():
@@ -269,7 +272,7 @@ def resend():
         recipients=[data["email"]],
     )
     msg.body = (
-        "Click on the link to activate your account http://127.0.0.1:5000/activate?token="
+        "Click on the link to activate your account http://46.101.200.138:90/activate?token="
         + data["rnd"]
         + "&user="
         + data["username"]
@@ -314,7 +317,7 @@ def assignment_records():
     all_records = assignment_records.find({})
     ret_records = []
     for rec in all_records:
-        ret_records.append({"_id": str(rec["_id"]), "user_id": rec["user_id"], "assignment_id": rec["assignment_id"], "grade": rec["grade"], "files": rec["files"]})
+        ret_records.append({"_id": str(rec["_id"]), "user_id": rec["user_id"], "assignment_id": rec["assignment_id"], "grade": rec["grade"], "files": rec["files"], "notes": rec["notes"]})
     return jsonify(ret_records)
 @app.route("/api/submit_assignment", methods=["POST"])
 @jwt_required
@@ -327,6 +330,7 @@ def submit_assignment():
     data["user_id"] = user_id
     data["assignment_id"] = assignment_id
     data["grade"] = 0
+    data["notes"] = ""
     files = request.files
 
     files = []
@@ -338,7 +342,16 @@ def submit_assignment():
     assignment_records.insert(data)
 
 
-    return jsonify({"_id": str(data["_id"]), "assignment_id": data["assignment_id"], "user_id": data["user_id"], "grade": data["grade"], "files": data["files"]})
+    return jsonify({"_id": str(data["_id"]), "assignment_id": data["assignment_id"], "user_id": data["user_id"], "grade": data["grade"], "files": data["files"], "notes": ""})
+
+@app.route("/api/rate_assignment", methods=["POST"])
+@jwt_required
+def rate_assignment():
+    user = get_jwt_identity()
+    assignment_records = db.assignment_records
+    data = request.get_json()
+    assignment_records.update({"_id": ObjectId(data["id"])}, {"$set": {"grade": data["grade"], "notes": data["notes"]}})
+    return jsonify({"id": data["id"], "grade": data["grade"], "notes": data["notes"]})
 
 
 

@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.landing > .landing-container {
+.landing>.landing-container {
     width: 80%;
     height: 80%;
     background: var(--light);
@@ -17,7 +17,7 @@
     display: flex;
 }
 
-.landing > .landing-container > .image {
+.landing>.landing-container>.image {
     width: 50%;
     height: 100%;
     background-image: url("../static/landing.jpg") !important;
@@ -27,18 +27,18 @@
     visibility: visible !important;
 }
 
-.landing > .landing-container > .form {
+.landing>.landing-container>.form {
     padding: 40px;
     box-sizing: border-box;
     width: 50%;
     overflow-y: scroll;
 }
 
-.landing > .landing-container > .form::-webkit-scrollbar {
+.landing>.landing-container>.form::-webkit-scrollbar {
     width: 0px;
 }
 
-.landing > .landing-container > .form > h3 {
+.landing>.landing-container>.form>h3 {
     text-align: center;
     font-size: 2em;
     margin-top: 30px;
@@ -46,18 +46,18 @@
     color: var(--gray-dark);
 }
 
-.landing > .landing-container > .form > form {
+.landing>.landing-container>.form>form {
     display: flex;
     flex-direction: column;
     padding: 50px;
 }
 
-.landing > .landing-container > .form > form > label {
+.landing>.landing-container>.form>form>label {
     font-size: 1.2em;
     margin-bottom: 7.5px;
 }
 
-.landing > .landing-container > .form > form > input {
+.landing>.landing-container>.form>form>input {
     padding: 10px;
     margin-bottom: 20px;
     font-size: 1.1em;
@@ -66,7 +66,7 @@
     color: var(--gray);
 }
 
-.landing > .landing-container > .form > form > button {
+.landing>.landing-container>.form>form>button {
     max-width: 280px;
     padding: 10px;
     background: var(--green);
@@ -75,4 +75,43 @@
     margin: 50px 0px 10px calc(50% - 140px);
     font-size: 1.1em;
     cursor: pointer;
+}
+
+.landing>.landing-container-mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 800px) {
+    .landing>.landing-container {
+        display: none;
+    }
+    .landing>.landing-container-mobile {
+        display: flex;
+        max-width: 60%;
+        background-color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    div.landing-container-mobile>div>form {
+        max-width: 90%;
+        margin: 0 auto;
+        text-align: center;
+    }
+    div.landing-container-mobile>div>form>input {
+        margin-bottom: 10px;
+        border-radius: .42rem;
+        padding: 8px;
+    }
+    div.landing-container-mobile>div>form>button {
+        margin-top: 20px;
+        display: flex;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 10px;
+        border: none;
+        padding: 8px;
+        color: white;
+        background-color: var(--primary);
+        border-radius: .42rem;
+    }
 }

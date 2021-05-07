@@ -72,3 +72,12 @@
     background: #FFF;
     box-shadow: 0 0.15rem 0.75rem 0 rgba(40, 60, 80, 0.15);
 }
+
+@media only screen and (max-width: 1000px) {
+    .ready > button {
+        width: 40%;
+    }
+    #back {
+        width: 40%;
+    }
+}

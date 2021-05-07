@@ -43,7 +43,7 @@ class User:
             sender ='flaskmailstest@gmail.com', 
             recipients = [new_user.email] 
             ) 
-        msg.body = ("Click on the link to activate your account http://127.0.0.1:5000/activate?token=" + rnd + "&user=" + new_user.username)
+        msg.body = ("Click on the link to activate your account http://46.101.200.138:90/activate?token=" + rnd + "&user=" + new_user.username)
         mail.send(msg)
 
 

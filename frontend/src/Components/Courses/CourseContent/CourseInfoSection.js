@@ -111,7 +111,7 @@ const CourseInfoSection = props => {
                     })}
                 </div> : null)}
                 <form onChange={e => handleChange(e)} onSubmit={e => handleSubmit(e)}>
-                    <input className="comment_input" name="comment" placeholder="Message..." onClick={() => document.getElementById("global").style.visibility = "visible"}></input><button id="global" className={"post_comment"} style={{ visibility: "hidden" }}>Post</button>
+                    <input className="comment_input" name="comment" placeholder="Add a comment..." onClick={() => document.getElementById("global").style.visibility = "visible"}></input><button id="global" className={"post_comment"} style={{ visibility: "hidden" }}>Post</button>
                 </form>
             </div>
         ),
