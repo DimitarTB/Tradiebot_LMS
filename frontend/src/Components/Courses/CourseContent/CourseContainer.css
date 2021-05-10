@@ -1,8 +1,48 @@
+:root {
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+    --pink: #e30059;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --white: #fff;
+    --gray: #69707a;
+    --gray-dark: #363d47;
+    --primary: #0061f2;
+    --secondary: #6900c7;
+    --success: #00ac69;
+    --info: #00cfd5;
+    --warning: #f4a100;
+    --danger: #e81500;
+    --light: #f2f6fc;
+    --dark: #212832;
+    --black: #000;
+    --white: #fff;
+    --red: #e81500;
+    --orange: #f76400;
+    --yellow: #f4a100;
+    --green: #00ac69;
+    --teal: #00ba94;
+    --cyan: #00cfd5;
+    --blue: #0061f2;
+    --indigo: #5800e8;
+    --purple: #6900c7;
+}
+
+a {
+    color: var(--dark);
+}
+
 .course-container {
     display: flex;
     width: 100%;
     min-height: 100vh;
     max-height: 100vh;
+    position: relative;
 }
 
 .course-container>.video-browser {
@@ -55,6 +95,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    position: relative;
 }
 
 .course-container>.left>.video-player {
@@ -140,9 +181,16 @@
     display: none !important;
 }
 
+.selected {
+    color: var(--primary) !important;
+}
+
 @media only screen and (max-width: 1000px) {
     .nav_bt {
         width: 10%;
+    }
+    .mrg {
+        margin-top: 15%;
     }
     .course-comments {
         width: 80%;
@@ -158,6 +206,7 @@
     .course-files {
         margin-left: 0 !important;
         position: absolute;
+        max-width: 80%;
     }
     .course-files>div {
         display: inline-block !important;
@@ -165,34 +214,58 @@
     .course-files>div>h2 {
         display: inline-block !important;
     }
-
     .video-browser {
         display: none !important;
         visibility: hidden !important;
     }
+    .left {
+        position: relative;
+    }
     .video-mobile {
-        display: block !important;
+        display: flex !important;
         overflow: auto !important;
         white-space: nowrap !important;
         position: absolute !important;
         bottom: 0 !important;
-        max-width: 80% !important;
+        max-width: 100% !important;
+        top: 0;
+        height: 10%;
+        margin-left: -20px !important;
+        padding: 5px;
+        left: 0;
     }
     .video-mobile>#navbutton {
         display: inline-block !important;
         text-align: center !important;
-        padding: 14px !important;
         text-decoration: none !important;
     }
-
-
-    #navbutton {
-        display: inline-block;
+    div.course-container>div>div.video-mobile>button {
+        background: none !important;
+        border: none;
+        padding: -5px;
+        margin-right: 10px !important;
+    }
+    div.course-container>div>div.video-mobile>button>h2 {
+        transform: scale(0.7);
     }
     .left {
         min-width: 80%;
     }
-    #root > div > div.container {
+    #root>div>div.container {
         min-width: 100% !important;
+    }
+    .selected {
+        border-bottom: 1px solid var(--primary) !important;
+    }
+}
+
+@media only screen and (min-width: 1001px) {
+    .video-mobile {
+        visibility: visible;
+        display: block;
+    }
+    .video-browser {
+        visibility: true;
+        display: block;
     }
 }

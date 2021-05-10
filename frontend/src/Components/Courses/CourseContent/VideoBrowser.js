@@ -11,12 +11,16 @@ const VideoBrowser = props => {
 
     function compare(a, b) {
         if (a.index > b.index) {
-            return -1;
-        }
-        if (a.index < b.index) {
             return 1;
         }
+        if (a.index < b.index) {
+            return -1;
+        }
         return 0;
+    }
+
+    function scrollLeft(idx) {
+        if (document.getElementById("scroller")) document.getElementById("scroller").scrollLeft = (idx * 100)
     }
     // const lectures = props.lectures.map((lecture, index, arr) => {
     //     return (
@@ -30,6 +34,10 @@ const VideoBrowser = props => {
     //     )
     // })
     props.topics.map(tp => tp.lectures.sort(compare))
+    const showLectures = [...props.lectures]
+    showLectures.sort(compare)
+
+    console.log(showLectures)
     const checkValue = (lectures, id) => {
         for (var i = 0; i < lectures.length; i = i + 1) {
             if (lectures[i].id === id) return true;
@@ -76,14 +84,16 @@ const VideoBrowser = props => {
     // })
     props.topics.map((topic, tidx, sz) => {
         var lectureCount = 0
-        assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/assignment/" + asn._id}><button>{"Assignment: " + asn.title}</button></NavLink>) : null)
-        props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button>{"Quiz: " + qz.name}</button></NavLink>) : null)
-        display.push(<button style={{ cursor: "default" }}><h2>{topic.name}</h2></button>)
-        props.lectures.map((lecture, idx, arr) => {
-            if (checkValue(topic.lectures, lecture._id)) {
+        assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
+        props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
+        display.push(<button style={{ cursor: "default" }}><h2>{"Topic: " + topic.name}</h2></button>)
+        topic.lectures.map((lc, idxx) => {
+            const lecture = props.lectures.find(lec => lec._id === lc.id)
+            if (lecture) {
                 display.push(
                     <Fragment>
-                        <button id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
+                        {props.selected?._id === lecture?._id ? scrollLeft(lc.index) : null}
+                        <button className={props.selected?._id === lecture?._id ? "selected" : ""} id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
@@ -102,10 +112,10 @@ const VideoBrowser = props => {
             }
         })
         if (tidx === sz.length - 1) {
-            assignments.map(asn => asn.topic_id === topic._id ? display.push(<NavLink id="navbutton" to={"/assignment/" + asn._id}><button>{"Assignment: " + asn.title}</button></NavLink>) : null)
-            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button id={records.find(rc => {
+            assignments.map(asn => asn.topic_id === topic._id ? display.push(<button><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
+            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<button id={records.find(rc => {
                 return (rc.quiz_id === qz._id)
-            }) ? "watched" : null}>{"Quiz: " + qz.name}</button></NavLink>) : null)
+            }) ? "watched" : null}><NavLink id="navbutton" to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
         }
     })
     return (
@@ -113,7 +123,7 @@ const VideoBrowser = props => {
             <div className="video-browser">
                 {display}
             </div>
-            <div className="video-mobile">
+            <div className="video-mobile" id="scroller">
                 {display}
             </div>
         </Fragment>

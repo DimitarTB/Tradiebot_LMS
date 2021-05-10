@@ -85,6 +85,7 @@ const CourseContainer = props => {
     const topicSel = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse?._id))
     const topics = JSON.parse(JSON.stringify(topicSel))
     topics.sort(compare)
+    console.log(topics)
     topics.map(tp => tp.lectures.sort(compare2))
     console.log(topics)
     const [firstLec, setFirstLec] = useState(null)
@@ -167,7 +168,7 @@ const CourseContainer = props => {
                     <div className="left">
 
                         {currentCourse.teachers.includes(currentUser.currentUserData._id) || currentUser.currentUserData.types.includes("SuperAdmin") ? <Fragment>
-                            <NavLink className="nav_bt" style={{ marginBottom: "10px" }} to={"/quizzes_tracking_teacher/" + params.course_id}>
+                            <NavLink className="nav_bt mrg" style={{ marginBottom: "10px" }} to={"/quizzes_tracking_teacher/" + params.course_id}>
                                 <button style={{ width: "130px" }} id="rateAssignments">Quiz Records</button>
                             </NavLink>
                             <NavLink className="nav_bt" to={"/assignment_records/" + params.course_id}>
@@ -194,9 +195,9 @@ const CourseContainer = props => {
                             {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
                         </div>
                         <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
-                        {window.screen.width <= 1000 ? <VideoBrowser firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null}
+                        {window.screen.width <= 1000 ? <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null}
                     </div>
-                    <VideoBrowser firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />
+                    {window.screen.width <= 1000 ? null : <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />}
                 </div>
             }>
 

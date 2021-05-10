@@ -309,6 +309,11 @@ svg {
     border-radius: 5px;
 }
 
+.profile-picture > h3, #pp {
+    margin-right: auto;
+    margin-left: auto;
+}
+
 #edit-quiz-container>.rest>form>input:focus, select:focus, textarea:focus {
     outline: none !important;
     border: 2px solid var(--green) !important;
@@ -332,7 +337,6 @@ svg {
         margin: 0 !important;
     }
     #edit-quiz-container>div.profile-picture>#pp {
-        margin-left: auto;
         margin-right: auto;
     }
     .topic>* button {
