@@ -7,7 +7,6 @@ export const getAllComments = createAsyncThunk(
         try {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + token);
-            console.log(token)
             var requestOptions = {
                 method: 'GET',
                 headers: myHeaders,
@@ -54,7 +53,6 @@ export const createComment = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + data.token));
             myHeaders.append("Content-Type", "application/json");
 
-            console.log(data.lecture_id)
             var raw = JSON.stringify({ "creator_id": data.creator_id, "lecture_id": data.lecture_id, "comment": data.comment, "replyTo": data.replyTo });
 
             var requestOptions = {
@@ -82,7 +80,6 @@ export const deleteComment = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
 
-            console.log(data.lecture_id)
             var raw = "";
 
             var requestOptions = {

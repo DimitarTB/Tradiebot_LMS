@@ -22,16 +22,12 @@ export const LecturesSlice = createSlice({
             state.allFiles = []
         },
         [getAllLectures.fulfilled]: (state, action) => {
-            console.log(action)
             state.allLectures = action.payload
             state.loadingStatus = statuses.fulfilled
-            console.log("Lectures: ", state.allLectures)
 
             state.allLectures.forEach(element => {
                 state.allFiles = state.allFiles + element.files
             })
-
-            console.log("Files :", state.allFiles)
         },
         [getAllLectures.rejected]: (state, action) => {
             state.loadingError = action.payload
@@ -56,7 +52,6 @@ export const LecturesSlice = createSlice({
         },
         [createLecture.fulfilled]: (state, action) => {
             state.createStatus = statuses.fulfilled
-            console.log("Lecture created!", action.payload.id)
 
             state.allLectures = [...state.allLectures, action.payload.lecture]
         },
@@ -87,7 +82,6 @@ export const LecturesSlice = createSlice({
         [uploadFile.fulfilled]: (state, action) => {
             const idx = state.allLectures.findIndex(lecture => lecture._id = action.payload.id)
             if (idx === -1) return
-            console.log(action.payload.files)
             // action.payload.files.forEach(file => state.allLectures[idx].files.push(file))
             state.allLectures[idx].files = state.allLectures[idx].files.concat(action.payload.files)
             state.filesStatus = statuses.fulfilled
@@ -108,14 +102,12 @@ export const LecturesSlice = createSlice({
         [deleteFile.fulfilled]: (state, action) => {
             const lectIdx = state.allLectures.findIndex(lect => lect._id === action.payload.id)
             if (lectIdx === -1) return
-            console.log(action.payload.id)
             state.allLectures[lectIdx].files = action.payload.files
         },
 
 
         [watchedLecture.fulfilled]: (state, action) => {
             const lectIdx = state.allLectures.findIndex(lect => lect._id === action.payload.lecture_id)
-            console.log(lectIdx)
             state.allLectures[lectIdx].watchedBy.push(action.payload.user_id)
         }
 

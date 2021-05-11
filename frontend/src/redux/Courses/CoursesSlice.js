@@ -20,10 +20,9 @@ export const CoursesSlice = createSlice({
             state.loadingStatus = statuses.pending
         },
         [getAllCourses.fulfilled]: (state, action) => {
-            console.log(action)
             state.allCourses = action.payload
             state.loadingStatus = statuses.fulfilled
-            console.log("Courses: ", state.allCourses)
+
         },
         [getAllCourses.rejected]: (state, action) => {
             state.loadingError = action.payload
@@ -79,7 +78,6 @@ export const CoursesSlice = createSlice({
         },
 
         [coursesTracking.fulfilled]: (state, action) => {
-            console.log(action)
             var counter = 0;
             action.payload.tracking.map(tr => {
                 tr.id = counter

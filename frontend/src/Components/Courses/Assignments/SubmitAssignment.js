@@ -15,17 +15,12 @@ function SubmitAssignment() {
 
 
     const assignmentRecords = assignmentSelector.assignmentRecords?.filter(rec => rec.user_id === currentUser.currentUserData._id && rec.assignment_id === assignment._id)
-    console.log(assignmentRecords.length)
-    const [file, setFile] = useState(null)
     const [ff, setFulfilled] = useState(false)
     const [redirect, setRedirect] = useState(false)
     useEffect(() => {
         dispatch(getAllAssignments())
         dispatch(getAssignmentRecords())
     }, [])
-    useEffect(() => {
-        console.log(file)
-    }, [file])
 
     useEffect(() => {
         if (ff === true) {

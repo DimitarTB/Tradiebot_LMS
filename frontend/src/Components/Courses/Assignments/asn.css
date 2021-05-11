@@ -66,3 +66,9 @@
 .assignmentContainer>#file_form>form>input:focus {
     border: none !important;
 }
+
+@media only screen and (max-width: 1000px) {
+    .assignmentContainer>#file_form>form>input {
+        min-width: 80% !important;
+    }
+}

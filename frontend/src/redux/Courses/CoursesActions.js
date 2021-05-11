@@ -77,7 +77,6 @@ export const createCourse = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -101,7 +100,6 @@ export const addTeacher = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log(error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -130,7 +128,6 @@ export const editCourse = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log(error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -140,7 +137,6 @@ export const uploadThumbnail = createAsyncThunk(
     'courses/uploadThumbnail',
     async (data, ext) => {
         try {
-            console.log("Thumbnail22")
             var formData = new FormData();
             formData.append("image", data.file)
             const response = await axios.post((API_URL + ("api/upload_thumbnail?course_id=" + data.id)), formData, {

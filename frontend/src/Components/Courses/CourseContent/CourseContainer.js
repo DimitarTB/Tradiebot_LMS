@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react"
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useParams } from 'react-router-dom'
 import { getAllCourses, getOneCourse } from "../../../redux/Courses/CoursesActions"
-import { getAllLectures, getCourseLectures, getOneLecture, watchedLecture } from "../../../redux/Lectures/LecturesActions"
+import { getCourseLectures, getOneLecture, watchedLecture } from "../../../redux/Lectures/LecturesActions"
 
 import VideoPlayer from "./VideoPlayer"
 import VideoBrowser from "./VideoBrowser"
@@ -14,15 +14,11 @@ import { getLectureComments } from "../../../redux/Comments/CommentsActions"
 import Container from "../../Global/Container"
 import { getAllTopics } from "../../../redux/Topics/TopicsActions"
 import { getAllQuizzes, getQuizRecords } from "../../../redux/Quizzes/QuizzesActions"
-import { addCertificate, fetchAll, getAllCertificates } from "../../../redux/Users/UserActions"
+import { fetchAll, getAllCertificates } from "../../../redux/Users/UserActions"
 import { getAllAssignments, getAssignmentRecords } from "../../../redux/Assignments/AssignmentsActions"
-import Certificate from "./Certificate"
-import Certificates from "../../User/Certificates"
 import ReadMoreReact from 'read-more-react';
-import { MdMore } from "react-icons/md"
 
 const CourseContainer = props => {
-    const [redirect, setRedirect] = useState(false)
     const [showVideo, setShowVideo] = useState(false)
     function idleTimer() {
         var t;
@@ -32,10 +28,6 @@ const CourseContainer = props => {
         window.onclick = resetTimer;     // catches mouse clicks
         window.onscroll = resetTimer;    // catches scrolling
         window.onkeypress = resetTimer;  //catches keyboard actions
-
-        function logout() {
-            console.log("inactive")
-        }
 
         function resetTimer() {
             clearTimeout(t);  // time is in milliseconds (1000 is 1 second)
@@ -52,10 +44,6 @@ const CourseContainer = props => {
         dispatch(getAllCertificates())
     }, [])
 
-
-    function stopWatching() {
-        dispatch({ type: 'user/stopWatching', payload: { "id": currentCourse._id } })
-    }
     function compare(a, b) {
         if (a.index < b.index) {
             return -1;
@@ -85,16 +73,18 @@ const CourseContainer = props => {
     const topicSel = useSelector(state => state.topics.allTopics.filter(topic => topic.course_id === currentCourse?._id))
     const topics = JSON.parse(JSON.stringify(topicSel))
     topics.sort(compare)
-    console.log(topics)
     topics.map(tp => tp.lectures.sort(compare2))
-    console.log(topics)
     const [firstLec, setFirstLec] = useState(null)
     const quizzes = useSelector(state => state.quizzes?.allQuizzes.filter(qz => qz?.course_id === currentCourse?._id))
-    console.log("topics", topics)
     const quizRecordsUser = useSelector(state => state.quizzes.quizRecords.filter(qzr => (qzr.user === currentUser.currentUserData._id && (quizzes.filter(qz => qz._id === qzr.quiz_id).length !== 0))))
     const certificates = currentUser.allCertificates.filter(cert => (cert.course_id === currentCourse?._id && cert.user_id === currentUser.currentUserData?._id))
     const [selectedLecture, setSelectedLecture] = useState(null)
     const showQuizzes = quizzes.filter(qz => (topics.filter(tp => tp._id === qz.topic_id).length !== 0))
+
+
+    function stopWatching() {
+        dispatch({ type: 'user/stopWatching', payload: { "id": currentCourse?._id } })
+    }
 
     const [dataURL, setDataURL] = useState("")
 
@@ -120,7 +110,6 @@ const CourseContainer = props => {
         if (selectedLecture === null && topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0) !== undefined) {
 
             const lect_id = topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0).id
-            console.log("useef", lect_id, currentLectures)
             setSelectedLecture(currentLectures.find(lect => lect._id === lect_id))
             // setSelectedLecture(topics.find(tp => tp.index === 0)?.lectures.find(lect => lect.index === 0))
         }
@@ -162,7 +151,7 @@ const CourseContainer = props => {
             min={20}
             ideal={150}
             max={2000}
-            readMoreText={<h5>Read More...</h5>} />}
+            readMoreText={"Read More..."} />}
             component={
                 <div className="course-container">
                     <div className="left">
@@ -195,11 +184,11 @@ const CourseContainer = props => {
                             {showVideo === true ? <VideoPlayer url={selectedLecture?.video_file} /> : null}
                         </div>
                         <CourseInfoSection lecture={selectedLecture} course={currentCourse} setShowVideo={setShowVideo} />
-                        {window.screen.width <= 1000 ? <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null}
+                        {/* {window.screen.width <= 1000 ? <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null} */}
                     </div>
-                    {window.screen.width <= 1000 ? null : <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />}
+                    {/* {window.screen.width <= 1000 ? null : <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />} */}
                 </div>
-            }>
+             }>
 
         </Container>
     ) : <Container details={currentCourse?.name} description="This course has no lectures to show!"></Container >) : <Container

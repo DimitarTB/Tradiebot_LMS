@@ -12,12 +12,8 @@ function ResizeImage() {
         var img = new Image();
 
 
-        console.log("img")
         img.addEventListener('load', function () {
             var percents = 0
-
-            console.log(img.width)
-            console.log(img.height)
             var width = img.width
             var height = img.height
 
@@ -41,8 +37,6 @@ function ResizeImage() {
                 width = width - (width_percent * percents)
             }
             // ctx.drawImage(img, height, width)
-            console.log(height, width)
-            console.log("c")
             canvas.height = height
             canvas.width = width
             ctx.drawImage(img, 0, 0, width, height);

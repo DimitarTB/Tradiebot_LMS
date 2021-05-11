@@ -24,6 +24,10 @@ function EditAssignment() {
         "description": currentAssignment.description
     })
 
+    const validator = (data, tester) => {
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Assignment Title field" })
+        return true
+    }
     useEffect(() => {
         dispatch(getAllAssignments())
     }, [])
@@ -46,7 +50,7 @@ function EditAssignment() {
                     name={currentAssignment.title}
                     info={info}
                     buttonText="Proceed"
-                    data={currentAssignment}
+                    data={assignment}
                     handleChange={e => {
                         setInfo({ type: null, message: null })
                         setAssignment({
@@ -56,6 +60,7 @@ function EditAssignment() {
                     }}
                     handleSubmit={e => {
                         e.preventDefault()
+                        if(validator({"name": assignment.title}) !== true) return
                         dispatch(updateAssignment({ "id": asn_id, "title": assignment.title, "description": assignment.description }))
                         setFulfilled(true)
                     }

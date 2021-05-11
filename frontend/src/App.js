@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import './App.css'
-import Container from "./Components/Global/Container"
 import Nav from "./Components/Global/Nav/Nav"
 import Landing from "./Components/Landing/Landing.js"
 import Profile from "./Components/User/Profile"
@@ -17,7 +16,6 @@ import {
     Switch,
     Route,
     Redirect,
-    useParams
 } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import EnrolledCourses from './Components/Courses/EnrolledCourses'
@@ -28,12 +26,10 @@ import SubmitToken from './Components/Landing/SubmitToken'
 import TopicsTest from './Components/TopicsTest'
 import EditTopic from './Components/Courses/Forms/EditTopic'
 import EditQuiz from './Components/Courses/Forms/EditQuiz'
-import PlastfixForm from './Components/Courses/Forms/PlastfixForm'
 import QuizContainer from "./Components/Quiz/QuizContainer"
 import Teachers from './Components/Landing/Teachers'
 import CoursesTracking from './Components/Courses/CoursesTracking'
 import SearchUsers from './Components/User/SearchUsers'
-import PlastfixForm2 from './Components/Courses/Forms/PlastfixForm2'
 import QuizTracking from './Components/Quiz/QuizTracking'
 import Home from './Components/Landing/Home'
 import Activate from './Components/User/Activate'
@@ -50,9 +46,9 @@ import RateAssignment from './Components/Courses/Assignments/RateAssignment'
 import AssignmentRecords from './Components/Courses/Assignments/AssignmentRecords'
 import TeacherQuizRecords from './Components/Courses/TeacherQuizRecords'
 import MobileNav from './Components/Global/Nav/MobileNav'
-import Paint from './Components/Courses/Paint'
 import CanvasPaint from './Components/Courses/CanvasPaint'
 import ResizeImage from './Components/Courses/ResizeImage'
+import CourseNavigator from './Components/Courses/CourseContent/CourseNavigator'
 
 function App() {
 
@@ -125,6 +121,9 @@ function App() {
                         </Route>
                         <Route exact path="/course/:course_id">
                             <CourseContainer />
+                        </Route>
+                        <Route exact path="/course_nav/:course_id">
+                            <CourseNavigator />
                         </Route>
                         <Route exact path="/resize">
                             <ResizeImage />

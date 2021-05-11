@@ -58,13 +58,7 @@ export default props => {
     }
 
     const validator = (data, tester) => {
-        for (const field in data) {
-            if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
-            if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
-            if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
-            if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
-        }
-
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Lecture Name field" })
         return true
     }
     useEffect(() => {
@@ -103,7 +97,7 @@ export default props => {
                     }}
                     handleSubmit={e => {
                         e.preventDefault()
-                        // if (validator(lecture, lectureValidator) !== true) return
+                        if (validator(lecture, lectureValidator) !== true) return
                         const data = {
                             name: lecture.name,
                             files: currentLecture?.files ? currentLecture.files : [],
@@ -115,7 +109,6 @@ export default props => {
                             content: lecture.content
                         }
                         if (lecture.files.length > 0) data.file = true
-                        console.log("dispatch")
                         dispatch(updateLecture(data))
 
                         if (lecture.files.length > 0) {
@@ -156,12 +149,12 @@ export default props => {
                     ]}
                     overloadedFields={[
                         (
-                            <div class="files">
+                            <div className="files">
                                 <h3 id="title-files">Files:</h3>
                                 {currentLecture?.files?.map(fl =>
                                     <Fragment>
                                         <h4>{getFileName(fl)}</h4>
-                                        <div class="icon">
+                                        <div className="icon">
                                             <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteFile({ "id": currentLecture?._id, "file": fl }))} />
                                         </div>
                                     </Fragment>

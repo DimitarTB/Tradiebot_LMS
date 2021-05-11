@@ -91,7 +91,6 @@ export const addTopicLectures = createAsyncThunk(
                 body: raw,
                 redirect: 'follow'
             };
-            console.log("DispAddTl5")
             const response = await fetch((API_URL + "api/topic?id=" + data.id + "&lecture=1"), requestOptions)
             const data2 = await response.json()
             return data2

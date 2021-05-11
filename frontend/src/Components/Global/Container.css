@@ -17,11 +17,17 @@
 }
 
 #icon>img {
-    width: 200px;
-    height: 200px;
+    /* width: 200px;
+    height: 200px; */
     position: absolute;
     right: 5%;
     top: 1.5%;
+    display: inline-block;
+    width: 10%;
+}
+
+#mobileIcon {
+    display: none;
 }
 
 #mobileNav {
@@ -55,12 +61,56 @@
 }
 
 @media only screen and (max-width: 800px) {
+    #mobileIcon {
+        display: block;
+    }
+    .computerIcon {
+        display: none;
+    }
     #mobileNav {
         visibility: visible;
-        bottom: 0;
-        position: -webkit-sticky;
-        position: sticky;
-        left: 0;
+        bottom: 15px;
+        /* position: -webkit-sticky; */
+        position: fixed;
+        left: 15px;
         margin-left: 15px;
+    }
+
+    .mobile-nav-item {
+        margin: 10px 0px;
+    }
+
+    .mobile-nav-item > ul {
+        margin-left: 10px;
+    }
+    .mobile-nav-item > ul > li {
+        font-size:1.1em;
+        padding: 3px;
+    }
+
+
+    .container > .details {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 70px;
+        padding-top: 10px
+    }
+
+    .container > .details > #det {
+        width: 100%;
+        margin-top: -100px;
+        z-index: 5;
+        text-align: center;
+    }
+
+    .container > .details > #desc {
+        display: none;
+    }
+
+    .container > .details > img {
+        width: 50%;
+        opacity: 0.5;
     }
 }

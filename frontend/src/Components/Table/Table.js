@@ -107,7 +107,6 @@ const Table = props => {
 
     useEffect(() => {
         rows = generateRows()
-        console.log(index)
         props.setExportData({
             cols: props.columns.map((currElement, index) => {
                 return {

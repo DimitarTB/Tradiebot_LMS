@@ -26,8 +26,6 @@ function ChangePassword() {
             .then(response => response.status === 200 ? setRedirect(true) : alert('User not found!'))
     }
 
-    console.log(redirect)
-
     return redirect === false ? (
         <div className="landing">
             <div className="landing-container">

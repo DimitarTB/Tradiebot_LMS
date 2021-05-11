@@ -18,11 +18,9 @@ export const CommentsSlice = createSlice({
             state.loadingStatus = statuses.pending
         },
         [getAllComments.fulfilled]: (state, action) => {
-            console.log(action)
             if (typeof action.payload !== typeof []) state.allComments = []
             else state.allComments = action.payload
             state.loadingStatus = statuses.fulfilled
-            console.log("Comments: ", state.allComments)
         },
         [getAllComments.rejected]: (state, action) => {
             state.loadingError = action.payload
@@ -39,9 +37,7 @@ export const CommentsSlice = createSlice({
             state.createStatus = statuses.pending
         },
         [createComment.fulfilled]: (state, action) => {
-            console.log(action)
             state.createStatus = statuses.fulfilled
-            console.log("Comment created!")
             state.allComments.push(action.payload.comment)
         },
         [createComment.rejected]: (state, action) => {

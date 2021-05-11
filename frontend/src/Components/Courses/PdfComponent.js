@@ -21,12 +21,10 @@ function PdfComponent() {
     function getDataUri(url, callback) {
         var image = new Image();
         image.setAttribute('crossorigin', 'anonymous')
-        console.log("Funct")
         image.onload = function () {
             var canvas = document.createElement('canvas');
             canvas.width = "300"; // or 'width' if you want a special/scaled size
             canvas.height = "300"; // or 'height' if you want a special/scaled size
-            console.log("Funct2")
             canvas.getContext('2d').drawImage(this, 0, 0);
 
             // Get raw image data
@@ -38,10 +36,7 @@ function PdfComponent() {
     }
 
     useEffect(() => {
-        console.log("dataURI")
         getDataUri("https://images.template.net/wp-content/uploads/2015/02/28065819/Certificate-Templates.jpg", function (dataUri) {
-            console.log("inside")
-            console.log(dataUri)
         })
     }, [])
     var rows = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},].map((a, index) => [

@@ -55,7 +55,7 @@ function RateAssignment() {
                     dispatch(rateAssignment({ "id": record_id, "grade": parseInt(e.target.grade.value), "notes": e.target.notes.value }))
                     setFulfilled(true)
                 }}>
-                    <label for="grade">Choose a grade:</label>
+                    <label htmlFor="grade">Choose a grade:</label>
                     <select name="grade" id="grade">
                         {record.grade === 1 ? <option value="1" selected>1</option> : <option value="1">1</option>}
                         {record.grade === 2 ? <option value="2" selected>2</option> : <option value="2">2</option>}
@@ -63,7 +63,7 @@ function RateAssignment() {
                         {record.grade === 4 ? <option value="4" selected>4</option> : <option value="4">4</option>}
                         {record.grade === 5 ? <option value="5" selected>5</option> : <option value="5">5</option>}
                     </select><br />
-                    <label for="notes">Notes</label>
+                    <label htmlFor="notes">Notes</label>
                     <textarea name="notes" style={{ height: "10%" }} defaultValue={record.notes}></textarea><br />
                     <button type="submit" style={{ color: "white", border: "none", backgroundColor: "var(--primary)", padding: "10px", borderRadius: ".42rem" }}>Submit</button>
                     <br /> <br />

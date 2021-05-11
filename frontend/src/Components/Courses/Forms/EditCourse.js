@@ -121,13 +121,13 @@ export default props => {
         return fnd
     }
     const validator = (data, tester) => {
-        for (const field in data) {
-            if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
-            if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
-            if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
-            if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
-        }
-
+        // for (const field in data) {
+        //     if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
+        //     if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
+        //     if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
+        //     if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
+        // }
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Course Name field" })
         return true
     }
 
@@ -190,6 +190,10 @@ export default props => {
                                     <input name="name" value={newQuiz.name} placeholder="Quiz Name"></input>
                                     <button onClick={e => {
                                         e.preventDefault()
+                                            if(newQuiz.name === null || newQuiz.name === undefined || newQuiz.name.length < 1) {
+                                            alert("Please enter a valid name for the quiz!")
+                                            return
+                                        }
                                         dispatch(createQuiz({ "name": newQuiz.name, "topic_id": topic?._id, "course_id": course_id }))
                                     }}>Add</button>
                                 </form>
@@ -235,8 +239,8 @@ export default props => {
                                                 </div>
                                             }</Fragment> : ""}
                                     <div className="border">
-                                        <NavLink class="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink>
-                                        <div class="icon">
+                                        <NavLink className="item" to={"/lectures/edit/" + lecture?._id}><h2>{lecture?.name}</h2></NavLink>
+                                        <div className="icon">
                                             <TiDelete style={{ color: "red" }} onClick={() => dispatch(deleteLecture({ token: currentUser?.currentUser, id: lecture?._id, topic_id: topic._id }))} />
                                             {idx !== 0 || idx === 0 ?
                                                 <Fragment>
@@ -311,7 +315,7 @@ export default props => {
                     }}
                     handleSubmit={e => {
                         e.preventDefault()
-                        // if (validator(course, courseValidator) !== true) return
+                        if (validator(course, courseValidator) !== true) return
                         course.dateCreated = currentCourse.dateCreated
                         course._id = course_id
                         course.manualEnroll = course.manualEnroll === "Self Enroll" ? false : true
@@ -387,6 +391,10 @@ export default props => {
                                         }}>
                                         <input name="name" value={addTopicData.name} placeholder="Topic Name" />
                                         <button type="button" onClick={() => {
+                                            if(addTopicData.name === null || addTopicData.name === undefined || addTopicData.name.length < 1) {
+                                                alert("Please enter a valid name for the topic!")
+                                                return
+                                            }
                                             dispatch(addTopic({ "name": addTopicData.name, "course_id": currentCourse._id }))
                                         }}>Add</button>
                                     </form>

@@ -25,7 +25,6 @@ function getBase64Image(img) {
     // will re-encode the image.
 
     var dataURL = canvas.toDataURL("image/png");
-    console.log(dataURL)
 
     return dataURL;
 }
@@ -55,10 +54,10 @@ const PrintButton = ({ id, label, width, height, table, text, text2 }) => (<div 
             const a4HeightMm = 297;
             const a4HeightPx = mmToPx(a4HeightMm);
             const numPages = inputHeightMm <= a4HeightMm ? 1 : Math.floor(inputHeightMm / a4HeightMm) + 1;
-            console.log({
-                input, inputHeightMm, a4HeightMm, a4HeightPx, numPages, range: range(0, numPages),
-                comp: inputHeightMm <= a4HeightMm, inputHeightPx: input.offsetHeight
-            });
+            // console.log({
+            //     input, inputHeightMm, a4HeightMm, a4HeightPx, numPages, range: range(0, numPages),
+            //     comp: inputHeightMm <= a4HeightMm, inputHeightPx: input.offsetHeight
+            // });
 
 
             html2canvas(input, { scrollX: -window.scrollX, scrollY: -window.scrollY })
@@ -68,7 +67,6 @@ const PrintButton = ({ id, label, width, height, table, text, text2 }) => (<div 
                         unit: "px",
                         format: [height, width]
                     });
-                    console.log(height, width)
                     const imgData = canvas.toDataURL('image/png');
                     pdf.setFontSize(50)
                     pdf.text(30, 40, text);

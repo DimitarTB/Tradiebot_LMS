@@ -34,7 +34,7 @@ function MobileNav(props) {
                             <FaUserAlt />
                             <h3>Admin Panel</h3>
                         </span>
-                        <MdKeyboardArrowDown />
+                        {/* <MdKeyboardArrowDown /> */}
                     </span>
                     <ul>
                         {user?.types?.includes("SuperAdmin") ? <li><NavLink to={"/courses/created"}> Created Courses</NavLink></li> : ""}
@@ -50,7 +50,7 @@ function MobileNav(props) {
                             <FaUserAlt />
                             <h3>User</h3>
                         </span>
-                        <MdKeyboardArrowDown />
+                        {/* <MdKeyboardArrowDown /> */}
                     </span>
                     <ul>
                         <li><NavLink to={"/user/" + user?._id}> Profile</NavLink></li>
@@ -70,7 +70,7 @@ function MobileNav(props) {
                             <FaUserAlt />
                             <h3>Courses</h3>
                         </span>
-                        <MdKeyboardArrowDown />
+                        {/* <MdKeyboardArrowDown /> */}
                     </span>
                     <ul>
                         <li><NavLink to="/courses/enrolled"> Enrolled Courses</NavLink></li>
@@ -78,6 +78,12 @@ function MobileNav(props) {
                         {user?.types?.includes("Teacher") ? <li><NavLink to={"/courses/teaching"}> Teaching Courses</NavLink></li> : ""}
                     </ul>
                 </div>
+
+
+                {/* <div>
+                    wasd
+                </div> */}
+
             </div>
         </div>
     )

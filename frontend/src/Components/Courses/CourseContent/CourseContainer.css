@@ -45,7 +45,41 @@ a {
     position: relative;
 }
 
-.course-container>.video-browser {
+
+
+div.container > div.video-browser {
+    display: block;
+    max-width: 50%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 40px;
+}
+
+div.container > div.video-browser > button {
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 100%;
+    background: none;
+    border: none;
+    background-color: var(--white);
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+div.container > div.video-browser > button:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+div.container > div.video-browser > #topic_nav {
+    margin-top: 40px;
+    background-color: var(--primary);
+}
+
+
+
+
+/* .course-container>.video-browser {
     overflow-y: scroll;
     width: 280px;
     display: flex;
@@ -88,7 +122,7 @@ a {
 
 .course-container>.video-browser>button:hover {
     background: var(--white);
-}
+} */
 
 .course-container>.left {
     width: calc(100% - 280px);

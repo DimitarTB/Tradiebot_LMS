@@ -64,7 +64,6 @@ export const CanvasPaint = React.memo(props => {
     })
 
 
-    useEffect(() => console.log(myRef.current), [myRef.current])
 
     useEffect(() => {
 
@@ -98,7 +97,6 @@ export const CanvasPaint = React.memo(props => {
     }
 
     const handleChangeComplete = (color) => {
-        console.log("change", color)
         ctx.strokeStyle = color.hex
         ctx.fillStyle = color.hex
     };
@@ -332,7 +330,6 @@ export const CanvasPaint = React.memo(props => {
         }
         else if (myRef.current === "text") {
             hasInput = false
-            console.log("TEXT FN")
             canvas.onclick = function (e) {
                 if (hasInput) return;
                 addInput(e.clientX, e.clientY);
@@ -378,11 +375,9 @@ export const CanvasPaint = React.memo(props => {
                 {/* <form onChange={(e) => setColor(e.target.value)}><input placeholder="color" name="color"></input></form> */}
                 <h1 onClick={(e) => {
                     myRef.current = "draw"
-                    console.log(myRef.current)
                 }}>Draw</h1>
                 <h1 onClick={(e) => {
                     myRef.current = "text"
-                    console.log(myRef.current)
                 }}>Text</h1>
                 <button onClick={() => download()}>Download</button>
                 <button onClick={() => clearCanvas()}>Clear</button>

@@ -289,6 +289,10 @@ svg {
     cursor: pointer
 } */
 
+div.profile-picture > img {
+        min-width: 40% !important;
+}
+
 .radio>input, textarea {
     border: 1px solid black;
     margin-top: auto;
@@ -349,5 +353,14 @@ svg {
     }
     .rest {
         min-width: 100%;
+    }
+    div.profile-picture > img {
+        min-width: 60% !important;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    div.profile-picture > img {
+        min-width: 80% !important;
     }
 }

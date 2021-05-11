@@ -147,9 +147,9 @@
         color: var(--light);
         max-height: 22px;
         overflow: hidden;
-        background-color: black !important;
+        background-color: black !important; 
     }
-    h3 {
+    .mobile-nav-container > div > .mobile-nav-item > span > span > h3 {
         display: inline-block;
         margin: 7px;
     }

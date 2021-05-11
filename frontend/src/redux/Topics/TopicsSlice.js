@@ -6,7 +6,8 @@ export const TopicsSlice = createSlice({
     name: 'topics',
     initialState: {
         allTopics: [],
-        addTopicStatus: statuses.idle
+        addTopicStatus: statuses.idle,
+        editTopicStatus: statuses.idle
     },
     reducers: {
         addLecturesToTopic: (state, action) => {
@@ -16,7 +17,6 @@ export const TopicsSlice = createSlice({
     },
     extraReducers: {
         [getAllTopics.fulfilled]: (state, action) => {
-            console.log(action.payload)
             state.allTopics = action.payload.topics
             state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         },
@@ -39,7 +39,6 @@ export const TopicsSlice = createSlice({
         },
 
         [addTopicLectures.fulfilled]: (state, action) => {
-            console.log(action.payload.lectures)
             state.allTopics.map(topic => topic._id === action.payload.id ? topic.lectures = action.payload.lectures : "")
             state.allTopics.map(tp => tp?.lectures?.sort((a, b) => a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
         },
@@ -47,6 +46,10 @@ export const TopicsSlice = createSlice({
 
         [changeTopicName.fulfilled]: (state, action) => {
             state.allTopics.map(topic => topic._id === action.payload.id ? topic.name = action.payload.name : "")
+            state.editTopicStatus = statuses.fulfilled
+        },
+        [changeTopicName.pending]: (state, action) => {
+            state.editTopicStatus = statuses.pending
         },
 
         [deleteTopic.fulfilled]: (state, action) => {

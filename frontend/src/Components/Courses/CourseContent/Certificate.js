@@ -49,12 +49,6 @@ function Certificate() {
 
     window.addEventListener("load", draw, true);
 
-    useEffect(() => {
-        console.log(dataURL)
-    }, [dataURL])
-
-
-
     return (
         <div>
 

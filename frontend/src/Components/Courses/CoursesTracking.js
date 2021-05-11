@@ -16,7 +16,8 @@ function CoursesTracking() {
         dispatch(getAllCourses("a"))
     }, [])
 
-    function msToTime(s) {
+    function msToTime(obj) {
+        var s = obj.row.time_watched_course
         var ms = s % 1000;
         s = (s - ms) / 1000;
         var secs = s % 60;
@@ -46,9 +47,11 @@ function CoursesTracking() {
         },
         {
             field: 'time_watched_course',
-            headerName: 'Time Watched',
+            headerName: 'Time Watched (h:m:s)',
             width: 250,
-            type: 'time'
+            filterable: false,
+            valueGetter: msToTime,
+            sortComparator: (v1, v2) => v1 - v2
         }
     ];
 
@@ -62,8 +65,8 @@ function CoursesTracking() {
         ob.started_watching = Date.parse(ob.started_watching)
         ob.started_watching = new Date(ob.started_watching)
 
-        ob.time_watched = parseInt(ob.time_watched)
-        ob.time_watched_course = msToTime(ob.time_watched)
+        ob.time_watched = parseFloat(ob.time_watched)
+        ob.time_watched_course = ob.time_watched
         ob.time_watched = ob.started_watching.getTime() + ob.time_watched
         ob.time_watched = new Date(ob.time_watched)
 
@@ -73,7 +76,7 @@ function CoursesTracking() {
     })
     return (
         <Container details="Courses Tracking" description="Track users watched courses" component={
-            <div class="table">
+            <div className="table">
                 <DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[5, 10, 25, 50, 100]} pagination sortModel={[{ field: "started_watching", sort: 'asc' }]} checkboxSelection />
             </div>
         }>

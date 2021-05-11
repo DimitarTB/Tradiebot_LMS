@@ -51,7 +51,6 @@ export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userData, ext) => {
         try {
-            console.log(userData)
             var myHeaders = new Headers();
             myHeaders.append("Authorization", JSON.stringify(userData));
 
@@ -79,6 +78,7 @@ export const register = createAsyncThunk(
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({ "username": data.username, "email": data.email, "password": data.password });
+
 
             var requestOptions = {
                 method: 'POST',
@@ -118,7 +118,6 @@ export const enrollCourse = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -143,7 +142,6 @@ export const unEnrollCourse = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -165,7 +163,6 @@ export const profilePicture = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -331,13 +328,11 @@ export const unenrollUserCourse = createAsyncThunk(
                 body: raw,
                 redirect: 'follow'
             };
-            console.log("fetch")
             const response = await fetch((API_URL + "api/unenroll_user_course"), requestOptions)
             const data2 = await response.json()
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -358,13 +353,11 @@ export const enrollUserCourse = createAsyncThunk(
                 body: raw,
                 redirect: 'follow'
             };
-            console.log("fetch")
             const response = await fetch((API_URL + "api/enroll_user_course"), requestOptions)
             const data2 = await response.json()
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -435,7 +428,6 @@ export const addCertificate = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }

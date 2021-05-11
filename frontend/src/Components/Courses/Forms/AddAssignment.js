@@ -24,6 +24,18 @@ function AddAssignment() {
         "description": ""
     })
 
+    const validator = (data, tester) => {
+        // for (const field in data) {
+        //     if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
+        //     if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
+        //     if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
+        //     if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
+        // }
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Assignment Title field" })
+        return true
+    }
+
+
     useEffect(() => {
         if (ff === true) {
             if (assignmentSelector.addAssignmentStatus === "fulfilled") {
@@ -52,9 +64,8 @@ function AddAssignment() {
                     }}
                     handleSubmit={e => {
                         e.preventDefault()
-                        console.log("add")
+                        if(validator({"name": newAssignment.title}, "") !== true) return
                         dispatch(addAssignment({ "topic_id": topic_id, "course_id": topic.course_id, "title": newAssignment.title, "description": newAssignment.description }))
-                        console.log("aft")
                         setFulfilled(true)
                     }
                     }

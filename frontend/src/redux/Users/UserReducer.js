@@ -34,11 +34,13 @@ export const UserSlice = createSlice({
             state.registerStatus = statuses.idle
         },
         startWatching: (state, action) => {
-            const stW = { "time": new Date(), "course": action.payload.id }
+            const stW = { "time": (new Date()).toString(), "course": action.payload.id }
             state.startedWatching = stW
+
         },
         stopWatching: (state, action) => {
             const watchingTime = (new Date()).getTime() - Date.parse(state.startedWatching.time)
+            // console.log(state.startedWatching.time)
             var myHeaders = new Headers();
             myHeaders.append("Authorization", ("Bearer " + state.currentUser));
             myHeaders.append("Content-Type", "application/json");
@@ -102,15 +104,11 @@ export const UserSlice = createSlice({
         [loginUser.fulfilled]: (state, action) => {
             state.currentUser = action.payload
             state.loginStatus = statuses.fulfilled
-            console.log(state.currentUser)
             const decodedPl = jwt_decode(state.currentUser)
             const decoded = decodedPl.identity
             const expDate = (new Date(decodedPl.exp * 1000)).toString()
-            console.log(decoded)
             const new_user = { "_id": decoded._id, "username": decoded.username, "email": decoded.email, "types": decoded.types, "enrolledCourses": decoded.enrolledCourses, "createdCourses": decoded.createdCourses, "activated": decoded.activated, "profile_picture": decoded.profile_picture, "token_exp": expDate, "bio": decoded.bio }
             state.currentUserData = new_user
-
-            console.log(state.currentUserData)
         },
         [loginUser.rejected]: (state, action) => {
             state.loginError = action.payload
@@ -125,7 +123,6 @@ export const UserSlice = createSlice({
         [register.fulfilled]: (state, action) => {
             state.allUsers.push(action.payload)
             state.registerStatus = statuses.fulfilled
-            console.log("FF")
         },
         [register.rejected]: (state, action) => {
             state.registerError = action.payload
@@ -133,12 +130,10 @@ export const UserSlice = createSlice({
         },
 
         [enrollCourse.fulfilled]: (state, action) => {
-            console.log("PL", action.payload)
             state.currentUserData.enrolledCourses = [...state.currentUserData.enrolledCourses, action.payload._id]
         },
 
         [unEnrollCourse.fulfilled]: (state, action) => {
-            console.log(action.payload._id)
             state.currentUserData.enrolledCourses = state.currentUserData.enrolledCourses.filter(course => course !== action.payload._id)
         },
 
@@ -170,14 +165,11 @@ export const UserSlice = createSlice({
         [changeUsername.fulfilled]: (state, action) => {
             state.changeUsernameStatus = statuses.fulfilled
             const upd_user = state.allUsers.indexOf(usr => state.currentUserData.username === usr.username)
-            console.log(upd_user)
             if (upd_user === -1) {
                 state.currentUserData.username = action.payload.username
                 state.currentUserData.email = action.payload.email
                 state.currentUserData.bio = action.payload.bio
-                console.log(state.currentUser, action.payload.token)
                 state.currentUser = action.payload.token
-                console.log(state.currentUser)
                 return
             }
             state.allUsers[upd_user].username = action.payload.username
@@ -191,7 +183,6 @@ export const UserSlice = createSlice({
         },
         [changeUsername.rejected]: (state, action) => {
             state.changeUsernameStatus = statuses.rejected
-            console.log(action.payload.message)
             state.usernameError = action.payload
         },
         [changeUsername.pending]: (state) => {
@@ -213,12 +204,9 @@ export const UserSlice = createSlice({
         },
 
         [removeTeacher.fulfilled]: (state, action) => {
-            console.log(action.payload.id)
             const idx = state.allUsers.findIndex(usr => usr._id === action.payload.id)
-            console.log(idx)
             const roles = state.allUsers[idx].types.filter(role => role !== "Teacher")
             state.allUsers[idx].types = roles
-            console.log(state.allUsers[idx])
         },
 
         [unenrollUserCourse.fulfilled]: (state, action) => {

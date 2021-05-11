@@ -28,9 +28,6 @@ export const QuizzesSlice = createSlice({
             if (idx === -1) return
             state.allQuizzes[idx].questions.push(action.payload.question)
             state.addStatus = statuses.fulfilled
-            console.log("payload", action.payload)
-            console.log(idx)
-            console.log(current(state.allQuizzes[idx]))
         },
         [addQuestion.pending]: (state, action) => {
             state.addStatus = statuses.pending
@@ -41,35 +38,27 @@ export const QuizzesSlice = createSlice({
             if (idx === -1) return
 
             state.allQuizzes[idx].questions = state.allQuizzes[idx].questions.filter(qs => {
-                console.log(qs)
-                console.log(action.payload.question)
                 return qs.question !== action.payload.question
             })
         },
 
         [addPublicAnswer.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
-            console.log(idx)
             state.allQuizzes[idx].questions = action.payload.questions
-            console.log(state.allQuizzes[idx].questions)
         },
 
         [deletePublicAnswer.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
-            console.log(idx)
             state.allQuizzes[idx].questions = action.payload.questions
         },
 
         [addCorrectAnswer.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
-            console.log(idx)
             state.allQuizzes[idx].questions = action.payload.questions
-            console.log(state.allQuizzes[idx].questions)
         },
 
         [deleteCorrectAnswer.fulfilled]: (state, action) => {
             const idx = state.allQuizzes.findIndex(qz => qz._id === action.payload.id)
-            console.log(idx)
             state.allQuizzes[idx].questions = action.payload.questions
         },
 

@@ -90,8 +90,6 @@ export const createLecture = createAsyncThunk(
 
             const response = await fetch(API_URL + "api/lecture", requestOptions)
             const data2 = await response.json()
-            console.log("ovde")
-            console.log(data2)
             ext.dispatch({ type: "topics/addLecturesToTopic", payload: { "id": data2.topic_id, "lecture_id": data2.lecture._id, "index": data2.index } })
             return data2
         }
@@ -118,7 +116,6 @@ export const deleteLecture = createAsyncThunk(
 
             const fndTopic = ext.getState().topics.allTopics.findIndex(topic => topic._id === data.topic_id)
             const arr = ext.getState().topics.allTopics[fndTopic].lectures.filter(lect => lect.id !== data2.id)
-            console.log(arr)
 
             ext.dispatch(addTopicLectures({ "id": data.topic_id, "lectures": arr }))
             return data2
@@ -133,12 +130,9 @@ export const updateLecture = createAsyncThunk(
     'lectures/updateLecture',
     async (data, ext) => {
         try {
-            console.log("fetch")
-            console.log(ext.getState().user.currentUser)
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + ext.getState().user.currentUser);
             myHeaders.append("Content-Type", "application/json");
-            console.log("Files:", data.files.length)
             var raw = JSON.stringify({ "name": data.name, "files": data.files, "dateCreated": data.dateCreated, "video_file": data.video_file, "course_id": data.course_id, "watchedBy": data.watchedBy, "content": data.content });
 
             var requestOptions = {

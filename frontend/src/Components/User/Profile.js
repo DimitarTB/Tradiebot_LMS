@@ -64,19 +64,16 @@ function Profile() {
             username.email = currentUser.currentUserData.email
         }
         dispatch(changeUsername(username))
-        console.log("username true")
         setShowUserNameState(true)
     }
 
     useEffect(() => {
         if (showState === true) {
             if (currentUser.changePasswordStatus === "fulfilled") {
-                console.log("Fulfilled change_pwaq")
                 alert("Password changed successfully!")
                 setShowUserNameState(false)
             }
             else if (currentUser.changePasswordStatus === "rejected") {
-                console.log("Rejected change_pwaq")
                 alert("Passwords doesn't match!")
                 setShowUserNameState(false)
             }
@@ -126,7 +123,7 @@ function Profile() {
                     <div className="profile-picture">
                         <h3>Change your profile picture</h3>
                         {currentUser.currentUserData.profile_picture === "" ? "No profile picture" : <img id="pp" src={FILES_URL + currentUser.currentUserData.profile_picture} width="200" />}
-                        <div className="topic">
+                        <div className="topic" style={{padding: "20px 0px"}}>
                             <form
                                 onSubmit={e => {
                                     e.preventDefault()
@@ -139,7 +136,7 @@ function Profile() {
                             </form>
                         </div>
                     </div>
-                    <div class="rest">
+                    <div className="rest">
                         <div className="form_nav">
                             <ul>
                                 <li id={selected === "Profile Info" ? "active" : ""} onClick={() => setSelected("Profile Info")}>Profile Info</li>
@@ -151,11 +148,11 @@ function Profile() {
                             <Fragment>
                                 <form onChange={e => usernameHandleChange(e)} onSubmit={e => usernameHandleSubmit(e)}>
                                     <h3>Change your profile info</h3><br />
-                                    <label for="username">Username</label><br />
+                                    <label htmlFor="username">Username</label><br />
                                     <input name="username" type="username" value={username.username}></input><br />
-                                    <label for="email">E-mail</label><br />
+                                    <label htmlFor="email">E-mail</label><br />
                                     <input name="email" type="email" value={username.email}></input><br />
-                                    <label for="bio">Biography</label><br />
+                                    <label htmlFor="bio">Biography</label><br />
                                     <textarea name="bio" value={username.bio} /><br />
                                     {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                     <button type="submit">Submit</button>
@@ -165,9 +162,9 @@ function Profile() {
                         {selected === "Security" ?
                             <form onChange={e => passwordHandleChange(e)} onSubmit={e => passwordHandleSubmit(e)}>
                                 <h3>Change your password</h3><br />
-                                <label for="currentPassword">Current Password</label>
+                                <label htmlFor="currentPassword">Current Password</label>
                                 <input name="currentPassword" type="password" placeholder="Current password"></input><br></br>
-                                <label for="newPassword">New Password</label>
+                                <label htmlFor="newPassword">New Password</label>
                                 <input name="newPassword" type="password" placeholder="New password"></input><br />
                                 {currentUser.changePasswordStatus === "pending" ? <h4>Pending...</h4> : ""}
                                 <button type="submit">Submit</button>

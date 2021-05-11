@@ -8,7 +8,7 @@ import { NavLink, Redirect } from 'react-router-dom'
 const VideoBrowser = props => {
     const records = useSelector(state => state.quizzes.quizRecords.filter(rec => rec.user === props.user_id))
     const assignments = useSelector(state => state.assignments.allAssignments.filter(asn => asn.course_id === props.course_id))
-
+    console.log("ovde")
     function compare(a, b) {
         if (a.index > b.index) {
             return 1;
@@ -37,16 +37,12 @@ const VideoBrowser = props => {
     const showLectures = [...props.lectures]
     showLectures.sort(compare)
 
-    console.log(showLectures)
     const checkValue = (lectures, id) => {
         for (var i = 0; i < lectures.length; i = i + 1) {
             if (lectures[i].id === id) return true;
         }
         return false;
     }
-    useEffect(() => {
-        props.setSelectedLecture(props.firstLec)
-    }, [])
     const topicCompleted = (lectures) => {
         let watched = true
         lectures.map(lect => {
@@ -66,44 +62,29 @@ const VideoBrowser = props => {
         return true
     }
     let display = []
-    let first = true
-    // props.topics.map((topic, tidx) => {
-    //     first = true
-    //     var counter = 0
-    //     props.lectures.map((lecture, idx, arr) => {
-    //         {
-    //             if (checkValue(topic.lectures, lecture._id)) {
-    //                 display.push((<Fragment>
-
-    //                 </Fragment>))
-    //                 first = false
-    //             }
-    //             if (checkValue(topic.lectures, lecture._id)) first = false
-    //         }
-    //     })
-    // })
+    
     props.topics.map((topic, tidx, sz) => {
         var lectureCount = 0
         assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
         props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
-        display.push(<button style={{ cursor: "default" }}><h2>{"Topic: " + topic.name}</h2></button>)
+        display.push(<button id="topic_nav" style={{ cursor: "default" }}><h2>{"Topic: " + topic.name}</h2></button>)
         topic.lectures.map((lc, idxx) => {
             const lecture = props.lectures.find(lec => lec._id === lc.id)
             if (lecture) {
                 display.push(
                     <Fragment>
-                        {props.selected?._id === lecture?._id ? scrollLeft(lc.index) : null}
+                        {/* {props.selected?._id === lecture?._id ? scrollLeft(lc.index) : null} */}
                         <button className={props.selected?._id === lecture?._id ? "selected" : ""} id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
                                 // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
-                                    if (quizCompleted(props.topics[tidx - 1]?._id) && topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
-                                    else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
+                                    // if (quizCompleted(props.topics[tidx - 1]?._id) && topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
+                                    // else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
                                 }
-                                else props.setSelectedLecture(lecture)
+                                // else props.setSelectedLecture(lecture)
                             }
                             else {
-                                props.setSelectedLecture(lecture)
+                                // props.setSelectedLecture(lecture)
                             }
                         }}>{lecture.name} <AiFillPlayCircle /></button>
                     </Fragment>

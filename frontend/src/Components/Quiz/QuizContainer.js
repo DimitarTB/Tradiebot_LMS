@@ -73,7 +73,6 @@ export default props => {
     }, [])
     useEffect(() => {
         const idx = quizSelector?.quizRecords?.filter(qz => (qz.user === currentUser.currentUserData._id && qz.quiz_id === quiz_id))
-        console.log(idx)
         setAttempts(3 - idx.length)
         var highest_p = 0
         idx.map(id => {
@@ -82,7 +81,6 @@ export default props => {
                 setHighest(id)
             }
         })
-        console.log(highest)
     }, [quizSelector?.quizRecords])
 
     const fields = quiz.questions?.map(question => {
@@ -119,7 +117,6 @@ export default props => {
             }
         }
     })
-    console.log(answers)
     if (selectedPage !== 0) {
         return (
             <Container
@@ -138,7 +135,6 @@ export default props => {
 
                                 const data_answers = []
                                 for (const [key, value] of Object.entries(answers)) {
-                                    console.log(key, value)
                                     let vl = value
                                     if (!Array.isArray(value)) vl = [vl]
                                     const correct_answers = quiz.questions.find(qt => qt.question === key).correct_answers
@@ -167,7 +163,7 @@ export default props => {
                 details={quiz.name}
                 component={
                     <center>
-                        <div class="ready">
+                        <div className="ready">
                             {attempts > 0 ?
                                 <Fragment>
                                     {completed === true ? <h1>{lastCompleted?.passed === true ? ("Congratulations, you completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (passed)!") : "You completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (failed)!"}</h1> : null}

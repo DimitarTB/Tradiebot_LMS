@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import CourseCard from "./CourseCard"
 import "./enrolled.css"
@@ -15,7 +15,6 @@ function BrowseCourses() {
     const showCourses = allCourses
     const [search, setSearch] = useState("")
     // const [showingCourses, setShowCourses] = useState([])
-    console.log(showCourses)
 
     useEffect(() => {
         if (currentUser.currentUser !== null) {

@@ -32,8 +32,6 @@ export const addAssignment = createAsyncThunk(
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
 
-            console.log(data)
-
             var raw = JSON.stringify({
                 "course_id": data.course_id,
                 "topic_id": data.topic_id,
@@ -129,7 +127,6 @@ export const submitAssignment = createAsyncThunk(
             return data2
         }
         catch (error) {
-            console.log("fetch3", error.message)
             return ext.rejectWithValue(error.message)
         }
     }
@@ -161,8 +158,6 @@ export const rateAssignment = createAsyncThunk(
             var myHeaders = new Headers();
             myHeaders.append("Authorization", ("Bearer " + ext.getState().user.currentUser));
             myHeaders.append("Content-Type", "application/json");
-
-            console.log(data)
 
             var raw = JSON.stringify({
                 "id": data.id,

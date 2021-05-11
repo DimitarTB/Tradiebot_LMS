@@ -1,7 +1,7 @@
 import React from 'react'
 import { Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { FILES_URL } from '../../redux/constants'
 import { enrollCourse, unenrollUserCourse } from '../../redux/Users/UserActions'
 import { unEnrollCourse } from '../../redux/Users/UserActions'

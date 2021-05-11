@@ -21,7 +21,6 @@ export default props => {
     const dispatch = useDispatch()
     const quizzes = useSelector(state => state.quizzes)
     const currentQuiz = useSelector(state => state.quizzes?.allQuizzes?.find(quiz => quiz?._id === quiz_id))
-    console.log(currentQuiz)
     const [selectedQuestion, setSelectedQuestion] = useState(currentQuiz.questions[0])
     const [info, setInfo] = useState({ type: null, message: null })
     const [quiz, setQuiz] = useState({
@@ -29,10 +28,6 @@ export default props => {
         questions: currentQuiz?.quizQuestions?.map(q => q.question)
     })
 
-
-    useEffect(() => {
-        console.log("selected", selectedQuestion)
-    }, [selectedQuestion])
     useEffect(() => {
         setQuiz({
             name: currentQuiz.name,
@@ -80,26 +75,17 @@ export default props => {
     }
 
     useEffect(() => {
-        console.log(quiz)
-        console.log(ff)
         if (ff === true) {
-            console.log(quiz)
             if (quizzes.addStatus === "fulfilled") {
                 setFulfilled(false)
                 alert("Question successfully added!")
                 setSelectedQuestion(currentQuiz.questions[currentQuiz.questions.length - 1])
-                console.log(currentQuiz.questions, selectedQuestion)
             }
         }
     }, [quizzes.addStatus])
 
     const validator = (data, tester) => {
-        for (const field in data) {
-            if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
-            if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
-            if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
-            if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
-        }
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Course Name field" })
         return true
     }
 
@@ -132,6 +118,7 @@ export default props => {
                         }}
                         handleSubmit={e => {
                             e.preventDefault()
+                            if(validator({"name": quiz.name}, "") !== true) return
                             dispatch(changeQuizName({ "name": quiz.name, "quiz_id": quiz_id }))
                             setFulfilled(true)
                         }
@@ -152,7 +139,7 @@ export default props => {
                         onChange={
                             (e) => { setSelectedQuestion(JSON.parse(e.target.value)) }
                         }>
-                        <label for="cars">Choose a question:</label>
+                        <label htmlFor="cars">Choose a question:</label>
                         <br />
                         <select name="questions">
                             {currentQuiz.questions.map(qt => {
@@ -168,6 +155,10 @@ export default props => {
                     <form onSubmit={
                         (e) => {
                             e.preventDefault()
+                            if(e.target.quest_name.value === null || e.target.quest_name.value === undefined || e.target.quest_name.value.length < 1 ) {
+                                alert("Please enter a valid name in the field!")
+                                return
+                            }
                             setFulfilled(false)
                             dispatch(addQuestion({
                                 question: e.target.quest_name.value,
@@ -190,13 +181,13 @@ export default props => {
                     </form>
                 </div>
                 <div className="rest smaller" style={selectedQuestion ? { visibility: "visible" } : { visibility: "hidden" }}>
-                    <form class="question" onSubmit={(e) => {
+                    <form className="question" onSubmit={(e) => {
                         e.preventDefault()
                         dispatch(editQuestion({ "quiz_id": quiz_id, "question": currentQuiz.questions[selectedQuestion.index].question, "question_name": e.target.question.value, "question_type": e.target.question_types.value }))
                     }}>
-                        <label for="question">Question</label>
+                        <label htmlFor="question">Question</label>
                         <input id="quest_name" name="question" value={selectedQuestion?.question} onChange={e => questionChange(e)}></input><br /><br />
-                        <label for="type">Type</label><br />
+                        <label htmlFor="type">Type</label><br />
                         <select name="question_types">
                             <option value="Multiple Choice" selected={selectedQuestion?.type === "Multiple Choice" ? true : false}>Multiple Choice</option>
                             <option value="Input" selected={selectedQuestion?.type === "Input" ? true : false}>Input</option>

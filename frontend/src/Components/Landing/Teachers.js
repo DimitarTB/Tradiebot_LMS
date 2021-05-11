@@ -10,7 +10,6 @@ import { addTeacher, fetchAll, removeTeacher } from '../../redux/Users/UserActio
 function Teachers() {
     const teachers = useSelector(state => state.user.allUsers.filter(usr => usr.types.includes("Teacher")))
     const dispatch = useDispatch()
-    console.log(teachers)
 
     useEffect(() => {
         dispatch(fetchAll())
@@ -28,7 +27,7 @@ function Teachers() {
                                 e.preventDefault()
                                 dispatch(addTeacher({ "username": e.target.username.value }))
                             }}>
-                                <label for="teach">Username</label>
+                                <label htmlFor="teach">Username</label>
                                 <input name="username"></input>
                                 <button>Add teacher</button>
                             </form>

@@ -22,7 +22,8 @@ export default props => {
     const dispatch = useDispatch()
     const topic_id = useParams().id
 
-    const topic = useSelector(state => state.topics.allTopics.find(tp => tp._id === topic_id))
+    const topicSelector = useSelector(state => state.topics)
+    const topic = topicSelector.allTopics.find(tp => tp._id === topic_id)
     const course = useSelector(state => state.courses?.allCourses.find(cr => cr._id === topic?.course_id))
     const lectures = useSelector(state => state.lectures?.allLectures.filter(lect => lect?.course_id === course?._id))
     const courseLectures = []
@@ -34,7 +35,6 @@ export default props => {
     //     console.log(Object.values(topic.lectures)["_id"] === lect._id)
     // })
     courseLectures.sort((a, b) => a.index > b.index)
-    console.log(courseLectures)
 
     const [info, setInfo] = useState({ type: null, message: null })
     const [cTopic, setTopic] = useState({
@@ -67,24 +67,27 @@ export default props => {
     }
 
     const validator = (data, tester) => {
-        for (const field in data) {
-            if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
-            if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
-            if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
-            if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
-        }
+        // for (const field in data) {
+        //     if (typeof data[field] !== tester[field]?.type) return setInfo({ type: "warning", message: "Please enter a valid value for the " + field + " field" })
+        //     if (data[field] === null && tester[field].isNullable === false) return setInfo({ type: "warning", message: "Field " + field + " is can't be null" })
+        //     if (data[field].length < tester[field].minLength) return setInfo({ type: "warning", message: "Field " + field + " must be longer" })
+        //     if (data[field].length > tester[field].maxLength) return setInfo({ type: "warning", message: "Field " + field + " must be shorter" })
+        // }
+        if(data["name"] === null || data["name"] === undefined || data["name"].length < 1) return setInfo({ type: "warning", message: "Please enter a valid value for the Course Name field" })
         return true
     }
 
     useEffect(() => {
         if (ff === true) {
-
+            if(topicSelector.editTopicStatus === "fulfilled") {
+                setInfo({ type: "success", message: "Topic updated successfully!!" })
+                setFulfilled(false)
+            }
+            else if(topicSelector.editTopicStatus === "pending") {
+                setInfo({ type: "loading", message: "Request is being processed. Please wait." })
+            }
         }
-        else {
-
-        }
-    }, [])
-    console.log(cTopic.lectures)
+    }, [topicSelector.editTopicStatus])
     return (
         <Fragment><Form
             name="Edit Topic"
@@ -96,23 +99,22 @@ export default props => {
                     ...cTopic,
                     [e.target.name]: e.target.value
                 })
-                console.log(cTopic)
             }}
             handleSubmit={e => {
                 e.preventDefault()
-                // if (validator(course, courseValidator) !== true) return
+                if (validator(cTopic, courseValidator) !== true) return
                 if (cTopic.name !== topic.name) dispatch(changeTopicName({ "id": topic._id, "name": cTopic.name }))
                 if (cTopic.lectures !== courseLectures) {
                     dispatch(addTopicLectures({ "id": topic._id, "lectures": cTopic.lectures }))
-                    console.log("addLL")
+                    setFulfilled(true)
                 }
             }
             }
             fields={[
                 {
                     name: "name",
-                    label: "Course Name",
-                    placeholder: "Please Enter Course Name",
+                    label: "Topic Name",
+                    placeholder: "Please Enter a Name for the topic",
                     type: "text",
                     fieldType: input
                 }

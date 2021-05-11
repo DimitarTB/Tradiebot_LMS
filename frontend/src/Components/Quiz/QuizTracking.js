@@ -51,7 +51,6 @@ function QuizTracking() {
     var id = 0
     quiz_records.map(qzr => {
         var ob = {}
-        console.log(quiz?.allQuizzes)
         ob.id = id
         id++
         ob.username = user?.allUsers.find(usr => usr._id === qzr.user)?.username
@@ -66,7 +65,6 @@ function QuizTracking() {
 
         ob.points = qzr.points
         ob.passed = qzr.passed === true ? "True" : "False"
-        console.log(ob)
         rows.push(ob)
     })
     return (

@@ -16,7 +16,6 @@ const EnrolledCourses = props => {
     const allCourses = useSelector(state => state.courses.allCourses?.filter(course => course.teachers.includes(currentUser.currentUserData?._id)))
 
     useEffect(() => {
-        console.log(currentUser.currentUser)
         if (currentUser.currentUser !== null) {
             dispatch(getAllCourses(currentUser.currentUser))
             dispatch(fetchAll(currentUser.currentUser))

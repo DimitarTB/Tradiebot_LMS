@@ -35,7 +35,6 @@ const CourseInfoSection = props => {
     }
     const sendFile = e => {
 
-        console.log(API_URL + "api/upload_image")
         var formData = new FormData();
         formData.append("image", e[0]);
         axios.post((API_URL + ("api/upload_image?course_id=" + props.course?._id)), formData, {
@@ -62,7 +61,6 @@ const CourseInfoSection = props => {
     }
 
     useEffect(() => {
-        console.log("fetch all")
         dispatch(getAllComments(allUsers.currentUser))
     }, [])
     function filterComments(comment) {
@@ -118,7 +116,7 @@ const CourseInfoSection = props => {
         (
             <div className="course-files">
                 {props.lecture?.video_file !== "" ? <Fragment><ImFileVideo /><h2 style={{ cursor: "pointer", display: "inline" }} onClick={() => props.setShowVideo(true)}> Lecture Video</h2></Fragment> : null}<br />
-                {props.lecture?.files?.map(file => <Fragment style={{ display: "inline" }}>{<div style={{ display: "inline" }}>{fileType(getFileName(file))}</div>}<h2 style={{ display: "inline" }}><a href={FILES_URL + file} target="_blank" download>{" " + getFileName(file)}</a></h2><br /></Fragment>)}
+                {props.lecture?.files?.map(file => <Fragment>{<div style={{ display: "inline" }}>{fileType(getFileName(file))}</div>}<h2 style={{ display: "inline" }}><a href={FILES_URL + file} target="_blank" download>{" " + getFileName(file)}</a></h2><br /></Fragment>)}
             </div >
         )
     ]

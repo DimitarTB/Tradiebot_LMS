@@ -15,7 +15,7 @@ const Container = props => {
         window.onkeypress = resetTimer;  //catches keyboard actions
 
         function logout() {
-            console.log("inactive")
+            // console.log("inactive")
             resetTimer()
         }
 
@@ -33,7 +33,10 @@ const Container = props => {
             <div className="details">
                 <h1 id="det">{props.details}</h1>
                 <h3 id="desc">{props.description}</h3>
-                <div id="icon"><img src={process.env.PUBLIC_URL + "/Assets/icons/" + (props.icon ? props.icon : "book.png")} /></div>
+                <img id="mobileIcon" src={process.env.PUBLIC_URL + "/Assets/icons/" + (props.icon ? props.icon : "book.png")} />
+
+                <div id="icon" className="computerIcon"><img src={process.env.PUBLIC_URL + "/Assets/icons/" + (props.icon ? props.icon : "book.png")} /></div>
+                {/* <div id="icon"></div> */}
             </div>
 
             {props.component}
