@@ -36,7 +36,7 @@ export default props => {
 
     return (
         <div className="course-card">
-            <NavLink style={{ color: "var(--grey)" }} to={"/course/" + props.course._id}>
+            <NavLink style={{ color: "var(--grey)" }} to={"/course_nav/" + props.course._id}>
                 <img src={FILES_URL + props.course.thumbnail} />
                 <h3 style={{ color: "var(--dark)" }}>{props.course.name}</h3>
                 <h4>{"ID: " + props.course._id}</h4>

@@ -22,8 +22,6 @@ export default props => {
     const quizSelector = useSelector(state => state?.quizzes)
     const quiz = quizSelector?.allQuizzes?.find(qz => qz?._id === quiz_id)
 
-    const [info, setInfo] = useState({ type: null, messagge: null })
-    const [submitted, setSubmitted] = useState(false)
 
     const [attempts, setAttempts] = useState(0)
     const [highest, setHighest] = useState(null)
@@ -170,9 +168,12 @@ export default props => {
                                     <h1>Are you ready?</h1>
                                     <h2>{"(" + attempts + " attempts left!)"}</h2><br />
                                     <button onClick={() => setSelectedPage(1)}>Start</button>
-                                </Fragment> : <h1>We are sorry, but you have no attempts left for this quiz.</h1>}
+                                </Fragment> : <Fragment>
+                                    {completed === true ? <h1>{lastCompleted?.passed === true ? ("Congratulations, you completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (passed)!") : "You completed the quiz with " + lastCompleted?.points + "/" + quiz.questions.length + " points (failed)!"}</h1> : null}
+                                    <h1>We are sorry, but you have no attempts left for this quiz.</h1>
+                                </Fragment>}
                             <h3>{attempts < 3 ? "The best result you got on this quiz is " + highest?.points + "/" + quiz?.questions.length + " (" + (highest?.passed ? "passed" : "failed") + ")" : null}</h3>
-                            <NavLink to={"/course/" + quiz.course_id}><button id="back">Back to the course</button></NavLink>
+                            <NavLink to={"/course_nav/" + quiz.course_id}><button id="back">Back to the course</button></NavLink>
                         </div>
                     </center>
                 } />

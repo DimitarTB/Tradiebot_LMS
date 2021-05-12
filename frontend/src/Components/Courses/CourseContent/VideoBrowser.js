@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { AiFillPlayCircle } from 'react-icons/ai'
 import { createLecture } from '../../../redux/Lectures/LecturesActions'
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const VideoBrowser = props => {
     const records = useSelector(state => state.quizzes.quizRecords.filter(rec => rec.user === props.user_id))
@@ -33,7 +33,6 @@ const VideoBrowser = props => {
     //         </Fragment>
     //     )
     // })
-    props.topics.map(tp => tp.lectures.sort(compare))
     const showLectures = [...props.lectures]
     showLectures.sort(compare)
 
@@ -62,39 +61,48 @@ const VideoBrowser = props => {
         return true
     }
     let display = []
-    
+
     props.topics.map((topic, tidx, sz) => {
         var lectureCount = 0
-        assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
-        props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<button><NavLink id="navbutton" to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
-        display.push(<button id="topic_nav" style={{ cursor: "default" }}><h2>{"Topic: " + topic.name}</h2></button>)
+        assignments.map(asn => asn.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/assignment/" + asn._id}><button>{"Assignment: " + asn.title}</button></NavLink>) : null)
+        props.quizzes.map(qz => qz.topic_id === sz[tidx - 1]?._id ? display.push(<NavLink id="navbutton" to={"/quiz/" + qz._id}><button className="lectt_bt" style={records.find(rc => rc.quiz_id === qz._id) ? { color: "green" } : {}}>{"Quiz: " + qz.name}</button></NavLink>) : null)
+        display.push(<button className="lectt_bt" id="topic_nav" style={{ cursor: "default" }}><h2 className="lectt_bt">{"Topic: " + topic.name}</h2></button>)
         topic.lectures.map((lc, idxx) => {
             const lecture = props.lectures.find(lec => lec._id === lc.id)
             if (lecture) {
                 display.push(
                     <Fragment>
                         {/* {props.selected?._id === lecture?._id ? scrollLeft(lc.index) : null} */}
-                        <button className={props.selected?._id === lecture?._id ? "selected" : ""} id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
+                        <button style={lecture?.watchedBy?.includes(props.user_id) ? { color: "green" } : {}} className={(props.selected?._id === lecture?._id ? "selected" : "") + " lectt_bt"} id={(lecture?.watchedBy?.includes(props.user_id)) ? "watched" : null} onClick={e => {
                             if (tidx !== 0) {
-                                // if (topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
                                 if (hasQuizzes(props.topics[tidx - 1]?._id)) {
-                                    // if (quizCompleted(props.topics[tidx - 1]?._id) && topicCompleted(props.topics[tidx - 1]?.lectures)) props.setSelectedLecture(lecture)
-                                    // else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
+                                    if (quizCompleted(props.topics[tidx - 1]?._id) && topicCompleted(props.topics[tidx - 1]?.lectures)) {
+                                        window.history.pushState({}, '', ('/course_nav/' + props.course_id));
+                                        window.location.replace(("/lecture/" + lecture._id))
+                                    }
+                                    else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
                                 }
-                                // else props.setSelectedLecture(lecture)
+                                else {
+                                    if (topicCompleted(props.topics[tidx - 1]?.lectures)) {
+                                        window.history.pushState({}, '', ('/course_nav/' + props.course_id));
+                                        window.location.replace(("/lecture/" + lecture._id))
+                                    }
+                                    else alert("You haven't completed the quiz or all of the lectures from the previous topic!")
+                                }
                             }
                             else {
-                                // props.setSelectedLecture(lecture)
+                                window.history.pushState({}, '', ('/course_nav/' + props.course_id));
+                                window.location.replace(("/lecture/" + lecture._id))
                             }
-                        }}>{lecture.name} <AiFillPlayCircle /></button>
+                        }}><AiFillPlayCircle /> {lecture.name}</button>
                     </Fragment>
                 )
                 lectureCount++
             }
         })
         if (tidx === sz.length - 1) {
-            assignments.map(asn => asn.topic_id === topic._id ? display.push(<button><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
-            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<button id={records.find(rc => {
+            assignments.map(asn => asn.topic_id === topic._id ? display.push(<button className="lectt_bt"><NavLink id="navbutton" to={"/assignment/" + asn._id}>{"Assignment: " + asn.title}</NavLink></button>) : null)
+            props.quizzes.map(qz => qz.topic_id === topic._id ? display.push(<button className="lectt_bt" id={records.find(rc => {
                 return (rc.quiz_id === qz._id)
             }) ? "watched" : null}><NavLink id="navbutton" to={"/quiz/" + qz._id}>{"Quiz: " + qz.name}</NavLink></button>) : null)
         }
@@ -104,9 +112,9 @@ const VideoBrowser = props => {
             <div className="video-browser">
                 {display}
             </div>
-            <div className="video-mobile" id="scroller">
+            {/* <div className="video-mobile" id="scroller">
                 {display}
-            </div>
+            </div> */}
         </Fragment>
     )
 }

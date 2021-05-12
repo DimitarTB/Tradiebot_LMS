@@ -60,7 +60,7 @@ function SubmitAssignment() {
                         <button id="back" onClick={() => setRedirect(true)}>Back to the course</button>
                 </div>
             } />
-    ) : <Redirect to={"/course/" + assignment.course_id} />
+    ) : <Redirect to={"/course_nav/" + assignment.course_id} />
 }
 
 export default SubmitAssignment

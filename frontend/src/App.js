@@ -119,7 +119,10 @@ function App() {
                         <Route path="/topics/edit/:id">
                             <EditTopic />
                         </Route>
-                        <Route exact path="/course/:course_id">
+                        {/* <Route exact path="/course/:course_id">
+                            <CourseContainer />
+                        </Route> */}
+                        <Route exact path="/lecture/:lecture_id">
                             <CourseContainer />
                         </Route>
                         <Route exact path="/course_nav/:course_id">

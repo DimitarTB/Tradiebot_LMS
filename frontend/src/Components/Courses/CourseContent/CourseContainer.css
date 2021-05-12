@@ -47,18 +47,19 @@ a {
 
 
 
-div.container > div.video-browser {
+div.container>div.video-browser {
     display: block;
     max-width: 50%;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 40px;
 }
 
-div.container > div.video-browser > button {
+div.container>div.video-browser>.lectt_bt,
+a>.lectt_bt, #navbutton>button {
     display: block;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
     background: none;
     border: none;
@@ -66,15 +67,22 @@ div.container > div.video-browser > button {
     padding: 10px;
     cursor: pointer;
     transition: 0.3s;
-}
-div.container > div.video-browser > button:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 .42rem .42rem;
+    border-top: 1px solid black;
 }
 
-div.container > div.video-browser > #topic_nav {
-    margin-top: 40px;
-    background-color: var(--primary);
+div.container>div.video-browser>button:hover,
+a>button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
+
+div.container>div.video-browser>#topic_nav {
+    margin-top: 40px;
+    background-color: var(--green);
+    border-radius: .42rem .42rem 0 0;
+    color: white;
+}
+
 
 
 
@@ -130,6 +138,8 @@ div.container > div.video-browser > #topic_nav {
     flex-direction: column;
     padding: 20px;
     position: relative;
+    width: 100%;
+    height: fit-content;
 }
 
 .course-container>.left>.video-player {
@@ -166,6 +176,56 @@ div.container > div.video-browser > #topic_nav {
     padding: 30px;
 }
 
+
+.course-container>.left>#nav_bts {
+    display: block;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    text-align: center;
+}
+
+.course-container>.left>#nav_bts>a>button,
+.asnqz {
+    border: none;
+    border-radius: .42rem;
+    background-color: var(--primary);
+    color: white;
+    padding: 5px;
+    width: 20%;
+    margin-bottom: 20px;
+}
+
+.course-container>.left>#nav_bts>a>button,
+.asnqza {
+    margin-top: 5%;
+}
+
+.next {
+    display: inline-block;
+    left: 0;
+    margin-left: 20%;
+}
+
+.previous {
+    display: inline-block;
+}
+
+.course-container>.left>a>.previous {
+    left: 0;
+}
+
+.asnqz {
+    right: 0;
+    position: absolute;
+    margin-right: 20px;
+}
+
+.course-container>.left>a>.next {
+    right: 0;
+}
+
 .course-container>.left>.course-info>.tab>div {
     width: 100%;
 }
@@ -191,12 +251,15 @@ div.container > div.video-browser > #topic_nav {
         align-items: center;
         height: 10%;
     }
+
     .course-container>.left>.course-info>.info-nav>h3 {
         margin: 10px;
     }
+
     .comment_input {
         width: 60%
     }
+
     #global {
         margin-top: 20px;
     }
@@ -219,7 +282,17 @@ div.container > div.video-browser > #topic_nav {
     color: var(--primary) !important;
 }
 
-@media only screen and (max-width: 1000px) {
+.nav_bt {
+    width: 20%;
+    border: none;
+    border-radius: .42rem;
+    color: var(--white);
+    background-color: var(--green);
+    padding: 5px;
+    text-align: center;
+}
+
+/* @media only screen and (max-width: 1000px) {
     .nav_bt {
         width: 10%;
     }
@@ -302,4 +375,4 @@ div.container > div.video-browser > #topic_nav {
         visibility: true;
         display: block;
     }
-}
+} */
