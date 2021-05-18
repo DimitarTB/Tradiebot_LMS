@@ -56,7 +56,8 @@ div.container>div.video-browser {
 }
 
 div.container>div.video-browser>.lectt_bt,
-a>.lectt_bt, #navbutton>button {
+a>.lectt_bt,
+#navbutton>button {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -79,10 +80,35 @@ a>button:hover {
 div.container>div.video-browser>#topic_nav {
     margin-top: 40px;
     background-color: var(--green);
-    border-radius: .42rem .42rem 0 0;
+    /* border-radius: .42rem .42rem 0 0; */
+    border-radius: 0 0 0 0 !important;
     color: white;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
+.container>.nav_bts {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
+    min-width: 80%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+div.container>div.nav_bts>.nav_bt>#rateAssignments {
+    width: 150px;
+    margin-top: 20px;
+}
+
+#certificate_course {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50%;
+    text-align: center;
+    margin-top: 20px;
+}
 
 
 
@@ -178,31 +204,48 @@ div.container>div.video-browser>#topic_nav {
 
 
 .course-container>.left>#nav_bts {
-    display: block;
+    /* display: block;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 10%;
+    text-align: center; */
     text-align: center;
+    max-width: 90%;
+    min-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.course-container>.left>#nav_bts>a>button,
-.asnqz {
+.next,
+.previous {
+    max-width: 40%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
     border: none;
-    border-radius: .42rem;
     background-color: var(--primary);
+    padding: 10px;
+    border-radius: .42rem;
     color: white;
-    padding: 5px;
-    width: 20%;
-    margin-bottom: 20px;
-}
-
-.course-container>.left>#nav_bts>a>button,
-.asnqza {
-    margin-top: 5%;
+    transition: 0.3s;
 }
 
 .next {
+    float: right;
+}
+
+.previous {
+    float: left;
+}
+
+.next:hover,
+.previous:hover {
+    background-color: var(--primary);
+    padding: 12px;
+}
+
+/* .next {
     display: inline-block;
     left: 0;
     margin-left: 20%;
@@ -210,7 +253,7 @@ div.container>div.video-browser>#topic_nav {
 
 .previous {
     display: inline-block;
-}
+} */
 
 .course-container>.left>a>.previous {
     left: 0;
@@ -235,7 +278,7 @@ div.container>div.video-browser>#topic_nav {
 }
 
 #rateAssignments {
-    margin-left: 85%;
+    /* margin-left: 85%; */
     border: none;
     border-radius: .42rem;
     background-color: #00ac69;
@@ -271,7 +314,7 @@ div.container>div.video-browser>#topic_nav {
     border-radius: .42rem;
     background-color: var(--primary);
     color: white;
-    width: 10%;
+    width: fit-content;
 }
 
 .video-mobile {
@@ -283,13 +326,20 @@ div.container>div.video-browser>#topic_nav {
 }
 
 .nav_bt {
-    width: 20%;
+    width: 250;
     border: none;
     border-radius: .42rem;
     color: var(--white);
     background-color: var(--green);
-    padding: 5px;
+    padding: 10px;
     text-align: center;
+    margin-left: 20px;
+    transition: 0.3s
+}
+
+.nav_bt:hover {
+    background-color: var(--green);
+    padding: 12px;
 }
 
 /* @media only screen and (max-width: 1000px) {

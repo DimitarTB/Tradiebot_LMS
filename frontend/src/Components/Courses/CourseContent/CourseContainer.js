@@ -85,7 +85,6 @@ const CourseContainer = props => {
     // topics.sort(compare)
     // topics.map(tp => tp.lectures.sort(compare2))
 
-    console.log(topicSel?.name)
     const currentQuiz = quizSelector.allQuizzes?.find(qz => qz?.topic_id === topicSel?._id)
     const currentAssignment = assignmentSelector.allAssignments?.find(asn => asn?.topic_id === topicSel?._id)
 
@@ -216,11 +215,11 @@ const CourseContainer = props => {
                             {/* {window.screen.width <= 1000 ? <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} /> : null} */}
                             {previous ? <NavLink to={"/lecture/" + previous._id} onClick={() => setSelectedLecture(previous)}><button className="previous"><AiOutlineArrowLeft />{"Previous: " + previous?.name}</button></NavLink> : null}
                             {next ? <NavLink to={"/lecture/" + next._id} onClick={() => setSelectedLecture(next)}><button className="next">{"Next: " + next?.name}<AiOutlineArrowRight /></button></NavLink> : null}
+                            {next ? null : <Fragment>
+                                {currentQuiz ? <NavLink to={"/quiz/" + currentQuiz._id}><button className="next">{"Quiz: " + currentQuiz?.name}</button></NavLink> : null}
+                                {currentAssignment ? <NavLink to={"/assignment/" + currentAssignment._id}><button className="next">{"Assignment: " + currentAssignment?.title}</button></NavLink> : null}</Fragment>
+                            }
                         </div>
-                        {next ? null : <Fragment>
-                            {currentQuiz ? <NavLink to={"/quiz/" + currentQuiz._id}><button className="asnqz">{"Quiz: " + currentQuiz?.name}</button></NavLink> : null}
-                            {currentAssignment ? <NavLink to={"/assignment/" + currentAssignment._id}><button className="asnqz asnqza">{"Assignment: " + currentAssignment?.title}</button></NavLink> : null}</Fragment>
-                        }
 
                     </div>
                     {/* {window.screen.width <= 1000 ? null : <VideoBrowser selected={selectedLecture} firstLec={firstLec} user_id={currentUser.currentUserData._id} topics={topics} lectures={currentLectures} setSelectedLecture={setSelectedLecture} currentCourse={currentCourse} quizzes={quizzes} course_id={currentCourse._id} />} */}
